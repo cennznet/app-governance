@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/app",
+  "sourceRoot": "packages/gov-app",
   "projectType": "application",
   "targets": {
     "build": {
@@ -8,8 +8,8 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "root": "packages/app",
-        "outputPath": "dist/packages/app"
+        "root": "packages/gov-app",
+        "outputPath": "dist/packages/gov-app"
       },
       "configurations": {
         "development": {},
@@ -20,16 +20,16 @@
       "executor": "@nrwl/next:server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "app:build",
+        "buildTarget": "gov-app:build",
         "dev": true
       },
       "configurations": {
         "development": {
-          "buildTarget": "app:build:development",
+          "buildTarget": "gov-app:build:development",
           "dev": true
         },
         "production": {
-          "buildTarget": "app:build:production",
+          "buildTarget": "gov-app:build:production",
           "dev": false
         }
       }
@@ -37,14 +37,14 @@
     "export": {
       "executor": "@nrwl/next:export",
       "options": {
-        "buildTarget": "app:build:production"
+        "buildTarget": "gov-app:build:production"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/packages/app"],
+      "outputs": ["coverage/packages/gov-app"],
       "options": {
-        "jestConfig": "packages/app/jest.config.ts",
+        "jestConfig": "packages/gov-app/jest.config.ts",
         "passWithNoTests": true
       }
     },
@@ -52,7 +52,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/app/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["packages/gov-app/**/*.{ts,tsx,js,jsx}"]
       }
     }
   },

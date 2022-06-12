@@ -3814,16 +3814,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"app-7f127f@workspace:packages/app":
-  version: 0.0.0-use.local
-  resolution: "app-7f127f@workspace:packages/app"
-  dependencies:
-    autoprefixer: ^10.4.7
-    postcss: ^8.4.14
-    tailwindcss: ^3.1.2
-  languageName: unknown
-  linkType: soft
-
 "aproba@npm:^1.0.3":
   version: 1.2.0
   resolution: "aproba@npm:1.2.0"
@@ -7164,6 +7154,16 @@ __metadata:
   checksum: b4be8885e0cfa018fc783792942d53926c35c50b3aefd3fdcfb9d22c627639dc26bd2327a40a0b74b074100ce95bb7187bfeae2f236856aa3de183af7a02aea6
   languageName: node
   linkType: hard
+
+"gov-app-c64c4c@workspace:packages/gov-app":
+  version: 0.0.0-use.local
+  resolution: "gov-app-c64c4c@workspace:packages/gov-app"
+  dependencies:
+    autoprefixer: ^10.4.7
+    postcss: ^8.4.14
+    tailwindcss: ^3.1.2
+  languageName: unknown
+  linkType: soft
 
 "governance@workspace:.":
   version: 0.0.0-use.local

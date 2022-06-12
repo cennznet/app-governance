@@ -2,7 +2,7 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
-    "app": "packages/app",
-    "discord": "packages/discord"
+    "discord": "packages/discord",
+    "gov-app": "packages/gov-app"
   }
 }

@@ -17,10 +17,10 @@
     "resolveJsonModule": true,
     "paths": {
       "@/*": ["*"],
-      "@app": ["packages/app"],
-      "@app/*": ["packages/app/*"],
       "@discord": ["packages/discord"],
-      "@discord/*": ["packages/discord/*"]
+      "@discord/*": ["packages/discord/*"],
+      "@gov-app": ["packages/gov-app"],
+      "@gov-app/*": ["packages/gov-app/*"]
     }
   },
   "include": ["**/*.ts"],
