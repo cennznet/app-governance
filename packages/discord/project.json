@@ -1,0 +1,43 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/discord",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/discord",
+        "commands": [
+          "tsc -p packages/discord/tsconfig.lib.json",
+          "tsc-alias -p packages/discord/tsconfig.lib.json"
+        ],
+        "parallel": false
+      }
+    },
+    "deploy-commands": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "ts-node --project packages/discord/tsconfig.json -r tsconfig-paths/register packages/discord/commands/deploy-commands.ts"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/discord/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/discord"],
+      "options": {
+        "jestConfig": "packages/discord/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
