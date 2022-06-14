@@ -2679,7 +2679,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/next@npm:^14.2.4":
+"@nrwl/next@npm:14.2.4":
   version: 14.2.4
   resolution: "@nrwl/next@npm:14.2.4"
   dependencies:
@@ -8208,7 +8208,7 @@ __metadata:
     "@nrwl/cli": 14.2.4
     "@nrwl/jest": 14.2.4
     "@nrwl/js": 14.2.4
-    "@nrwl/next": ^14.2.4
+    "@nrwl/next": 14.2.4
     "@nrwl/nx-cloud": latest
     "@nrwl/react": 14.2.4
     "@nrwl/web": 14.2.4
