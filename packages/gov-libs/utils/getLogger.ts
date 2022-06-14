@@ -11,8 +11,7 @@ const cennzGreen = chalk.hex("#05b210");
 
 const labels = {
 	ProposalListener: cennzBlue("ProposalListener"),
-	IdentityRelayer: cennzGreen("IdentityRelayer"),
-	SlackAlert: chalk.cyan("SlackAlert"),
+	ProposalProcessor: cennzGreen("ProposalProcessor"),
 };
 
 export const getLogger = (service: LoggerService): Logger => {

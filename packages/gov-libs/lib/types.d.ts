@@ -1,1 +1,1 @@
-export type LoggerService = "ProposalListener" | "IdentityRelayer";
+export type LoggerService = "ProposalListener" | "ProposalProcessor";
