@@ -3,9 +3,9 @@ import type { PropsWithChildren } from "@gov-app/libs/types";
 import { FC, createContext, useState, useEffect, useContext } from "react";
 import { Api } from "@cennznet/api";
 
-type CENNZApiContextType = {
+interface CENNZApiContextType {
 	api: Api;
-};
+}
 
 const CENNZApiContext = createContext<CENNZApiContextType>(null);
 
@@ -13,7 +13,7 @@ interface CENNZApiProviderProps extends PropsWithChildren {
 	endpoint: string;
 }
 
-const CENNZApiProvider: FC<CENNZApiProviderProps> = ({
+export const CENNZApiProvider: FC<CENNZApiProviderProps> = ({
 	children,
 	endpoint,
 }) => {
@@ -46,8 +46,6 @@ const CENNZApiProvider: FC<CENNZApiProviderProps> = ({
 		</CENNZApiContext.Provider>
 	);
 };
-
-export default CENNZApiProvider;
 
 export function useCENNZApi(): CENNZApiContextType {
 	return useContext(CENNZApiContext);

@@ -17,19 +17,19 @@ import type * as Extension from "@polkadot/extension-dapp";
 import { useUserAgent } from "@gov-app/libs/providers/UserAgentProvider";
 import { useWalletProvider } from "@gov-app/libs/providers/WalletProvider";
 
-interface ExtensionContext {
+interface CENNZExtensionContextType {
 	accounts: InjectedAccountWithMeta[];
 	promptInstallExtension: () => void;
 	getInstalledExtension: () => Promise<InjectedExtension>;
 }
 
-const CENNZExtensionContext = createContext<ExtensionContext>(
-	{} as ExtensionContext
+const CENNZExtensionContext = createContext<CENNZExtensionContextType>(
+	{} as CENNZExtensionContextType
 );
 
 interface CENNZExtensionProviderProps extends PropsWithChildren {}
 
-const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
+export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 	children,
 }) => {
 	const { browser, os } = useUserAgent();
@@ -116,8 +116,6 @@ const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 	);
 };
 
-export default CENNZExtensionProvider;
-
-export function useCENNZExtension(): ExtensionContext {
+export function useCENNZExtension(): CENNZExtensionContextType {
 	return useContext(CENNZExtensionContext);
 }

@@ -16,7 +16,6 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "paths": {
-      "@/*": ["*"],
       "@discord": ["packages/discord"],
       "@discord/*": ["packages/discord/*"],
       "@gov-app": ["packages/gov-app"],

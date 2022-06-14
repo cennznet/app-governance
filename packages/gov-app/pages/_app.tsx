@@ -1,34 +1,28 @@
 import type { AppProps } from "next/app";
-
-import "@gov-app/libs/globals.css";
-
 import { CENNZ_NETWORK } from "@gov-app/libs/constants";
-import CENNZApiProvider from "@gov-app/libs/providers/CENNZApiProvider";
-import CENNZExtensionProvider from "@gov-app/libs/providers/CENNZExtensionProvider";
-import CENNZWalletProvider from "@gov-app/libs/providers/CENNZWalletProvider";
-import MetaMaskExtensionProvider from "@gov-app/libs/providers/MetaMaskExtensionProvider";
-import MetaMaskWalletProvider from "@gov-app/libs/providers/MetaMaskWalletProvider";
-import UserAgentProvider from "@gov-app/libs/providers/UserAgentProvider";
-import WalletProvider from "@gov-app/libs/providers/WalletProvider";
+import { MainProvider } from "@gov-app/libs/providers/MainProvider";
+import { CENNZApiProvider } from "@gov-app/libs/providers/CENNZApiProvider";
+import { CENNZExtensionProvider } from "@gov-app/libs/providers/CENNZExtensionProvider";
+import { CENNZWalletProvider } from "@gov-app/libs/providers/CENNZWalletProvider";
+import { UserAgentProvider } from "@gov-app/libs/providers/UserAgentProvider";
+import { WalletProvider } from "@gov-app/libs/providers/WalletProvider";
+import "@gov-app/libs/globals.css";
+import { FC } from "react";
 
-function MyApp({ Component, pageProps }: AppProps) {
+const NextApp: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
 	return (
-		<UserAgentProvider>
-			<MetaMaskExtensionProvider>
-				<WalletProvider>
-					<CENNZExtensionProvider>
-						<CENNZApiProvider endpoint={CENNZ_NETWORK.ApiUrl.InWebSocket}>
-							<MetaMaskWalletProvider>
-								<CENNZWalletProvider>
-									<Component {...pageProps} />
-								</CENNZWalletProvider>
-							</MetaMaskWalletProvider>
-						</CENNZApiProvider>
-					</CENNZExtensionProvider>
-				</WalletProvider>
-			</MetaMaskExtensionProvider>
-		</UserAgentProvider>
+		<MainProvider
+			providers={[
+				<UserAgentProvider />,
+				<WalletProvider />,
+				<CENNZExtensionProvider />,
+				<CENNZApiProvider endpoint={CENNZ_NETWORK.ApiUrl.InWebSocket} />,
+				<CENNZWalletProvider />,
+			]}
+		>
+			<Component {...pageProps} />
+		</MainProvider>
 	);
-}
+};
 
-export default MyApp;
+export default NextApp;
