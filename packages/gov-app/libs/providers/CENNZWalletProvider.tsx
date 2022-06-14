@@ -17,7 +17,7 @@ import { useCENNZExtension } from "@gov-app/libs/providers/CENNZExtensionProvide
 import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";
 import { useWalletProvider } from "@gov-app/libs/providers/WalletProvider";
 
-interface WalletContext {
+interface CENNZWalletContextType {
 	selectedAccount: InjectedAccountWithMeta;
 	wallet: InjectedExtension;
 	connectWallet: (callback?: () => void) => Promise<void>;
@@ -25,7 +25,9 @@ interface WalletContext {
 	selectAccount: (account: InjectedAccountWithMeta) => void;
 }
 
-const CENNZWalletContext = createContext<WalletContext>({} as WalletContext);
+const CENNZWalletContext = createContext<CENNZWalletContextType>(
+	{} as CENNZWalletContextType
+);
 
 interface CENNZWalletProviderProps extends PropsWithChildren {}
 
@@ -113,6 +115,6 @@ export const CENNZWalletProvider: FC<CENNZWalletProviderProps> = ({
 	);
 };
 
-export function useCENNZWallet(): WalletContext {
+export function useCENNZWallet(): CENNZWalletContextType {
 	return useContext(CENNZWalletContext);
 }

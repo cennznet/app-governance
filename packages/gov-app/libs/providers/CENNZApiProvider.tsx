@@ -3,9 +3,9 @@ import type { PropsWithChildren } from "@gov-app/libs/types";
 import { FC, createContext, useState, useEffect, useContext } from "react";
 import { Api } from "@cennznet/api";
 
-type CENNZApiContextType = {
+interface CENNZApiContextType {
 	api: Api;
-};
+}
 
 const CENNZApiContext = createContext<CENNZApiContextType>(null);
 
