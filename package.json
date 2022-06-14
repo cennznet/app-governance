@@ -1,6 +1,6 @@
 {
-  "name": "governance",
-  "version": "0.0.0",
+  "name": "@cennznet/gov-services",
+  "version": "1.0.0",
   "license": "MIT",
   "private": true,
   "packageManager": "yarn@3.2.1",
@@ -9,7 +9,11 @@
     "gov-app:build": "nx run gov-app:build",
     "gov-app:dev": "nx run gov-app:serve",
     "discord:build": "nx run discord:build",
-    "discord:deploy-commands": "nx run discord:deploy-commands"
+    "discord:deploy-commands": "nx run discord:deploy-commands",
+    "new:provider": "HYGEN_TMPLS=.hygen/templates hygen new lib:provider",
+    "new:component": "HYGEN_TMPLS=.hygen/templates hygen new lib:component",
+    "new:hook": "HYGEN_TMPLS=.hygen/templates hygen new lib:hook",
+    "new:util": "HYGEN_TMPLS=.hygen/templates hygen new lib:util"
   },
   "dependencies": {
     "@cennznet/api": "^2.1.1-alpha.4",
@@ -27,7 +31,6 @@
     "@nrwl/cli": "14.2.4",
     "@nrwl/jest": "14.2.4",
     "@nrwl/js": "14.2.4",
-    "@nrwl/next": "^14.2.4",
     "@nrwl/nx-cloud": "latest",
     "@nrwl/react": "14.2.4",
     "@nrwl/web": "14.2.4",
@@ -48,6 +51,7 @@
     "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-react": "7.30.0",
     "eslint-plugin-react-hooks": "4.5.0",
+    "hygen": "^6.2.7",
     "jest": "27.5.1",
     "nx": "14.2.4",
     "prettier": "^2.6.2",
