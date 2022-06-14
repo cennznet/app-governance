@@ -9,7 +9,7 @@
       "defaultConfiguration": "production",
       "options": {
         "root": "packages/gov-app",
-        "outputPath": "dist/packages/gov-app"
+        "outputPath": "packages/gov-app"
       },
       "configurations": {
         "development": {},
