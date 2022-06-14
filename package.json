@@ -13,6 +13,7 @@
     "proposal-relayer:build": "nx run proposal-relayer:build",
     "proposal-relayer:listener": "nx run proposal-relayer:listener",
     "proposal-relayer:processor": "nx run proposal-relayer:processor",
+    "proposal-relayer:dev": "run-p proposal-relayer:listener proposal-relayer:processor",
     "new:provider": "HYGEN_TMPLS=.hygen/templates hygen new lib:provider",
     "new:component": "HYGEN_TMPLS=.hygen/templates hygen new lib:component",
     "new:hook": "HYGEN_TMPLS=.hygen/templates hygen new lib:hook",
@@ -67,7 +68,8 @@
     "ts-node": "^10.8.1",
     "tsc-alias": "^1.6.9",
     "tsconfig-paths": "^4.0.0",
-    "typescript": "~4.7.2"
+    "typescript": "~4.7.2",
+    "yarn-run-all": "^3.1.1"
   },
   "resolutions": {
     "@polkadot/util": "8.7.1",
