@@ -2,7 +2,7 @@ module.exports = [
 	{
 		type: "select",
 		name: "package",
-		message: "For what package?",
+		message: "Which package?",
 		choices: ["gov-app", "discord"],
 	},
 ];

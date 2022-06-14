@@ -1,20 +1,29 @@
 ---
-to: "packages/<%= package %>/libs/providers/<%= name %>Provider.tsx"
+to: "packages/<%= package %>/libs/providers/<%= name %>.tsx"
 ---
-import type { PropsWithChildren } from "@gov-app/libs/types";
+<%
+ nameOnly = name.replace("Provider", "");
+%>import type { PropsWithChildren } from "@gov-app/libs/types";
 
 import { FC, createContext, useContext } from "react";
 
-interface <%= name %>ContextType {}
-const <%= name %>Context = createContext<<%= name %>ContextType>(
-	{} as <%= name %>ContextType
+interface <%= nameOnly %>ContextType {}
+const <%= nameOnly %>Context = createContext<<%= nameOnly %>ContextType>(
+	{} as <%= nameOnly %>ContextType
 );
 
-interface <%= name %>ProviderProps extends PropsWithChildren {}
-export const <%= name %>: FC<<%= name %>ProviderProps> = (props) => {
-	return <<%= name %>Context.Provider value={{}} {...props} />;
+interface <%= name %>Props extends PropsWithChildren {}
+export const <%= name %>: FC<<%= name %>Props> = ({
+	children,
+	...props
+}) => {
+	return (
+		<<%= nameOnly %>Context.Provider value={{}} {...props}>
+			{children}
+		</<%= nameOnly %>Context.Provider>
+	);
 };
 
-export const use<%= name %> = (): <%= name %>ContextType => {
-	return useContext(<%= name %>Context);
+export const use<%= nameOnly %> = (): <%= nameOnly %>ContextType => {
+	return useContext(<%= nameOnly %>Context);
 };
