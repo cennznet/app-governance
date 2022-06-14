@@ -5,6 +5,7 @@ import { AMQPQueue, AMQPMessage } from "@cloudamqp/amqp-client";
 import { Proposal, ProposalInterface } from "@proposal-relayer/libs/models";
 import { requeueMessage } from "@proposal-relayer/libs/utils/requeueMessage";
 import { fetchProposalInfo } from "@proposal-relayer/libs/utils/fetchProposalInfo";
+import { fetchProposalDetails } from "@proposal-relayer/libs/utils/fetchProposalDetails";
 
 const logger = getLogger("ProposalProcessor");
 
@@ -59,9 +60,30 @@ export async function handleProposalMessage(
 		if (abortSignal.aborted) return;
 		logger.info("Proposal #%d: [2/3] fetching details...", proposalId);
 
+		const proposalDetails = await fetchProposalDetails(
+			proposalInfo.justificationUri
+		);
+
+		await updateProposalRecord({
+			proposalDetails,
+			state: "DetailsFetched",
+		});
+
 		//3. Send proposal to Discord
 		if (abortSignal.aborted) return;
 		logger.info("Proposal #%d: [3/3] sending proposal...", proposalId);
+
+		//TODO: send to discord
+
+		await updateProposalRecord({
+			state: "DiscordSent",
+			status: "Successful",
+		});
+
+		if (abortSignal.aborted) return;
+		messageDelivered = true;
+		await message.ack();
+		logger.info("Proposal #%d: done 🎉", proposalId);
 	} catch (error: any) {
 		messageDelivered = true;
 		const response = await requeueMessage(queue, message);

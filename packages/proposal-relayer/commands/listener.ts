@@ -26,7 +26,7 @@ getCENNZnetApi()
 				);
 
 				proposalIds.forEach((proposalId) => {
-					logger.info("Proposal #%d: Sent to queue...", proposalId)
+					logger.info("Proposal #%d: Sent to queue...", proposalId);
 					queue.publish(proposalId.toString());
 				});
 			});

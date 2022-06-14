@@ -5,16 +5,16 @@ mongoose.connect(MONGODB_SERVER);
 
 export interface ProposalInterface {
 	proposalId: number;
-	proposalDescription?: string;
-	proposalJustificationUri: string;
+	proposalInfo: Record<string, string | number>;
+	proposalDetails: Record<string, string>;
 	state: "Created" | "InfoFetched" | "DetailsFetched" | "DiscordSent";
 	status: "Pending" | "Successful" | "Failed" | "Skipped" | "Aborted";
 }
 
 const ProposalSchema = new Schema<ProposalInterface>({
 	proposalId: { type: Schema.Types.Number, required: true, unique: true },
-	proposalDescription: { type: Schema.Types.String },
-	proposalJustificationUri: { type: Schema.Types.String },
+	proposalInfo: { type: Schema.Types.Map, of: Schema.Types.Mixed },
+	proposalDetails: { type: Schema.Types.Map, of: Schema.Types.String },
 	state: { type: Schema.Types.String, required: true },
 	status: { type: Schema.Types.String, required: true },
 });
