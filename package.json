@@ -12,6 +12,7 @@
     "gov-app:dev": "nx run gov-app:serve",
     "proposal-relayer:build": "nx run proposal-relayer:build",
     "proposal-relayer:listener": "nx run proposal-relayer:listener",
+    "proposal-relayer:processor": "nx run proposal-relayer:processor",
     "new:provider": "HYGEN_TMPLS=.hygen/templates hygen new lib:provider",
     "new:component": "HYGEN_TMPLS=.hygen/templates hygen new lib:component",
     "new:hook": "HYGEN_TMPLS=.hygen/templates hygen new lib:hook",

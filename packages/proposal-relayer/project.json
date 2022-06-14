@@ -23,6 +23,14 @@
         ]
       }
     },
+    "processor": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/processor.ts"
+        ]
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
