@@ -9,7 +9,11 @@
     "gov-app:build": "nx run gov-app:build",
     "gov-app:dev": "nx run gov-app:serve",
     "discord:build": "nx run discord:build",
-    "discord:deploy-commands": "nx run discord:deploy-commands"
+    "discord:deploy-commands": "nx run discord:deploy-commands",
+    "new:provider": "HYGEN_TMPLS=.hygen/templates hygen new lib:provider",
+    "new:component": "HYGEN_TMPLS=.hygen/templates hygen new lib:component",
+    "new:hook": "HYGEN_TMPLS=.hygen/templates hygen new lib:hook",
+    "new:util": "HYGEN_TMPLS=.hygen/templates hygen new lib:util"
   },
   "dependencies": {
     "@cennznet/api": "^2.1.1-alpha.4",
@@ -47,6 +51,7 @@
     "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-react": "7.30.0",
     "eslint-plugin-react-hooks": "4.5.0",
+    "hygen": "^6.2.7",
     "jest": "27.5.1",
     "nx": "14.2.4",
     "prettier": "^2.6.2",
