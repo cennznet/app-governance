@@ -1,4 +1,4 @@
 ---
-to: "packages/<%= package %>/libs/hooks/use<%= name %>.ts"
+to: "packages/<%= package %>/libs/hooks/<%= name %>.ts"
 ---
-export const use<%= name %> = (): void => {};
+export const <%= name %> = (): void => {};
