@@ -6,7 +6,8 @@ mongoose.connect(MONGODB_SERVER);
 export interface ProposalInterface {
 	proposalId: number;
 	proposalDescription?: string;
-	proposalJustificationUri; string;
+	proposalJustificationUri;
+	string;
 }
 
 const ProposalSchema = new Schema<ProposalInterface>({
