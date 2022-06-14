@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@cloudamqp/amqp-client": "^2.0.3",
+    "mongoose": "^6.3.8",
     "winston": "^3.7.2"
   }
 }

@@ -8586,6 +8586,7 @@ __metadata:
   resolution: "gov-libs-e15058@workspace:packages/gov-libs"
   dependencies:
     "@cloudamqp/amqp-client": ^2.0.3
+    mongoose: ^6.3.8
     winston: ^3.7.2
   languageName: unknown
   linkType: soft
@@ -8628,7 +8629,6 @@ __metadata:
     eslint-plugin-react: 7.30.0
     eslint-plugin-react-hooks: 4.5.0
     jest: 27.5.1
-    mongoose: ^6.3.8
     next: 12.1.5
     nx: 14.2.4
     prettier: ^2.6.2
