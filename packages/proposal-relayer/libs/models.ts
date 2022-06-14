@@ -7,7 +7,7 @@ export interface ProposalInterface {
 	proposalId: number;
 	proposalDescription?: string;
 	proposalJustificationUri: string;
-	state: "Created" | "InfoFetched" | "DiscordSent";
+	state: "Created" | "InfoFetched" | "DetailsFetched" | "DiscordSent";
 	status: "Pending" | "Successful" | "Failed" | "Skipped" | "Aborted";
 }
 

@@ -3,10 +3,10 @@ import { AMQPMessage, AMQPQueue } from "@cloudamqp/amqp-client";
 
 type ResponseStatus = "Requeued" | "Discarded";
 
-export const requeueMessage = async (
+export async function requeueMessage(
 	queue: AMQPQueue,
 	message: AMQPMessage
-): Promise<ResponseStatus> => {
+): Promise<ResponseStatus> {
 	const retriesCount = Number(message?.properties?.headers?.["x-retries"] ?? 0);
 
 	await message.reject(false);
@@ -22,4 +22,4 @@ export const requeueMessage = async (
 	});
 
 	return "Requeued";
-};
+}

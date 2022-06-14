@@ -1,8 +1,8 @@
 import { Proposal } from "@proposal-relayer/libs/models";
 
-export const collectPendingProposalIds = async (
+export async function collectPendingProposalIds(
 	nextProposalId: number
-): Promise<number[]> => {
+): Promise<number[]> {
 	const lastProcessedProposal = await Proposal.findOne()
 		.sort({
 			proposalId: "desc",
@@ -18,4 +18,4 @@ export const collectPendingProposalIds = async (
 	for (let i = proposalIdToStart; i < nextProposalId; i++) proposalIds.push(i);
 
 	return proposalIds;
-};
+}
