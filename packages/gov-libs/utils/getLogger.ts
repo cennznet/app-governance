@@ -10,7 +10,7 @@ const cennzGreen = chalk.hex("#05b210");
 // const cennzPurple = chalk.hex("#9847FF");
 
 const labels = {
-	ProposalRelayer: cennzBlue("ProposalRelayer"),
+	ProposalListener: cennzBlue("ProposalListener"),
 	IdentityRelayer: cennzGreen("IdentityRelayer"),
 	SlackAlert: chalk.cyan("SlackAlert"),
 };
