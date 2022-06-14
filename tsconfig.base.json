@@ -22,7 +22,9 @@
       "@gov-app": ["packages/gov-app"],
       "@gov-app/*": ["packages/gov-app/*"],
       "@gov-libs": ["packages/gov-libs"],
-      "@gov-libs/*": ["packages/gov-libs/*"]
+      "@gov-libs/*": ["packages/gov-libs/*"],
+      "@proposal-relayer": ["packages/proposal-relayer"],
+      "@proposal-relayer/*": ["packages/proposal-relayer/*"]
     }
   },
   "include": ["**/*.ts"],
