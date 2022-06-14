@@ -15,11 +15,11 @@
         "parallel": false
       }
     },
-    "dev": {
+    "listener": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/proposal-relayer.ts"
+          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/proposal-listener.ts"
         ]
       }
     },
