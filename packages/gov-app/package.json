@@ -1,12 +1,9 @@
 {
   "dependencies": {
-    "@metamask/detect-provider": "^1.2.0",
-    "@metamask/providers": "^9.0.0",
     "store": "^2.0.12",
     "ua-parser-js": "^1.0.2"
   },
   "devDependencies": {
-    "@metamask/types": "^1.1.0",
     "@types/store": "^2",
     "@types/ua-parser-js": "^0.7.36",
     "autoprefixer": "^10.4.7",

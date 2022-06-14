@@ -8,7 +8,6 @@ import {
 	useEffect,
 	useState,
 } from "react";
-import { useMetaMaskExtension } from "@gov-app/libs/providers/MetaMaskExtensionProvider";
 import store from "store";
 
 interface WalletContextType {
