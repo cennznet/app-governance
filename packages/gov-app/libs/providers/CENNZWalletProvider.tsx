@@ -29,7 +29,9 @@ const CENNZWalletContext = createContext<WalletContext>({} as WalletContext);
 
 interface CENNZWalletProviderProps extends PropsWithChildren {}
 
-const CENNZWalletProvider: FC<CENNZWalletProviderProps> = ({ children }) => {
+export const CENNZWalletProvider: FC<CENNZWalletProviderProps> = ({
+	children,
+}) => {
 	const { api } = useCENNZApi();
 	const { selectedWallet } = useWalletProvider();
 	const { promptInstallExtension, getInstalledExtension, accounts } =
@@ -110,8 +112,6 @@ const CENNZWalletProvider: FC<CENNZWalletProviderProps> = ({ children }) => {
 		</CENNZWalletContext.Provider>
 	);
 };
-
-export default CENNZWalletProvider;
 
 export function useCENNZWallet(): WalletContext {
 	return useContext(CENNZWalletContext);

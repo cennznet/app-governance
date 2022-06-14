@@ -29,7 +29,7 @@ const CENNZExtensionContext = createContext<ExtensionContext>(
 
 interface CENNZExtensionProviderProps extends PropsWithChildren {}
 
-const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
+export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 	children,
 }) => {
 	const { browser, os } = useUserAgent();
@@ -115,8 +115,6 @@ const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 		</CENNZExtensionContext.Provider>
 	);
 };
-
-export default CENNZExtensionProvider;
 
 export function useCENNZExtension(): ExtensionContext {
 	return useContext(CENNZExtensionContext);

@@ -13,7 +13,7 @@ interface CENNZApiProviderProps extends PropsWithChildren {
 	endpoint: string;
 }
 
-const CENNZApiProvider: FC<CENNZApiProviderProps> = ({
+export const CENNZApiProvider: FC<CENNZApiProviderProps> = ({
 	children,
 	endpoint,
 }) => {
@@ -46,8 +46,6 @@ const CENNZApiProvider: FC<CENNZApiProviderProps> = ({
 		</CENNZApiContext.Provider>
 	);
 };
-
-export default CENNZApiProvider;
 
 export function useCENNZApi(): CENNZApiContextType {
 	return useContext(CENNZApiContext);
