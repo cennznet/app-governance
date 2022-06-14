@@ -6,12 +6,12 @@ import startProposalRelayer from "@proposal-relayer/utils/startProposalRelayer";
 
 const logger = getLogger("ProposalRelayer");
 logger.info(
-	`Start ProposalRelayer for CENNZnet ${chalk.magenta(
-		"%s"
-	)}...`,
-	CENNZ_NETWORK,
+	`Start ProposalRelayer for CENNZnet ${chalk.magenta("%s")}...`,
+	CENNZ_NETWORK
 );
 
-getCENNZnetApi().then(startProposalRelayer).catch((error) => {
+getCENNZnetApi()
+	.then(startProposalRelayer)
+	.catch((error) => {
 		logger.error("%s", error);
 	});

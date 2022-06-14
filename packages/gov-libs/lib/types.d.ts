@@ -1,2 +1,1 @@
-export type LoggerService =
-	| "ProposalRelayer" | "IdentityRelayer"
+export type LoggerService = "ProposalRelayer" | "IdentityRelayer";
