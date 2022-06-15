@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "@cloudamqp/amqp-client": "^2.0.3",
-    "@discordjs/builders": "^0.15.0",
     "discord.js": "^13.8.0",
     "mongoose": "^6.3.8",
     "winston": "^3.7.2"
