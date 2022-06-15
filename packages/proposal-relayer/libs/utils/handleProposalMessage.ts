@@ -1,16 +1,20 @@
 import type { Api } from "@cennznet/api";
+import type { InteractionWebhook } from "discord.js";
+import type { ProposalInterface } from "@proposal-relayer/libs/types";
 
 import { getLogger } from "@gov-libs/utils/getLogger";
 import { AMQPQueue, AMQPMessage } from "@cloudamqp/amqp-client";
-import { Proposal, ProposalInterface } from "@proposal-relayer/libs/models";
+import { Proposal } from "@proposal-relayer/libs/models";
 import { requeueMessage } from "@proposal-relayer/libs/utils/requeueMessage";
 import { fetchProposalInfo } from "@proposal-relayer/libs/utils/fetchProposalInfo";
 import { fetchProposalDetails } from "@proposal-relayer/libs/utils/fetchProposalDetails";
+import { getDiscordMessage } from "@proposal-relayer/libs/utils/getDiscordMessage";
 
 const logger = getLogger("ProposalProcessor");
 
 export async function handleProposalMessage(
 	cennzApi: Api,
+	discordWebhook: InteractionWebhook,
 	queue: AMQPQueue,
 	message: AMQPMessage,
 	abortSignal: AbortSignal
@@ -73,7 +77,9 @@ export async function handleProposalMessage(
 		if (abortSignal.aborted) return;
 		logger.info("Proposal #%d: [3/3] sending proposal...", proposalId);
 
-		//TODO: send to discord
+		discordWebhook.send({
+			embeds: [getDiscordMessage(proposalId, proposalDetails, proposalInfo)],
+		});
 
 		await updateProposalRecord({
 			state: "DiscordSent",
