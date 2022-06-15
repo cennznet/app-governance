@@ -1666,20 +1666,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discordjs/rest@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "@discordjs/rest@npm:0.5.0"
-  dependencies:
-    "@discordjs/collection": ^0.7.0
-    "@sapphire/async-queue": ^1.3.1
-    "@sapphire/snowflake": ^3.2.2
-    discord-api-types: ^0.33.3
-    tslib: ^2.4.0
-    undici: ^5.4.0
-  checksum: 36427fd77ff11285da4400e9960fccb71aafa657e43c3de4fe4772d1497f20c3d84754c844ad44d2c6f68fed45303ace790191fd811c94414312fde20d0346c2
-  languageName: node
-  linkType: hard
-
 "@eslint/eslintrc@npm:^1.3.0":
   version: 1.3.0
   resolution: "@eslint/eslintrc@npm:1.3.0"
@@ -3624,13 +3610,6 @@ __metadata:
   version: 3.2.0
   resolution: "@sapphire/shapeshift@npm:3.2.0"
   checksum: 166c590e66e222f20bc92e21b50390b687eca5c948a4bbf6a4cf8745189fa35972f41b1022a3a35c4e0f2e2c808232f18f46ddb1db12b84c10bd1c9145740ff0
-  languageName: node
-  linkType: hard
-
-"@sapphire/snowflake@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "@sapphire/snowflake@npm:3.2.2"
-  checksum: 315fecef4738092c2a2f3509b132b811fcbfa6c98d5d45d951adaf3ca21608be69043bcc137cc6933a7c3e55cbdc066daa5bb484603e6575422b335445b59315
   languageName: node
   linkType: hard
 
@@ -6889,7 +6868,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:^0.33.3, discord-api-types@npm:^0.33.5":
+"discord-api-types@npm:^0.33.3":
   version: 0.33.5
   resolution: "discord-api-types@npm:0.33.5"
   checksum: 6dcaad640c5693a69c9a4f5e444e739dde11ba835164ae6fd3dd5a1ab7b4d7f96cd022ed653eeaff2c8051ead0d998a5d502a2915cfacdde596364b82d9e3b3f
@@ -6912,17 +6891,6 @@ __metadata:
   checksum: 9fb026f5d2bcc5339044b3f2df7efca815656064d593582ea5fb60beabdc0ae0381010949b94940496d91dd8c2aa2dc55bc8db48300da5b8d00eadcc04665dc2
   languageName: node
   linkType: hard
-
-"discord@workspace:packages/discord":
-  version: 0.0.0-use.local
-  resolution: "discord@workspace:packages/discord"
-  dependencies:
-    "@discordjs/builders": ^0.15.0
-    "@discordjs/rest": ^0.5.0
-    discord-api-types: ^0.33.5
-    discord.js: ^13.8.0
-  languageName: unknown
-  linkType: soft
 
 "dlv@npm:^1.1.3":
   version: 1.1.3
@@ -8694,6 +8662,8 @@ __metadata:
   resolution: "gov-libs-e15058@workspace:packages/gov-libs"
   dependencies:
     "@cloudamqp/amqp-client": ^2.0.3
+    "@discordjs/builders": ^0.15.0
+    discord.js: ^13.8.0
     mongoose: ^6.3.8
     winston: ^3.7.2
   languageName: unknown
@@ -14823,13 +14793,6 @@ __metadata:
     has-symbols: ^1.0.3
     which-boxed-primitive: ^1.0.2
   checksum: b7a1cf5862b5e4b5deb091672ffa579aa274f648410009c81cca63fed3b62b610c4f3b773f912ce545bb4e31edc3138975b5bc777fc6e4817dca51affb6380e9
-  languageName: node
-  linkType: hard
-
-"undici@npm:^5.4.0":
-  version: 5.4.0
-  resolution: "undici@npm:5.4.0"
-  checksum: 2852397ee1dbb2b3ad58166520ec30f4f0143895f6e7b157dbedfac4e43b522a710a3927be61a67b2ae791190973f206d30785564ece7675e08133427cebaaa1
   languageName: node
   linkType: hard
 

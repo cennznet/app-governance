@@ -6,8 +6,6 @@
   "packageManager": "yarn@3.2.1",
   "scripts": {
     "format": "prettier --config .prettierrc.json ./ --write",
-    "discord:build": "nx run discord:build",
-    "discord:deploy-commands": "nx run discord:deploy-commands",
     "gov-app:build": "nx run gov-app:build",
     "gov-app:dev": "nx run gov-app:serve",
     "proposal-relayer:build": "nx run proposal-relayer:build",
