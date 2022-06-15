@@ -104,7 +104,7 @@ function createProposalRecordUpdater(
 	return async (data: Partial<ProposalInterface>) =>
 		Proposal.findOneAndUpdate(
 			{ proposalId },
-			{ ...data, proposalId, updatedAt: new Date() },
+			{ ...data, proposalId },
 			{ upsert: true }
 		);
 }
