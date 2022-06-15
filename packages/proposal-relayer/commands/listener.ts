@@ -14,8 +14,8 @@ logger.info(
 	CENNZ_NETWORK
 );
 
-getCENNZnetApi()
-	.then(async (cennzApi) => {
+Promise.all([getCENNZnetApi()])
+	.then(async ([cennzApi]) => {
 		const [, queue] = await getRabbitMQSet("ProposalQueue");
 
 		await cennzApi.query.governance
