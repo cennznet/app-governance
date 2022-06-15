@@ -41,5 +41,4 @@ jobs:
 
       - run: yarn nx workspace-lint
       - run: yarn nx affected --target=lint
-      - run: yarn nx affected --target=test --ci --code-coverage
       - run: yarn nx affected --target=build
