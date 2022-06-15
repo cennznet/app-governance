@@ -7,3 +7,13 @@ export const RABBBITMQ_SERVER: string =
 
 export const MESSAGE_MAX_TIME = Number(process.env.MESSAGE_MAX_TIME || 30000);
 export const MESSAGE_MAX_RETRY = Number(process.env.MESSAGE_MAX_RETRY ?? 3);
+
+export const DISCORD_BOT = {
+	AvatarUrl: process.env.DISCORD_AVATAR || "",
+	BotName: process.env.DISCORD_BOT_NAME || "",
+	ClientId: process.env.DISCORD_CLIENT_ID || "",
+	ChannelId:process.env.DISCORD_CHANNEL_ID || "",
+	GuildId: process.env.DISCORD_GUILD_ID || "",
+	Token: process.env.DISCORD_TOKEN || "",
+	WebhookId: process.env.DISCORD_WEBHOOK_ID || ""
+}
