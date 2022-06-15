@@ -1,39 +1,50 @@
 import type {
+	DiscordMessage,
 	ProposalDetails,
 	ProposalInfo,
 } from "@proposal-relayer/libs/types";
 
-import { MessageEmbed, EmbedFieldData } from "discord.js";
+import { MessageEmbed, MessageButton, MessageActionRow } from "discord.js";
 
 export function getDiscordMessage(
 	proposalId: number,
 	proposalDetails: ProposalDetails,
 	proposalInfo: ProposalInfo
-): MessageEmbed {
-	return new MessageEmbed()
-		.setColor("#1130FF")
-		.setTitle("**New Proposal Submitted**")
-		.setDescription(`Id: #${proposalId}`)
+): DiscordMessage {
+	const embed = new MessageEmbed()
+		.setColor("#9847FF")
+		.setTitle("New Proposal")
+		.setDescription(`**ID:** _#${proposalId}_`)
 		.addFields([
 			{
 				name: "Title",
 				value: proposalDetails.title,
+				inline: true,
 			},
 			{
-				name: "Description",
+				name: "Details",
 				value: proposalDetails.description,
 				inline: true,
 			},
 			{
 				name: "Sponsor",
 				value: proposalInfo.sponsor,
-				inline: true,
+				inline: false,
 			},
 			{
 				name: "Enactment Delay",
-				value: `${proposalInfo.enactmentDelay} blocks`,
-				inline: true,
+				value: `_${proposalInfo.enactmentDelay} blocks_`,
+				inline: false,
 			},
-		] as EmbedFieldData[])
+		])
 		.setTimestamp();
+
+	const row = new MessageActionRow().addComponents(
+		new MessageButton()
+			.setURL("https://saucet.vercel.app")
+			.setLabel("Vote!")
+			.setStyle("LINK")
+	);
+
+	return { embeds: [embed], components: [row] };
 }

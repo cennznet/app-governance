@@ -1,3 +1,5 @@
+import type { MessageEmbed, MessageActionRow } from "discord.js";
+
 export interface ProposalDetails {
 	title: string;
 	description: string;
@@ -15,4 +17,9 @@ export interface ProposalInterface {
 	proposalDetails: ProposalDetails;
 	state: "Created" | "InfoFetched" | "DetailsFetched" | "DiscordSent";
 	status: "Pending" | "Successful" | "Failed" | "Skipped" | "Aborted";
+}
+
+export interface DiscordMessage {
+	embeds: [MessageEmbed];
+	components: [MessageActionRow];
 }

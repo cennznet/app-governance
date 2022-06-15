@@ -78,7 +78,7 @@ export async function handleProposalMessage(
 		logger.info("Proposal #%d: [3/3] sending proposal...", proposalId);
 
 		discordWebhook.send({
-			embeds: [getDiscordMessage(proposalId, proposalDetails, proposalInfo)],
+			...getDiscordMessage(proposalId, proposalDetails, proposalInfo),
 		});
 
 		await updateProposalRecord({
