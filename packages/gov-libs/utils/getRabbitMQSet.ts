@@ -1,5 +1,5 @@
 import { AMQPChannel, AMQPClient, AMQPQueue } from "@cloudamqp/amqp-client";
-import { RABBBITMQ_SERVER } from "@gov-libs/lib/constants";
+import { CENNZ_NETWORK, RABBBITMQ_SERVER } from "@gov-libs/lib/constants";
 
 export async function getRabbitMQSet(
 	name: string
@@ -8,7 +8,13 @@ export async function getRabbitMQSet(
 	const connection = await client.connect();
 
 	const channel = await connection.channel();
-	const queue = await channel.queue(name, { durable: true });
+	const queue = await channel.queue(`${getNetworkName()}_GovServices_${name}`, {
+		durable: true,
+	});
 
 	return [channel, queue];
+}
+
+function getNetworkName(): string {
+	return `${CENNZ_NETWORK.charAt(0).toUpperCase()}${CENNZ_NETWORK.slice(1)}`;
 }
