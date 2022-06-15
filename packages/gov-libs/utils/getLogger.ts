@@ -7,11 +7,12 @@ const instances = {} as Record<LoggerService, Logger>;
 
 const cennzBlue = chalk.hex("#1130FF");
 const cennzGreen = chalk.hex("#05b210");
-// const cennzPurple = chalk.hex("#9847FF");
+const cennzPurple = chalk.hex("#9847FF");
 
 const labels = {
 	ProposalListener: cennzBlue("ProposalListener"),
 	ProposalProcessor: cennzGreen("ProposalProcessor"),
+	DiscordBot: cennzPurple("DiscordBot"),
 };
 
 export const getLogger = (service: LoggerService): Logger => {
