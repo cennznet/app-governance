@@ -1,4 +1,4 @@
-import type { InteractionWebhook } from "discord.js";
+import type { InteractionWebhook, EmbedFieldData } from "discord.js";
 import type {
 	DiscordMessage,
 	ProposalDetails,
@@ -28,6 +28,8 @@ export class DiscordHandler {
 	proposalDetails: ProposalDetails;
 	proposalInfo: ProposalInfo;
 	sentMessage: Message;
+	proposalFields: EmbedFieldData[];
+	voteFields: EmbedFieldData[];
 
 	constructor(
 		api: Api,
@@ -44,36 +46,41 @@ export class DiscordHandler {
 	}
 
 	async sendProposal(): Promise<Message> {
+		this.proposalFields = [
+			{
+				name: "Details",
+				value: this.proposalDetails.description,
+			},
+			{
+				name: "Sponsor",
+				value: `_${this.proposalInfo.sponsor}_`,
+			},
+			{
+				name: "Enactment Delay",
+				value: `${this.proposalInfo.enactmentDelay} blocks`,
+			},
+		];
+
+		this.voteFields = [
+			{
+				name: "Votes to Pass",
+				value: "_**1**_",
+				inline: true,
+			},
+			{
+				name: "Votes to Reject",
+				value: "_**0**_",
+				inline: true,
+			},
+		];
+
 		const message = new MessageEmbed()
 			.setColor("#9847FF")
-			.setTitle("New Proposal")
-			.setDescription(`**ID:** _#${this.proposalId}_`)
-			.addFields([
-				{
-					name: "Title",
-					value: this.proposalDetails.title,
-					inline: true,
-				},
-				{
-					name: "Details",
-					value: this.proposalDetails.description,
-					inline: true,
-				},
-				{
-					name: "Sponsor",
-					value: this.proposalInfo.sponsor,
-					inline: false,
-				},
-				{
-					name: "Enactment Delay",
-					value: `_${this.proposalInfo.enactmentDelay} blocks_`,
-					inline: false,
-				},
-			]);
-
-		const votes = new MessageEmbed()
-			.setColor("#1130FF")
-			.setTitle("Votes")
+			.setTitle(`Proposal ID: _#${this.proposalId}_`)
+			.setDescription(`_**${this.proposalDetails.title}**_`)
+			.setFields(this.proposalFields)
+			.addFields(this.voteFields)
+			.setFooter(`Status: Deliberation`)
 			.setTimestamp();
 
 		const voteButtons = new MessageActionRow().addComponents(
@@ -88,7 +95,7 @@ export class DiscordHandler {
 		);
 
 		return (this.sentMessage = (await this.webhook.send({
-			embeds: [message, votes],
+			embeds: [message],
 			components: [voteButtons],
 		})) as Message);
 	}
