@@ -32,7 +32,7 @@ export interface DiscordMessage {
 	embeds: MessageEmbed[];
 }
 
-export type VoteOption = "pass" | "reject";
+export type VoteAction = "pass" | "reject";
 
 export type ProposalRecordUpdater = ReturnType<
 	typeof createProposalRecordUpdater

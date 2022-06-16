@@ -4,7 +4,7 @@ import type {
 	ProposalDetails,
 	ProposalInfo,
 	ProposalRecordUpdater,
-	VoteOption,
+	VoteAction,
 } from "@proposal-relayer/libs/types";
 import type { Api } from "@cennznet/api";
 import type { ProposalVoteInfo, u128 } from "@cennznet/types";
@@ -17,7 +17,6 @@ import {
 } from "discord.js";
 import { getLogger } from "@gov-libs/utils/getLogger";
 import { PROPOSALS_URL } from "@proposal-relayer/libs/constants";
-import { createProposalRecordUpdater } from "@proposal-relayer/libs/utils/createProposalRecordUpdater";
 
 const logger = getLogger("DiscordBot");
 
@@ -87,11 +86,10 @@ export class DiscordHandler {
 				.setStyle("LINK")
 		);
 
-		await this.webhook
-			.send({ embeds: [message, votes], components: [voteButtons] })
-			.then((sentMessage: Message) => (this.sentMessage = sentMessage));
-
-		return this.sentMessage;
+		return (this.sentMessage = (await this.webhook.send({
+			embeds: [message, votes],
+			components: [voteButtons],
+		})) as Message);
 	}
 
 	async updateOnVote(
@@ -105,7 +103,7 @@ export class DiscordHandler {
 					await this.api.query.governance.proposalStatus(this.proposalId)
 				).toString();
 
-				logger.info("Proposal #%d: updating status...", this.proposalId);
+				logger.info("Proposal #%d: updating status in DB...", this.proposalId);
 				updateProposalRecord({ status: proposalStatus });
 
 				let newMessage: DiscordMessage;
@@ -135,13 +133,16 @@ export class DiscordHandler {
 						],
 					};
 
-				logger.info("Proposal #%d: updating votes...", this.proposalId);
+				logger.info(
+					"Proposal #%d: updating votes on Discord...",
+					this.proposalId
+				);
 				await this.webhook.editMessage(this.sentMessage.id, newMessage);
 			}
 		);
 	}
 
-	getProposalLink(action: VoteOption): string {
+	getProposalLink(action: VoteAction): string {
 		return `${PROPOSALS_URL}/${this.proposalId}?stage=proposal&action=${action}`;
 	}
 
