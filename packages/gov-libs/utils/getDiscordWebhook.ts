@@ -26,16 +26,15 @@ export async function getDiscordWebhook(): Promise<InteractionWebhook> {
 	bot.on("ready", async () => {
 		const channel: any = bot.channels.cache.get(DISCORD_BOT.ChannelId);
 
-		if (DISCORD_BOT.WebhookId)
-			webhook = channel
-				.fetchWebhooks()
-				.then((hooks: InteractionWebhook[]) =>
-					hooks.find((hook) => hook.id === DISCORD_BOT.WebhookId)
-				);
-		else
-			webhook = await channel.createWebhook(DISCORD_BOT.BotName, {
-				avatar: DISCORD_BOT.AvatarUrl,
-			});
+		webhook = DISCORD_BOT.WebhookId
+			? await channel
+					.fetchWebhooks()
+					.then((hooks: InteractionWebhook[]) =>
+						hooks.find((hook) => hook.id === DISCORD_BOT.WebhookId)
+					)
+			: await channel.createWebhook(DISCORD_BOT.BotName, {
+					avatar: DISCORD_BOT.AvatarUrl,
+			  });
 	});
 
 	while (!webhook) {
