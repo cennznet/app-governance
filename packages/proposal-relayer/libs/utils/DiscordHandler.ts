@@ -1,4 +1,4 @@
-import type { InteractionWebhook } from "discord.js";
+import type { InteractionWebhook, EmbedFieldData } from "discord.js";
 import type {
 	DiscordMessage,
 	ProposalDetails,
@@ -28,6 +28,8 @@ export class DiscordHandler {
 	proposalDetails: ProposalDetails;
 	proposalInfo: ProposalInfo;
 	sentMessage: Message;
+	proposalFields: EmbedFieldData[];
+	voteFields: EmbedFieldData[];
 
 	constructor(
 		api: Api,
@@ -44,36 +46,41 @@ export class DiscordHandler {
 	}
 
 	async sendProposal(): Promise<Message> {
+		this.proposalFields = [
+			{
+				name: "Details",
+				value: this.proposalDetails.description,
+			},
+			{
+				name: "Sponsor",
+				value: `_${this.proposalInfo.sponsor}_`,
+			},
+			{
+				name: "Enactment Delay",
+				value: `${this.proposalInfo.enactmentDelay} blocks`,
+			},
+		];
+
+		this.voteFields = [
+			{
+				name: "Votes to Pass",
+				value: "_**1**_",
+				inline: true,
+			},
+			{
+				name: "Votes to Reject",
+				value: "_**0**_",
+				inline: true,
+			},
+		];
+
 		const message = new MessageEmbed()
 			.setColor("#9847FF")
-			.setTitle("New Proposal")
-			.setDescription(`**ID:** _#${this.proposalId}_`)
-			.addFields([
-				{
-					name: "Title",
-					value: this.proposalDetails.title,
-					inline: true,
-				},
-				{
-					name: "Details",
-					value: this.proposalDetails.description,
-					inline: true,
-				},
-				{
-					name: "Sponsor",
-					value: this.proposalInfo.sponsor,
-					inline: false,
-				},
-				{
-					name: "Enactment Delay",
-					value: `_${this.proposalInfo.enactmentDelay} blocks_`,
-					inline: false,
-				},
-			]);
-
-		const votes = new MessageEmbed()
-			.setColor("#1130FF")
-			.setTitle("Votes")
+			.setTitle(`Proposal ID: _#${this.proposalId}_`)
+			.setDescription(`_**${this.proposalDetails.title}**_`)
+			.setFields(this.proposalFields)
+			.addFields(this.voteFields)
+			.setFooter({ text: "Status: Deliberation" })
 			.setTimestamp();
 
 		const voteButtons = new MessageActionRow().addComponents(
@@ -88,7 +95,7 @@ export class DiscordHandler {
 		);
 
 		return (this.sentMessage = (await this.webhook.send({
-			embeds: [message, votes],
+			embeds: [message],
 			components: [voteButtons],
 		})) as Message);
 	}
@@ -121,29 +128,49 @@ export class DiscordHandler {
 		);
 	}
 
-	getMessage(status: ProposalStatus, [pass, reject]): DiscordMessage {
+	getMessage(status: ProposalStatus, votes): DiscordMessage {
 		return status === "Deliberation"
 			? {
 					components: this.sentMessage.components,
 					embeds: [
-						this.sentMessage.embeds[0],
-						this.sentMessage.embeds[1].setFields(
-							{ name: "Status", value: `_${status}_`, inline: true },
-							{ name: "Pass", value: `_${pass}_`, inline: true },
-							{ name: "Reject", value: `_${reject}_`, inline: true }
-						),
+						this.sentMessage.embeds[0]
+							.setFields(this.proposalFields)
+							.addFields(this.getVoteFields(status, votes))
+							.setFooter({ text: `Status: ${status}` })
+							.setTimestamp(),
 					],
 			  }
 			: {
 					components: [],
 					embeds: [
-						new MessageEmbed()
-							.setColor("#9847FF")
-							.setDescription(`**ID:** _#${this.proposalId}_`)
-							.setTitle("Voting Complete")
-							.setFields({ name: "Status", value: `_${status}_` }),
+						this.sentMessage.embeds[0]
+							.setColor(status === "Disapproved" ? "RED" : "#05b210")
+							.setFields(this.proposalFields)
+							.setFooter({ text: `Status: ${status}` })
+							.setTimestamp(),
 					],
 			  };
+	}
+
+	getVoteFields(
+		status: ProposalStatus,
+		votes: [pass: number, reject: number]
+	): EmbedFieldData[] {
+		const [pass, reject] = votes;
+
+		this.voteFields[0] = {
+			name: "Votes to Pass",
+			value: `_**${pass}**_`,
+			inline: true,
+		};
+
+		this.voteFields[1] = {
+			name: "Votes to Reject",
+			value: `_**${reject}**_`,
+			inline: true,
+		};
+
+		return this.voteFields;
 	}
 
 	getProposalLink(action: VoteAction): string {
@@ -151,8 +178,8 @@ export class DiscordHandler {
 	}
 
 	getVotes({ activeBits, voteBits }): [pass: number, reject: number] {
-		// This function converts the bits to decimals and counts the number of ones - 
-		// votes are stored in this way for efficiency 
+		// This function converts the bits to decimals and counts the number of ones -
+		// votes are stored in this way for efficiency
 		const countOnes = (bits: u128[]) =>
 			bits
 				.map((bit) => (bit.toNumber() >>> 0).toString(2).split("1").length - 1)
