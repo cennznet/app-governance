@@ -1,6 +1,6 @@
 import type { ProposalInterface } from "@proposal-relayer/libs/types";
 
-import { MONGODB_SERVER } from "@gov-libs/lib/constants";
+import { MONGODB_SERVER } from "@gov-libs/constants";
 import mongoose, { Schema, Model } from "mongoose";
 
 mongoose.connect(MONGODB_SERVER);

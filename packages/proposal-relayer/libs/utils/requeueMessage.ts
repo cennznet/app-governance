@@ -1,4 +1,4 @@
-import { MESSAGE_MAX_RETRY } from "@gov-libs/lib/constants";
+import { MESSAGE_MAX_RETRY } from "@gov-libs/constants";
 import { AMQPMessage, AMQPQueue } from "@cloudamqp/amqp-client";
 
 type ResponseStatus = "Requeued" | "Discarded";

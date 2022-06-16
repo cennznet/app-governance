@@ -4,7 +4,7 @@ import { getCENNZnetApi } from "@gov-libs/utils/getCENNZnetApi";
 import { getDiscordWebhook } from "@gov-libs/utils/getDiscordWebhook";
 import { getRabbitMQSet } from "@gov-libs/utils/getRabbitMQSet";
 import { AMQPError, AMQPMessage } from "@cloudamqp/amqp-client";
-import { CENNZ_NETWORK, MESSAGE_MAX_TIME } from "@gov-libs/lib/constants";
+import { CENNZ_NETWORK, MESSAGE_MAX_TIME } from "@gov-libs/constants";
 import { handleProposalMessage } from "@proposal-relayer/libs/utils/handleProposalMessage";
 
 const logger = getLogger("ProposalProcessor");

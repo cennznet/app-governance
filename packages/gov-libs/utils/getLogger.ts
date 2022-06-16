@@ -1,4 +1,4 @@
-import type { LoggerService } from "@gov-libs/lib/types";
+import type { LoggerService } from "@gov-libs/types";
 
 import { createLogger, format, transports, Logger } from "winston";
 import chalk from "chalk";

@@ -1,5 +1,5 @@
 import { AMQPChannel, AMQPClient, AMQPQueue } from "@cloudamqp/amqp-client";
-import { CENNZ_NETWORK, RABBBITMQ_SERVER } from "@gov-libs/lib/constants";
+import { CENNZ_NETWORK, RABBBITMQ_SERVER } from "@gov-libs/constants";
 
 export async function getRabbitMQSet(
 	name: string

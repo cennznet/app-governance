@@ -3,7 +3,7 @@ import type { InteractionWebhook } from "discord.js";
 import { Client } from "discord.js";
 import { getLogger } from "@gov-libs/utils/getLogger";
 import { waitFor } from "@gov-libs/utils/waitFor";
-import { DISCORD_BOT } from "@gov-libs/lib/constants";
+import { DISCORD_BOT } from "@gov-libs/constants";
 
 const logger = getLogger("DiscordBot");
 

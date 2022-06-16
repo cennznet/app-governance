@@ -3,7 +3,7 @@ import type { u64 } from "@cennznet/types";
 import chalk from "chalk";
 import { AMQPError } from "@cloudamqp/amqp-client";
 import { getLogger } from "@gov-libs/utils/getLogger";
-import { CENNZ_NETWORK } from "@gov-libs/lib/constants";
+import { CENNZ_NETWORK } from "@gov-libs/constants";
 import { getRabbitMQSet } from "@gov-libs/utils/getRabbitMQSet";
 import { getCENNZnetApi } from "@gov-libs/utils/getCENNZnetApi";
 import { collectPendingProposalIds } from "@proposal-relayer/libs/utils/collectPendingProposalIds";
