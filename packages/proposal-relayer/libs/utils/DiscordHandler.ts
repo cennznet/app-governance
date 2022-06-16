@@ -80,7 +80,7 @@ export class DiscordHandler {
 			.setDescription(`_**${this.proposalDetails.title}**_`)
 			.setFields(this.proposalFields)
 			.addFields(this.voteFields)
-			.setFooter(`Status: Deliberation`)
+			.setFooter({ text: "Status: Deliberation" })
 			.setTimestamp();
 
 		const voteButtons = new MessageActionRow().addComponents(
@@ -136,7 +136,7 @@ export class DiscordHandler {
 						this.sentMessage.embeds[0]
 							.setFields(this.proposalFields)
 							.addFields(this.getVoteFields(status, votes))
-							.setFooter(`Status: ${status}`)
+							.setFooter({ text: `Status: ${status}` })
 							.setTimestamp(),
 					],
 			  }
@@ -146,7 +146,7 @@ export class DiscordHandler {
 						this.sentMessage.embeds[0]
 							.setColor(status === "Disapproved" ? "RED" : "#05b210")
 							.setFields(this.proposalFields)
-							.setFooter(`Status: ${status}`)
+							.setFooter({ text: `Status: ${status}` })
 							.setTimestamp(),
 					],
 			  };
