@@ -143,10 +143,9 @@ export class DiscordHandler {
 			: {
 					components: [],
 					embeds: [
-						new MessageEmbed()
+						this.sentMessage.embeds[0]
 							.setColor(status === "Disapproved" ? "RED" : "#05b210")
-							.setTitle("Voting Complete")
-							.setDescription(`**Proposal ID:** _#${this.proposalId}_`)
+							.setFields(this.proposalFields)
 							.setFooter(`Status: ${status}`)
 							.setTimestamp(),
 					],
