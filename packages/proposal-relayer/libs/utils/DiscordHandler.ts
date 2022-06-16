@@ -128,29 +128,50 @@ export class DiscordHandler {
 		);
 	}
 
-	getMessage(status: ProposalStatus, [pass, reject]): DiscordMessage {
+	getMessage(status: ProposalStatus, votes): DiscordMessage {
 		return status === "Deliberation"
 			? {
 					components: this.sentMessage.components,
 					embeds: [
-						this.sentMessage.embeds[0],
-						this.sentMessage.embeds[1].setFields(
-							{ name: "Status", value: `_${status}_`, inline: true },
-							{ name: "Pass", value: `_${pass}_`, inline: true },
-							{ name: "Reject", value: `_${reject}_`, inline: true }
-						),
+						this.sentMessage.embeds[0]
+							.setFields(this.proposalFields)
+							.addFields(this.getVoteFields(status, votes))
+							.setFooter(`Status: ${status}`)
+							.setTimestamp(),
 					],
 			  }
 			: {
 					components: [],
 					embeds: [
 						new MessageEmbed()
-							.setColor("#9847FF")
-							.setDescription(`**ID:** _#${this.proposalId}_`)
+							.setColor(status === "Disapproved" ? "RED" : "#05b210")
 							.setTitle("Voting Complete")
-							.setFields({ name: "Status", value: `_${status}_` }),
+							.setDescription(`**Proposal ID:** _#${this.proposalId}_`)
+							.setFooter(`Status: ${status}`)
+							.setTimestamp(),
 					],
 			  };
+	}
+
+	getVoteFields(
+		status: ProposalStatus,
+		votes: [pass: number, reject: number]
+	): EmbedFieldData[] {
+		const [pass, reject] = votes;
+
+		this.voteFields[0] = {
+			name: "Votes to Pass",
+			value: `_**${pass}**_`,
+			inline: true,
+		};
+
+		this.voteFields[1] = {
+			name: "Votes to Reject",
+			value: `_**${reject}**_`,
+			inline: true,
+		};
+
+		return this.voteFields;
 	}
 
 	getProposalLink(action: VoteAction): string {
@@ -158,8 +179,8 @@ export class DiscordHandler {
 	}
 
 	getVotes({ activeBits, voteBits }): [pass: number, reject: number] {
-		// This function converts the bits to decimals and counts the number of ones - 
-		// votes are stored in this way for efficiency 
+		// This function converts the bits to decimals and counts the number of ones -
+		// votes are stored in this way for efficiency
 		const countOnes = (bits: u128[]) =>
 			bits
 				.map((bit) => (bit.toNumber() >>> 0).toString(2).split("1").length - 1)
