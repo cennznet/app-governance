@@ -1,9 +1,0 @@
-node_modules
-.env
-
-# yarn
-.yarn/*
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions

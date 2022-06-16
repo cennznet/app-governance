@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import "@gov-app/libs/globals.css";
 
 import type { AppProps } from "next/app";
