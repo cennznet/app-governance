@@ -1,13 +1,24 @@
 const { join } = require("path");
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: [
-		join(__dirname, "pages/**/*.{js,ts,jsx,tsx}"),
-		join(__dirname, "components/**/*.{js,ts,jsx,tsx}"),
+		join(__dirname, "./pages/**/*.{js,ts,jsx,tsx}"),
+		join(__dirname, "./libs/components/**/*.{js,ts,jsx,tsx}"),
 	],
 	theme: {
-		extend: {},
+		fontFamily: {
+			display: ["apotek", "sans-serif"],
+			body: ["gopher", "sans-serif"],
+		},
+
+		extend: {
+			colors: { hero: "#9847FF", mid: "#E4D1FF", light: "#F5ECFF" },
+			fontFamily: {
+				sans: ["gopher", ...defaultTheme.fontFamily.sans],
+			},
+		},
 	},
 	plugins: [],
 };
