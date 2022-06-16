@@ -7,7 +7,7 @@ import { DISCORD_BOT } from "@gov-libs/constants";
 
 const logger = getLogger("DiscordBot");
 
-const bot: Client<true> = new Client({
+const bot: Client = new Client({
 	partials: ["MESSAGE", "CHANNEL", "REACTION"],
 	intents: [
 		"DIRECT_MESSAGES",
@@ -21,7 +21,7 @@ const bot: Client<true> = new Client({
 bot.login(DISCORD_BOT.Token);
 
 export async function getDiscordWebhook(): Promise<InteractionWebhook> {
-	let webhook: InteractionWebhook;
+	let webhook: InteractionWebhook | undefined;
 
 	bot.on("ready", async () => {
 		const channel: any = bot.channels.cache.get(DISCORD_BOT.ChannelId);
