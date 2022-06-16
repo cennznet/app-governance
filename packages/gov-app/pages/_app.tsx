@@ -1,4 +1,6 @@
+/* eslint-disable react/jsx-key */
 import type { AppProps } from "next/app";
+
 import { CENNZ_NETWORK } from "@gov-app/libs/constants";
 import { MainProvider } from "@gov-app/libs/providers/MainProvider";
 import { CENNZApiProvider } from "@gov-app/libs/providers/CENNZApiProvider";
