@@ -1,14 +1,14 @@
 import type { Api } from "@cennznet/api";
 import type { InteractionWebhook } from "discord.js";
-import type { ProposalInterface } from "@proposal-relayer/libs/types";
+import type { ProposalRecordUpdater } from "@proposal-relayer/libs/types";
 
 import { getLogger } from "@gov-libs/utils/getLogger";
 import { AMQPQueue, AMQPMessage } from "@cloudamqp/amqp-client";
-import { Proposal } from "@proposal-relayer/libs/models";
 import { requeueMessage } from "@proposal-relayer/libs/utils/requeueMessage";
 import { fetchProposalInfo } from "@proposal-relayer/libs/utils/fetchProposalInfo";
 import { fetchProposalDetails } from "@proposal-relayer/libs/utils/fetchProposalDetails";
-import { getDiscordMessage } from "@proposal-relayer/libs/utils/getDiscordMessage";
+import { createProposalRecordUpdater } from "@proposal-relayer/libs/utils/createProposalRecordUpdater";
+import { DiscordHandler } from "@proposal-relayer/libs/utils/DiscordHandler";
 
 const logger = getLogger("ProposalProcessor");
 
@@ -19,14 +19,12 @@ export async function handleProposalMessage(
 	message: AMQPMessage,
 	abortSignal: AbortSignal
 ) {
-	let updateProposalRecord: any = null;
 	const body = message.bodyString();
 	if (!body) return;
 	const proposalId = Number(body);
 	let messageDelivered = false;
-	updateProposalRecord = createProposalRecordUpdater(proposalId) as ReturnType<
-		typeof createProposalRecordUpdater
-	>;
+	const updateProposalRecord: ProposalRecordUpdater =
+		createProposalRecordUpdater(proposalId);
 
 	try {
 		abortSignal.addEventListener(
@@ -77,14 +75,22 @@ export async function handleProposalMessage(
 		if (abortSignal.aborted) return;
 		logger.info("Proposal #%d: [3/3] sending proposal...", proposalId);
 
-		discordWebhook.send({
-			...getDiscordMessage(proposalId, proposalDetails, proposalInfo),
-		});
+		const discordHandler = new DiscordHandler(
+			cennzApi,
+			discordWebhook,
+			proposalId,
+			proposalDetails,
+			proposalInfo
+		);
 
+		await discordHandler.sendProposal();
 		await updateProposalRecord({
 			state: "DiscordSent",
-			status: "Successful",
+			status: "Deliberation",
 		});
+
+		//4. Update proposal status on vote
+		await discordHandler.updateOnVote(updateProposalRecord);
 
 		if (abortSignal.aborted) return;
 		messageDelivered = true;
@@ -96,15 +102,4 @@ export async function handleProposalMessage(
 		logger.info("Proposal #%d: %s.", proposalId, response.toLowerCase());
 		logger.error("Proposal #%d: %s", proposalId, error);
 	}
-}
-
-function createProposalRecordUpdater(
-	proposalId: number
-): (data: Partial<ProposalInterface>) => Promise<any> {
-	return async (data: Partial<ProposalInterface>) =>
-		Proposal.findOneAndUpdate(
-			{ proposalId },
-			{ ...data, proposalId },
-			{ upsert: true }
-		);
 }
