@@ -29,7 +29,7 @@ export async function getDiscordWebhook(): Promise<InteractionWebhook> {
 		if (DISCORD_BOT.WebhookId)
 			webhook = channel
 				.fetchWebhooks()
-				.then((hooks) =>
+				.then((hooks: InteractionWebhook[]) =>
 					hooks.find((hook) => hook.id === DISCORD_BOT.WebhookId)
 				);
 		else

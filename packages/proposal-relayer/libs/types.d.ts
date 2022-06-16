@@ -1,4 +1,7 @@
 import type { MessageEmbed, MessageActionRow } from "discord.js";
+import type { ProposalStatusInfo } from "@cennznet/types";
+
+import { createProposalRecordUpdater } from "@proposal-relayer/libs/utils/createProposalRecordUpdater";
 
 export interface ProposalDetails {
 	title: string;
@@ -16,10 +19,21 @@ export interface ProposalInterface {
 	proposalInfo: ProposalInfo;
 	proposalDetails: ProposalDetails;
 	state: "Created" | "InfoFetched" | "DetailsFetched" | "DiscordSent";
-	status: "Pending" | "Successful" | "Failed" | "Skipped" | "Aborted";
+	status:
+		| "Pending"
+		| "Failed"
+		| "Skipped"
+		| "Aborted"
+		| ProposalStatusInfo.type;
 }
 
 export interface DiscordMessage {
-	embeds: [MessageEmbed];
-	components: [MessageActionRow];
+	components: MessageActionRow[];
+	embeds: MessageEmbed[];
 }
+
+export type VoteOption = "pass" | "reject";
+
+export type ProposalRecordUpdater = ReturnType<
+	typeof createProposalRecordUpdater
+>;
