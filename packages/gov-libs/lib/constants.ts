@@ -6,7 +6,7 @@ export const RABBBITMQ_SERVER: string =
 	process.env.RABBBITMQ_SERVER || "amqp://guest:guest@localhost:5672";
 
 export const MESSAGE_MAX_TIME = Number(process.env.MESSAGE_MAX_TIME || 30000);
-export const MESSAGE_MAX_RETRY = Number(process.env.MESSAGE_MAX_RETRY ?? 3);
+export const MESSAGE_MAX_RETRY = Number(process.env.MESSAGE_MAX_RETRY || 3);
 
 export const DISCORD_BOT = {
 	AvatarUrl: process.env.DISCORD_AVATAR || "",
