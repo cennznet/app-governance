@@ -10,6 +10,20 @@ const nextConfig = {
 		// See: https://github.com/gregberge/svgr
 		svgr: false,
 	},
+	async redirects() {
+		return [
+			{
+				source: "/",
+				destination: "/connect",
+				permanent: false,
+			},
+			{
+				source: "/proposals",
+				destination: "/proposals/new",
+				permanent: false,
+			},
+		];
+	},
 };
 
 module.exports = withNx(nextConfig);
