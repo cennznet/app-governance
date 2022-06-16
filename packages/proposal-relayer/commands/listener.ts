@@ -1,6 +1,6 @@
 import type { u64 } from "@cennznet/types";
 
-import * as chalk from "chalk";
+import chalk from "chalk";
 import { AMQPError } from "@cloudamqp/amqp-client";
 import { getLogger } from "@gov-libs/utils/getLogger";
 import { CENNZ_NETWORK } from "@gov-libs/lib/constants";
@@ -18,9 +18,8 @@ Promise.all([getCENNZnetApi()])
 	.then(async ([cennzApi]) => {
 		const [, queue] = await getRabbitMQSet("ProposalQueue");
 
-		await cennzApi.query.governance
-			.nextProposalId()
-			.then(async (nextProposalId: u64) => {
+		await cennzApi.query.governance.nextProposalId(
+			async (nextProposalId: u64) => {
 				const proposalIds = await collectPendingProposalIds(
 					nextProposalId.toNumber()
 				);
@@ -29,7 +28,8 @@ Promise.all([getCENNZnetApi()])
 					logger.info("Proposal #%d: Sent to queue...", proposalId);
 					queue.publish(proposalId.toString());
 				});
-			});
+			}
+		);
 	})
 	.catch((error) => {
 		if (error instanceof AMQPError) error?.connection?.close();

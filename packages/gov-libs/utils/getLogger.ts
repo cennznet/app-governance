@@ -1,7 +1,7 @@
 import type { LoggerService } from "@gov-libs/lib/types";
 
 import { createLogger, format, transports, Logger } from "winston";
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 const instances = {} as Record<LoggerService, Logger>;
 

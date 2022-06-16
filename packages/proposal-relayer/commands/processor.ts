@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 import { getLogger } from "@gov-libs/utils/getLogger";
 import { getCENNZnetApi } from "@gov-libs/utils/getCENNZnetApi";
 import { getDiscordWebhook } from "@gov-libs/utils/getDiscordWebhook";
