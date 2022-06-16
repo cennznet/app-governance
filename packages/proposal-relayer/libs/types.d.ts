@@ -19,12 +19,7 @@ export interface ProposalInterface {
 	proposalInfo: ProposalInfo;
 	proposalDetails: ProposalDetails;
 	state: "Created" | "InfoFetched" | "DetailsFetched" | "DiscordSent";
-	status:
-		| "Pending"
-		| "Failed"
-		| "Skipped"
-		| "Aborted"
-		| ProposalStatusInfo.type;
+	status: "Pending" | "Failed" | "Skipped" | "Aborted" | ProposalStatus;
 }
 
 export interface DiscordMessage {
@@ -37,3 +32,5 @@ export type VoteAction = "pass" | "reject";
 export type ProposalRecordUpdater = ReturnType<
 	typeof createProposalRecordUpdater
 >;
+
+export type ProposalStatus = ProposalStatusInfo["type"];

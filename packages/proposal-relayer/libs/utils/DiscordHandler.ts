@@ -3,6 +3,7 @@ import type {
 	DiscordMessage,
 	ProposalDetails,
 	ProposalInfo,
+	ProposalStatus,
 	ProposalRecordUpdater,
 	VoteAction,
 } from "@proposal-relayer/libs/types";
@@ -98,48 +99,51 @@ export class DiscordHandler {
 		await this.api.query.governance.proposalVotes(
 			this.proposalId,
 			async (voteInfo: ProposalVoteInfo) => {
-				const [pass, reject] = this.getVotes(voteInfo);
+				const votes = this.getVotes(voteInfo);
 				const proposalStatus = (
 					await this.api.query.governance.proposalStatus(this.proposalId)
 				).toString();
 
 				logger.info("Proposal #%d: updating status in DB...", this.proposalId);
-				updateProposalRecord({ status: proposalStatus });
-
-				let newMessage: DiscordMessage;
-
-				if (proposalStatus === "Deliberation")
-					newMessage = {
-						components: this.sentMessage.components,
-						embeds: [
-							this.sentMessage.embeds[0],
-							this.sentMessage.embeds[1].setFields(
-								{ name: "Status", value: `_${proposalStatus}_` },
-								{ name: "Pass", value: `_${pass}_`, inline: true },
-								{ name: "Reject", value: `_${reject}_`, inline: true }
-							),
-						],
-					};
-
-				if (proposalStatus !== "Deliberation")
-					newMessage = {
-						components: [],
-						embeds: [
-							new MessageEmbed()
-								.setColor("#9847FF")
-								.setDescription(`**ID:** _#${this.proposalId}_`)
-								.setTitle("Voting Complete")
-								.setFields({ name: "Status", value: `_${proposalStatus}_` }),
-						],
-					};
+				updateProposalRecord({
+					status: proposalStatus as ProposalStatus,
+				});
 
 				logger.info(
 					"Proposal #%d: updating votes on Discord...",
 					this.proposalId
 				);
-				await this.webhook.editMessage(this.sentMessage.id, newMessage);
+				await this.webhook.editMessage(
+					this.sentMessage.id,
+					this.getMessage(proposalStatus as ProposalStatus, votes)
+				);
 			}
 		);
+	}
+
+	getMessage(status: ProposalStatus, [pass, reject]): DiscordMessage {
+		return status === "Deliberation"
+			? {
+					components: this.sentMessage.components,
+					embeds: [
+						this.sentMessage.embeds[0],
+						this.sentMessage.embeds[1].setFields(
+							{ name: "Status", value: `_${status}_`, inline: true },
+							{ name: "Pass", value: `_${pass}_`, inline: true },
+							{ name: "Reject", value: `_${reject}_`, inline: true }
+						),
+					],
+			  }
+			: {
+					components: [],
+					embeds: [
+						new MessageEmbed()
+							.setColor("#9847FF")
+							.setDescription(`**ID:** _#${this.proposalId}_`)
+							.setTitle("Voting Complete")
+							.setFields({ name: "Status", value: `_${status}_` }),
+					],
+			  };
 	}
 
 	getProposalLink(action: VoteAction): string {
@@ -147,6 +151,8 @@ export class DiscordHandler {
 	}
 
 	getVotes({ activeBits, voteBits }): [pass: number, reject: number] {
+		// This function converts the bits to decimals and counts the number of ones - 
+		// votes are stored in this way for efficiency 
 		const countOnes = (bits: u128[]) =>
 			bits
 				.map((bit) => (bit.toNumber() >>> 0).toString(2).split("1").length - 1)
