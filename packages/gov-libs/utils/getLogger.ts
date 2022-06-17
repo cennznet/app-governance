@@ -1,7 +1,7 @@
 import type { LoggerService } from "@gov-libs/types";
 
-import { createLogger, format, transports, Logger } from "winston";
 import chalk from "chalk";
+import { createLogger, format, transports, Logger } from "winston";
 
 const instances = {} as Record<LoggerService, Logger>;
 
@@ -10,9 +10,10 @@ const cennzGreen = chalk.hex("#05b210");
 const cennzPurple = chalk.hex("#9847FF");
 
 const labels = {
+	DiscordBot: chalk.magenta("DiscordBot"),
 	ProposalListener: cennzBlue("ProposalListener"),
 	ProposalProcessor: cennzGreen("ProposalProcessor"),
-	DiscordBot: cennzPurple("DiscordBot"),
+	ProposalDiscord: cennzPurple("ProposalDiscord"),
 };
 
 export const getLogger = (service: LoggerService): Logger => {
