@@ -1,7 +1,6 @@
 import chalk from "chalk";
 import { getLogger } from "@gov-libs/utils/getLogger";
 import { getCENNZnetApi } from "@gov-libs/utils/getCENNZnetApi";
-import { getDiscordWebhook } from "@gov-libs/utils/getDiscordWebhook";
 import { getRabbitMQSet } from "@gov-libs/utils/getRabbitMQSet";
 import { AMQPError, AMQPMessage } from "@cloudamqp/amqp-client";
 import { CENNZ_NETWORK, MESSAGE_MAX_TIME } from "@gov-libs/constants";
@@ -13,14 +12,13 @@ logger.info(
 	CENNZ_NETWORK
 );
 
-Promise.all([getCENNZnetApi(), getDiscordWebhook()])
-	.then(async ([cennzApi, discordWebhook]) => {
+Promise.all([getCENNZnetApi()])
+	.then(async ([cennzApi]) => {
 		const [channel, queue] = await getRabbitMQSet("ProposalQueue");
 
 		const onMessage = async (message: AMQPMessage) => {
 			await handleProposalMessage(
 				cennzApi,
-				discordWebhook,
 				queue,
 				message,
 				(AbortSignal as any).timeout(MESSAGE_MAX_TIME)
