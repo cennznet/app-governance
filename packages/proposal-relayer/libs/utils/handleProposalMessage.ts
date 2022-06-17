@@ -1,5 +1,4 @@
 import type { Api } from "@cennznet/api";
-import type { InteractionWebhook } from "discord.js";
 import type { ProposalRecordUpdater } from "@proposal-relayer/libs/types";
 
 import { getLogger } from "@gov-libs/utils/getLogger";
@@ -8,13 +7,11 @@ import { requeueMessage } from "@proposal-relayer/libs/utils/requeueMessage";
 import { fetchProposalInfo } from "@proposal-relayer/libs/utils/fetchProposalInfo";
 import { fetchProposalDetails } from "@proposal-relayer/libs/utils/fetchProposalDetails";
 import { createProposalRecordUpdater } from "@proposal-relayer/libs/utils/createProposalRecordUpdater";
-import { DiscordHandler } from "@proposal-relayer/libs/utils/DiscordHandler";
 
 const logger = getLogger("ProposalProcessor");
 
 export async function handleProposalMessage(
 	cennzApi: Api,
-	discordWebhook: InteractionWebhook,
 	queue: AMQPQueue,
 	message: AMQPMessage,
 	abortSignal: AbortSignal
@@ -38,7 +35,7 @@ export async function handleProposalMessage(
 			{ once: true }
 		);
 
-		//1. Fetch proposal info from CENNZnet
+		//1. Fetch proposal info from CENNZnet & store in DB
 		if (abortSignal.aborted) return;
 		logger.info("Proposal #%d: [1/3] fetching info...", proposalId);
 
@@ -58,7 +55,7 @@ export async function handleProposalMessage(
 			state: "InfoFetched",
 		});
 
-		//2. Fetch proposal details from IPFS
+		//2. Fetch proposal details from IPFS & store in DB
 		if (abortSignal.aborted) return;
 		logger.info("Proposal #%d: [2/3] fetching details...", proposalId);
 
@@ -70,27 +67,6 @@ export async function handleProposalMessage(
 			proposalDetails,
 			state: "DetailsFetched",
 		});
-
-		//3. Send proposal to Discord
-		if (abortSignal.aborted) return;
-		logger.info("Proposal #%d: [3/3] sending proposal...", proposalId);
-
-		const discordHandler = new DiscordHandler(
-			cennzApi,
-			discordWebhook,
-			proposalId,
-			proposalDetails,
-			proposalInfo
-		);
-
-		await discordHandler.sendProposal();
-		await updateProposalRecord({
-			state: "DiscordSent",
-			status: "Deliberation",
-		});
-
-		//4. Update proposal status on vote
-		await discordHandler.updateOnVote(updateProposalRecord);
 
 		if (abortSignal.aborted) return;
 		messageDelivered = true;
