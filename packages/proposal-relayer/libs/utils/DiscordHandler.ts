@@ -102,30 +102,42 @@ export class DiscordHandler {
 
 	async updateOnVote(
 		updateProposalRecord: ProposalRecordUpdater
-	): Promise<void> {
-		await this.api.query.governance.proposalVotes(
-			this.proposalId,
-			async (voteInfo: ProposalVoteInfo) => {
-				const votes = this.getVotes(voteInfo);
-				const proposalStatus = (
-					await this.api.query.governance.proposalStatus(this.proposalId)
-				).toString();
+	): Promise<string> {
+		return new Promise((resolve, reject) => {
+			try {
+				this.api.query.governance.proposalVotes(
+					this.proposalId,
+					async (voteInfo: ProposalVoteInfo) => {
+						const votes = this.getVotes(voteInfo);
+						const proposalStatus = (
+							await this.api.query.governance.proposalStatus(this.proposalId)
+						).toString();
 
-				logger.info("Proposal #%d: updating status in DB...", this.proposalId);
-				updateProposalRecord({
-					status: proposalStatus as ProposalStatus,
-				});
+						logger.info(
+							"Proposal #%d: updating status in DB...",
+							this.proposalId
+						);
+						updateProposalRecord({
+							status: proposalStatus as ProposalStatus,
+						});
 
-				logger.info(
-					"Proposal #%d: updating votes on Discord...",
-					this.proposalId
+						logger.info(
+							"Proposal #%d: updating votes on Discord...",
+							this.proposalId
+						);
+						await this.webhook.editMessage(
+							this.sentMessage.id,
+							this.getMessage(proposalStatus as ProposalStatus, votes)
+						);
+
+						if (proposalStatus !== "Deliberation") resolve(proposalStatus);
+					}
 				);
-				await this.webhook.editMessage(
-					this.sentMessage.id,
-					this.getMessage(proposalStatus as ProposalStatus, votes)
-				);
+			} catch (error: any) {
+				logger.error("Error: %s", error);
+				reject(error);
 			}
-		);
+		});
 	}
 
 	getMessage(status: ProposalStatus, votes): DiscordMessage {
