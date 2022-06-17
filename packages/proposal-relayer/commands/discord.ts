@@ -30,8 +30,8 @@ Promise.all([getCENNZnetApi(), getDiscordWebhook()]).then(
 			try {
 				await cennzApi.query.governance.proposals.entries((entries) => {
 					entries
+						//Sort entries by proposalId
 						.sort(([aKey], [bKey]) =>
-							//Sort entries by proposalId
 							Number(aKey.toHuman()[0]) < Number(bKey.toHuman()[0]) ? -1 : 1
 						)
 						.forEach(async ([storageKey, entry]) => {
