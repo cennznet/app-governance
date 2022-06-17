@@ -1535,12 +1535,9 @@ __metadata:
     eslint-plugin-react-hooks: 4.5.0
     hygen: ^6.2.7
     jest: 27.5.1
-    next: 12.1.5
     nx: 14.2.4
     prettier: ^2.6.2
     prettier-plugin-tailwindcss: ^0.1.11
-    react: 18.1.0
-    react-dom: 18.1.0
     regenerator-runtime: 0.13.7
     ts-jest: 27.1.4
     ts-node: ^10.8.1
@@ -3606,6 +3603,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sindresorhus/class-names@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@sindresorhus/class-names@npm:2.0.0"
+  checksum: 26fbe201255786d9d9edab06de17e8c053c3cc88c54f860204a472ca2fca0e658e8c3ccabebfce3650bfe386f7883b7a153be388c2798c0b43fe02ad5b608d8f
+  languageName: node
+  linkType: hard
+
 "@sindresorhus/is@npm:^4.6.0":
   version: 4.6.0
   resolution: "@sindresorhus/is@npm:4.6.0"
@@ -5264,6 +5268,13 @@ __metadata:
   bin:
     atob: bin/atob.js
   checksum: dfeeeb70090c5ebea7be4b9f787f866686c645d9f39a0d184c817252d0cf08455ed25267d79c03254d3be1f03ac399992a792edcd5ffb9c91e097ab5ef42833a
+  languageName: node
+  linkType: hard
+
+"auto-bind@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "auto-bind@npm:5.0.1"
+  checksum: 44a6d8d040c4382e761922f8fa1b044e18ddefbc855fecee0c76ec6b4e6fc74adda21026bc86e190833e05f52b4b6615372c2a83a734858f8395b1e2a98b253a
   languageName: node
   linkType: hard
 
@@ -8629,14 +8640,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gov-app-c64c4c@workspace:packages/gov-app":
+"gov-app@workspace:packages/gov-app":
   version: 0.0.0-use.local
-  resolution: "gov-app-c64c4c@workspace:packages/gov-app"
+  resolution: "gov-app@workspace:packages/gov-app"
   dependencies:
     "@types/store": ^2
     "@types/ua-parser-js": ^0.7.36
     autoprefixer: ^10.4.7
+    next: 12.1.5
     postcss: ^8.4.14
+    react: 18.1.0
+    react-dom: 18.1.0
+    react-extras: ^3.0.0
     store: ^2.0.12
     tailwindcss: ^3.1.2
     ua-parser-js: ^1.0.2
@@ -12784,6 +12799,19 @@ __metadata:
   peerDependencies:
     react: ^18.1.0
   checksum: bb0d48eeb0b297c79c2a03978baa29f5b3ff7ba3d070b21e34c9af1a6e7fdf0ca8b8d73e41f9214d91ad40eeb6d1f3559f884cbbc338713374a51320637c23df
+  languageName: node
+  linkType: hard
+
+"react-extras@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "react-extras@npm:3.0.0"
+  dependencies:
+    "@sindresorhus/class-names": ^2.0.0
+    auto-bind: ^5.0.1
+    prop-types: ^15.8.1
+  peerDependencies:
+    react: ">=17"
+  checksum: 999706e575e4458a28a385d389c5171f918e1ca9e00de73f4f244c66e419fa47ce5d18ce1a3621e08b4cd84976fd9f73c70fbf3b271ecf96a89ebb788fad18ff
   languageName: node
   linkType: hard
 
