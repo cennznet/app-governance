@@ -38,7 +38,7 @@ Promise.all([getCENNZnetApi(), getDiscordWebhook()]).then(
 							const proposalId = Number(storageKey.toHuman()[0]);
 
 							//1. Do nothing if voting is finished
-							if (proposalId < 5 || finalized[proposalId]) return;
+							if (finalized[proposalId]) return;
 
 							const newProposal = !discordHandlers[proposalId];
 
