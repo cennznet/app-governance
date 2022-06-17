@@ -4,12 +4,12 @@ import type {
 } from "@proposal-relayer/libs/types";
 
 import chalk from "chalk";
-import { waitFor } from "@gov-libs/utils/waitFor";
 import { CENNZ_NETWORK } from "@gov-libs/constants";
 import { getLogger } from "@gov-libs/utils/getLogger";
+import { waitForBlock } from "@gov-libs/utils/waitForBlock";
 import { getCENNZnetApi } from "@gov-libs/utils/getCENNZnetApi";
 import { getDiscordWebhook } from "@gov-libs/utils/getDiscordWebhook";
-import { POLLING_INTERVAL } from "@proposal-relayer/libs/constants";
+import { BLOCK_POLLING_INTERVAL } from "@proposal-relayer/libs/constants";
 import { DiscordHandler } from "@proposal-relayer/libs/utils/DiscordHandler";
 import { handleDiscordMessage } from "@proposal-relayer/libs/utils/handleDiscordMessage";
 import { fetchProposalDetails } from "@proposal-relayer/libs/utils/fetchProposalDetails";
@@ -73,7 +73,7 @@ Promise.all([getCENNZnetApi(), getDiscordWebhook()]).then(
 						});
 				});
 
-				await waitFor(POLLING_INTERVAL);
+				await waitForBlock(cennzApi, BLOCK_POLLING_INTERVAL);
 			} catch (error) {
 				logger.error("Error: %s", error);
 				process.exit();
