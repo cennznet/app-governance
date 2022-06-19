@@ -6,9 +6,9 @@ import type {
 	ProposalStatus,
 	ProposalRecordUpdater,
 	VoteAction,
+	ProposalVotes,
 } from "@proposal-relayer/libs/types";
 import type { Api } from "@cennznet/api";
-import type { ProposalVoteInfo, u128 } from "@cennznet/types";
 
 import {
 	Message,
@@ -18,23 +18,26 @@ import {
 } from "discord.js";
 import { getLogger } from "@gov-libs/utils/getLogger";
 import { PROPOSALS_URL } from "@proposal-relayer/libs/constants";
+import { fetchVotes } from "./fetchVotes";
+import { createProposalRecordUpdater } from "./createProposalRecordUpdater";
 
-const logger = getLogger("DiscordBot");
+const logger = getLogger("VoteProcessor");
 
 export class DiscordHandler {
 	api: Api;
 	webhook: InteractionWebhook;
-	proposalId: number;
+	proposalId: string;
 	proposalDetails: ProposalDetails;
 	proposalInfo: ProposalInfo;
 	sentMessage: Message;
 	proposalFields: EmbedFieldData[];
 	voteFields: EmbedFieldData[];
+	updateProposalRecord: ProposalRecordUpdater;
 
 	constructor(
 		api: Api,
 		webhook: InteractionWebhook,
-		proposalId: number,
+		proposalId: string,
 		proposalDetails: ProposalDetails,
 		proposalInfo: ProposalInfo
 	) {
@@ -43,21 +46,22 @@ export class DiscordHandler {
 		this.proposalId = proposalId;
 		this.proposalDetails = proposalDetails;
 		this.proposalInfo = proposalInfo;
+		this.updateProposalRecord = createProposalRecordUpdater(Number(proposalId));
 	}
 
 	async sendProposal(): Promise<Message> {
 		this.proposalFields = [
 			{
 				name: "Details",
-				value: this.proposalDetails.description,
+				value: this.proposalDetails.get("description"),
 			},
 			{
 				name: "Sponsor",
-				value: `_${this.proposalInfo.sponsor}_`,
+				value: `_${this.proposalInfo.get("sponsor")}_`,
 			},
 			{
 				name: "Enactment Delay",
-				value: `${this.proposalInfo.enactmentDelay} blocks`,
+				value: `${this.proposalInfo.get("enactmentDelay")} blocks`,
 			},
 		];
 
@@ -77,7 +81,7 @@ export class DiscordHandler {
 		const message = new MessageEmbed()
 			.setColor("#9847FF")
 			.setTitle(`Proposal ID: _#${this.proposalId}_`)
-			.setDescription(`_**${this.proposalDetails.title}**_`)
+			.setDescription(`_**${this.proposalDetails.get("title")}**_`)
 			.setFields(this.proposalFields)
 			.addFields(this.voteFields)
 			.setFooter({ text: "Status: Deliberation" })
@@ -94,60 +98,53 @@ export class DiscordHandler {
 				.setStyle("LINK")
 		);
 
+		this.updateProposalRecord({
+			state: "DiscordSent",
+			passVotes: 1,
+			rejectVotes: 0,
+		});
+
 		return (this.sentMessage = (await this.webhook.send({
 			embeds: [message],
 			components: [voteButtons],
 		})) as Message);
 	}
 
-	async updateOnVote(
-		updateProposalRecord: ProposalRecordUpdater
-	): Promise<string> {
-		return new Promise((resolve, reject) => {
-			try {
-				this.api.query.governance.proposalVotes(
-					this.proposalId,
-					async (voteInfo: ProposalVoteInfo) => {
-						const votes = this.getVotes(voteInfo);
-						const proposalStatus = (
-							await this.api.query.governance.proposalStatus(this.proposalId)
-						).toString();
+	async updateVotes(): Promise<string> {
+		const proposalStatus = (
+			await this.api.query.governance.proposalStatus(this.proposalId)
+		).toString();
 
-						logger.info(
-							"Proposal #%d: updating status in DB...",
-							this.proposalId
-						);
-						updateProposalRecord({
-							status: proposalStatus as ProposalStatus,
-						});
+		const { passVotes, rejectVotes } = await fetchVotes(
+			this.api,
+			this.proposalId
+		);
 
-						logger.info(
-							"Proposal #%d: updating votes on Discord...",
-							this.proposalId
-						);
-						await this.webhook.editMessage(
-							this.sentMessage.id,
-							this.getMessage(proposalStatus as ProposalStatus, votes)
-						);
-
-						if (proposalStatus !== "Deliberation") resolve(proposalStatus);
-					}
-				);
-			} catch (error: any) {
-				logger.error("Error: %s", error);
-				reject(error);
-			}
+		this.updateProposalRecord({
+			status: proposalStatus as ProposalStatus,
+			passVotes,
+			rejectVotes,
 		});
+
+		await this.webhook.editMessage(
+			this.sentMessage.id,
+			this.getMessage(proposalStatus as ProposalStatus, {
+				passVotes,
+				rejectVotes,
+			})
+		);
+
+		return proposalStatus;
 	}
 
-	getMessage(status: ProposalStatus, votes): DiscordMessage {
+	getMessage(status: ProposalStatus, votes: ProposalVotes): DiscordMessage {
 		return status === "Deliberation"
 			? {
 					components: this.sentMessage.components,
 					embeds: [
 						this.sentMessage.embeds[0]
 							.setFields(this.proposalFields)
-							.addFields(this.getVoteFields(status, votes))
+							.addFields(this.getVoteFields(votes))
 							.setFooter({ text: `Status: ${status}` })
 							.setTimestamp(),
 					],
@@ -164,21 +161,16 @@ export class DiscordHandler {
 			  };
 	}
 
-	getVoteFields(
-		status: ProposalStatus,
-		votes: [pass: number, reject: number]
-	): EmbedFieldData[] {
-		const [pass, reject] = votes;
-
+	getVoteFields({ passVotes, rejectVotes }: ProposalVotes): EmbedFieldData[] {
 		this.voteFields[0] = {
 			name: "Votes to Pass",
-			value: `_**${pass}**_`,
+			value: `_**${passVotes}**_`,
 			inline: true,
 		};
 
 		this.voteFields[1] = {
 			name: "Votes to Reject",
-			value: `_**${reject}**_`,
+			value: `_**${rejectVotes}**_`,
 			inline: true,
 		};
 
@@ -187,19 +179,5 @@ export class DiscordHandler {
 
 	getProposalLink(action: VoteAction): string {
 		return `${PROPOSALS_URL}/${this.proposalId}?stage=proposal&action=${action}`;
-	}
-
-	getVotes({ activeBits, voteBits }): [pass: number, reject: number] {
-		// This function converts the bits to decimals and counts the number of ones -
-		// votes are stored in this way for efficiency
-		const countOnes = (bits: u128[]) =>
-			bits
-				.map((bit) => (bit.toNumber() >>> 0).toString(2).split("1").length - 1)
-				.reduce((total, acc) => total + acc, 0);
-
-		const activeCount = countOnes(activeBits);
-		const passCount = countOnes(voteBits);
-
-		return [passCount, activeCount - passCount];
 	}
 }
