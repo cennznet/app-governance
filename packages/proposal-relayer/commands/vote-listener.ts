@@ -34,7 +34,9 @@ Promise.all([getCENNZnetApi()]).then(async ([cennzApi]) => {
 							voteBits
 						);
 
-						const proposal = await Proposal.findOne({ proposalId: Number(proposalId) });
+						const proposal = await Proposal.findOne({
+							proposalId: Number(proposalId),
+						});
 						if (!proposal?.proposalDetails || !proposal?.proposalInfo) return;
 
 						const { passVotes: prevPass, rejectVotes: prevReject } = proposal;

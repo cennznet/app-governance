@@ -3,16 +3,16 @@ import type { ProposalStatusInfo } from "@cennznet/types";
 
 import { createProposalRecordUpdater } from "@proposal-relayer/libs/utils/createProposalRecordUpdater";
 
-export type ProposalDetails =  Map<{
+export type ProposalDetails = Map<{
 	title: string;
 	description: string;
-}>
+}>;
 
 export type ProposalInfo = Map<{
 	sponsor: string;
 	justificationUri: string;
 	enactmentDelay: number;
-}>
+}>;
 
 export interface ProposalInterface {
 	proposalId: number;

@@ -16,12 +16,9 @@ import {
 	MessageButton,
 	MessageActionRow,
 } from "discord.js";
-import { getLogger } from "@gov-libs/utils/getLogger";
 import { PROPOSALS_URL } from "@proposal-relayer/libs/constants";
-import { fetchVotes } from "./fetchVotes";
-import { createProposalRecordUpdater } from "./createProposalRecordUpdater";
-
-const logger = getLogger("VoteProcessor");
+import { fetchVotes } from "@proposal-relayer/libs/utils/fetchVotes";
+import { createProposalRecordUpdater } from "@proposal-relayer/libs/utils/createProposalRecordUpdater";
 
 export class DiscordHandler {
 	api: Api;

@@ -20,7 +20,7 @@ export async function handleProposalMessage(
 
 	const body = message.bodyString();
 	if (!body) return;
-	
+
 	const proposalId = Number(body);
 	const updateProposalRecord: ProposalRecordUpdater =
 		createProposalRecordUpdater(proposalId);
