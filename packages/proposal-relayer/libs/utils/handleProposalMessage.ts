@@ -3,7 +3,7 @@ import type { ProposalRecordUpdater } from "@proposal-relayer/libs/types";
 
 import { getLogger } from "@gov-libs/utils/getLogger";
 import { AMQPQueue, AMQPMessage } from "@cloudamqp/amqp-client";
-import { requeueMessage } from "@proposal-relayer/libs/utils/requeueMessage";
+import { requeueMessage } from "@gov-libs/utils/requeueMessage";
 import { fetchProposalInfo } from "@proposal-relayer/libs/utils/fetchProposalInfo";
 import { fetchProposalDetails } from "@proposal-relayer/libs/utils/fetchProposalDetails";
 import { createProposalRecordUpdater } from "@proposal-relayer/libs/utils/createProposalRecordUpdater";
@@ -16,10 +16,12 @@ export async function handleProposalMessage(
 	message: AMQPMessage,
 	abortSignal: AbortSignal
 ) {
+	let messageDelivered = false;
+
 	const body = message.bodyString();
 	if (!body) return;
+	
 	const proposalId = Number(body);
-	let messageDelivered = false;
 	const updateProposalRecord: ProposalRecordUpdater =
 		createProposalRecordUpdater(proposalId);
 
@@ -30,7 +32,7 @@ export async function handleProposalMessage(
 				if (messageDelivered) return;
 				await updateProposalRecord?.({ status: "Aborted" });
 				await message.reject(false);
-				logger.info("Request #%d: aborted.", proposalId);
+				logger.info("Proposal #%d: aborted.", proposalId);
 			},
 			{ once: true }
 		);
@@ -66,6 +68,7 @@ export async function handleProposalMessage(
 		await updateProposalRecord({
 			proposalDetails,
 			state: "DetailsFetched",
+			status: "Deliberation",
 		});
 
 		if (abortSignal.aborted) return;
