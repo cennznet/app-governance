@@ -10,10 +10,11 @@ const cennzGreen = chalk.hex("#05b210");
 const cennzPurple = chalk.hex("#9847FF");
 
 const labels = {
-	DiscordBot: chalk.magenta("DiscordBot"),
+	DiscordBot: cennzPurple("DiscordBot"),
 	ProposalListener: cennzBlue("ProposalListener"),
 	ProposalProcessor: cennzGreen("ProposalProcessor"),
-	ProposalDiscord: cennzPurple("ProposalDiscord"),
+	VoteListener: chalk.yellow("VoteListener"),
+	VoteProcessor: chalk.cyan("VoteProcessor"),
 };
 
 export const getLogger = (service: LoggerService): Logger => {

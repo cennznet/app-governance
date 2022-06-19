@@ -15,27 +15,35 @@
         "parallel": false
       }
     },
-    "listener": {
+    "proposal-listener": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/listener.ts"
+          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/proposal-listener.ts"
         ]
       }
     },
-    "processor": {
+    "proposal-processor": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/processor.ts"
+          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/proposal-processor.ts"
         ]
       }
     },
-    "discord": {
+    "vote-listener": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/discord.ts"
+          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/vote-listener.ts"
+        ]
+      }
+    },
+    "vote-processor": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/vote-processor.ts"
         ]
       }
     },
