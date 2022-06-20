@@ -97,8 +97,6 @@ export class DiscordHandler {
 
 		this.updateProposalRecord({
 			state: "DiscordSent",
-			passVotes: 1,
-			rejectVotes: 0,
 		});
 
 		return (this.sentMessage = (await this.webhook.send({
@@ -121,6 +119,7 @@ export class DiscordHandler {
 			status: proposalStatus as ProposalStatus,
 			passVotes,
 			rejectVotes,
+			state: proposalStatus === "Deliberation" ? "DiscordSent" : "Done",
 		});
 
 		await this.webhook.editMessage(

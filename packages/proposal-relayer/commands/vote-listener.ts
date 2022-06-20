@@ -5,6 +5,7 @@ import { waitForBlock } from "@gov-libs/utils/waitForBlock";
 import { getCENNZnetApi } from "@gov-libs/utils/getCENNZnetApi";
 import { BLOCK_POLLING_INTERVAL } from "@proposal-relayer/libs/constants";
 import { getVotesFromBits } from "@proposal-relayer/libs/utils/fetchVotes";
+import { handleFinalizedProposals } from "@proposal-relayer/libs/utils/handleFinalizedProposals";
 import { getRabbitMQSet } from "@gov-libs/utils/getRabbitMQSet";
 import { Proposal } from "@proposal-relayer/libs/models";
 
@@ -46,6 +47,8 @@ Promise.all([getCENNZnetApi()]).then(async ([cennzApi]) => {
 						queue.publish(proposalId);
 					});
 			});
+
+			await handleFinalizedProposals(queue);
 
 			await waitForBlock(cennzApi, BLOCK_POLLING_INTERVAL);
 		} catch (error) {
