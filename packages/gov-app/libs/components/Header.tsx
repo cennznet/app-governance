@@ -12,7 +12,11 @@ export const Header: FC<IntrinsicElements["div"] & HeaderProps> = ({
 }) => {
 	return (
 		<header {...props} className="py-16 px-20">
-			<img src={TopLogo.src} />
+			<img
+				src={TopLogo.src}
+				className="w-96"
+				alt="CENNZet | Governance Platform"
+			/>
 			{children}
 		</header>
 	);
