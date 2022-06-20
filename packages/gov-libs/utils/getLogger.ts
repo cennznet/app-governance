@@ -13,7 +13,6 @@ const labels = {
 	DiscordBot: cennzPurple("DiscordBot"),
 	ProposalListener: cennzBlue("ProposalListener"),
 	ProposalProcessor: cennzGreen("ProposalProcessor"),
-	VoteListener: chalk.yellow("VoteListener"),
 	VoteProcessor: chalk.cyan("VoteProcessor"),
 };
 
