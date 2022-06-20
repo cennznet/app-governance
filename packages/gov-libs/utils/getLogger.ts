@@ -5,17 +5,6 @@ import { createLogger, format, transports, Logger } from "winston";
 
 const instances = {} as Record<LoggerService, Logger>;
 
-const cennzBlue = chalk.hex("#1130FF");
-const cennzGreen = chalk.hex("#05b210");
-const cennzPurple = chalk.hex("#9847FF");
-
-const labels = {
-	DiscordBot: cennzPurple("DiscordBot"),
-	ProposalListener: cennzBlue("ProposalListener"),
-	ProposalProcessor: cennzGreen("ProposalProcessor"),
-	VoteProcessor: chalk.cyan("VoteProcessor"),
-};
-
 export const getLogger = (service: LoggerService): Logger => {
 	if (instances[service]) return instances[service];
 
@@ -59,7 +48,7 @@ function getDefaultFormat(service: string) {
 function getColorized(service: LoggerService) {
 	return [
 		format.label({
-			label: labels[service],
+			label: chalk.cyan(service),
 			message: true,
 		}),
 		format.timestamp({
