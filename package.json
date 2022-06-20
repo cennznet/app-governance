@@ -70,7 +70,9 @@
     "@polkadot/util": "8.7.1",
     "@polkadot/util-crypto": "8.7.1",
     "nx": "14.2.4",
-    "rxjs": "7.5.5"
+    "rxjs": "7.5.5",
+    "lodash": "^4.17",
+    "lodash-es": "^4.17"
   },
   "workspaces": [
     "packages/**"

@@ -1,3 +1,5 @@
+import { OAuthUserConfig } from "next-auth/providers";
+
 export const CENNZ_NETWORK = {
 	rata: {
 		ChainName: "Rata Testnet",
@@ -23,3 +25,19 @@ export const CENNZ_NETWORK = {
 		ExplorerUrl: "https://uncoverexplorer.com",
 	},
 }[process.env.NEXT_PUBLIC_CENNZ_NETWORK ?? "rata"];
+
+export const DISCORD_CLIENT: Pick<
+	OAuthUserConfig<"discord">,
+	"clientId" | "clientSecret"
+> = {
+	clientId: process.env.DISCORD_CLIENT_ID,
+	clientSecret: process.env.DISCORD_CLIENT_SECRET,
+};
+
+export const TWITTER_CLIENT: Pick<
+	OAuthUserConfig<"twitter">,
+	"clientId" | "clientSecret"
+> = {
+	clientId: process.env.TWITTER_CLIENT_ID,
+	clientSecret: process.env.TWITTER_CLIENT_SECRET,
+};

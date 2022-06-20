@@ -11,29 +11,35 @@ import { CENNZWalletProvider } from "@gov-app/libs/providers/CENNZWalletProvider
 import { UserAgentProvider } from "@gov-app/libs/providers/UserAgentProvider";
 import { WalletProvider } from "@gov-app/libs/providers/WalletProvider";
 import { FC } from "react";
+import { SessionProvider } from "next-auth/react";
 
-const NextApp: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
+const NextApp: FC<AppProps> = ({
+	Component,
+	pageProps: { session, ...pageProps },
+}: AppProps) => {
 	return (
-		<MainProvider
-			providers={[
-				<UserAgentProvider />,
-				<WalletProvider />,
-				<CENNZExtensionProvider />,
-				<CENNZApiProvider endpoint={CENNZ_NETWORK.ApiUrl.InWebSocket} />,
-				<CENNZWalletProvider />,
-			]}
-		>
-			<Head>
-				<title>CENNZnet | Governance Platform</title>
-				<meta name="description" content="CENNZnet Governance" />
-				<link
-					rel="stylesheet"
-					type="text/css"
-					href="https://use.typekit.net/sxj0edc.css"
-				/>
-			</Head>
-			<Component {...pageProps} />
-		</MainProvider>
+		<SessionProvider session={session}>
+			<MainProvider
+				providers={[
+					<UserAgentProvider />,
+					<WalletProvider />,
+					<CENNZExtensionProvider />,
+					<CENNZApiProvider endpoint={CENNZ_NETWORK.ApiUrl.InWebSocket} />,
+					<CENNZWalletProvider />,
+				]}
+			>
+				<Head>
+					<title>CENNZnet | Governance Platform</title>
+					<meta name="description" content="CENNZnet Governance" />
+					<link
+						rel="stylesheet"
+						type="text/css"
+						href="https://use.typekit.net/sxj0edc.css"
+					/>
+				</Head>
+				<Component {...pageProps} />
+			</MainProvider>
+		</SessionProvider>
 	);
 };
 
