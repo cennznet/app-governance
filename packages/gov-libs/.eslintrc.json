@@ -4,12 +4,7 @@
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-non-null-assertion": "off",
-        "@typescript-eslint/no-inferrable-types": "off",
-        "no-async-promise-executor": "off"
-      }
+      "rules": {}
     },
     {
       "files": ["*.ts", "*.tsx"],
