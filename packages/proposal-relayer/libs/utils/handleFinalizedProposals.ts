@@ -4,7 +4,7 @@ import type { ProposalInterface } from "@proposal-relayer/libs/types";
 import { Proposal } from "@proposal-relayer/libs/models";
 import { getLogger } from "@gov-libs/utils/getLogger";
 
-const logger = getLogger("VoteListener");
+const logger = getLogger("ProposalListener");
 
 export function handleFinalizedProposals(queue: AMQPQueue): void {
 	Proposal.find({})
