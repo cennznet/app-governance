@@ -14,7 +14,12 @@ const nextConfig = {
 		return [
 			{
 				source: "/",
-				destination: "/connect",
+				destination: "/identity/connect",
+				permanent: false,
+			},
+			{
+				source: "/identity",
+				destination: "/identity/connect",
 				permanent: false,
 			},
 			{
