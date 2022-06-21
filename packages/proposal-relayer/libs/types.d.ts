@@ -15,6 +15,7 @@ export type ProposalInfo = Map<{
 }>;
 
 export interface ProposalInterface {
+	discordMessageId: string;
 	proposalId: number;
 	proposalInfo: ProposalInfo;
 	proposalDetails: ProposalDetails;
