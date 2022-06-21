@@ -13,6 +13,7 @@ export async function requeueMessage(
 
 	if (retriesCount >= MESSAGE_MAX_RETRY) return "Discarded";
 
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	await queue.publish(message.body!, {
 		...message.properties,
 		headers: {

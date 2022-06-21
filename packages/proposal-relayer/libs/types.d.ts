@@ -3,22 +3,25 @@ import type { ProposalStatusInfo } from "@cennznet/types";
 
 import { createProposalRecordUpdater } from "@proposal-relayer/libs/utils/createProposalRecordUpdater";
 
-export interface ProposalDetails {
+export type ProposalDetails = Map<{
 	title: string;
 	description: string;
-}
+}>;
 
-export interface ProposalInfo {
+export type ProposalInfo = Map<{
 	sponsor: string;
 	justificationUri: string;
 	enactmentDelay: number;
-}
+}>;
 
 export interface ProposalInterface {
+	discordMessageId: string;
 	proposalId: number;
 	proposalInfo: ProposalInfo;
 	proposalDetails: ProposalDetails;
-	state: "Created" | "InfoFetched" | "DetailsFetched" | "DiscordSent";
+	passVotes: number;
+	rejectVotes: number;
+	state: "Created" | "InfoFetched" | "DetailsFetched" | "DiscordSent" | "Done";
 	status: "Pending" | "Failed" | "Skipped" | "Aborted" | ProposalStatus;
 }
 
@@ -34,3 +37,8 @@ export type ProposalRecordUpdater = ReturnType<
 >;
 
 export type ProposalStatus = ProposalStatusInfo["type"];
+
+export interface ProposalVotes {
+	passVotes: number;
+	rejectVotes: number;
+}

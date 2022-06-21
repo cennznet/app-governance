@@ -1,7 +1,4 @@
-interface ProposalDetails {
-	title: string;
-	description: string;
-}
+import type { ProposalDetails } from "@proposal-relayer/libs/types";
 
 export async function fetchProposalDetails(
 	justificationUri: string

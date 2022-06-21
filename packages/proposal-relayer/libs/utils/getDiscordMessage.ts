@@ -2,49 +2,39 @@ import type {
 	DiscordMessage,
 	ProposalDetails,
 	ProposalInfo,
+	ProposalStatus,
+	ProposalVotes,
 } from "@proposal-relayer/libs/types";
 
-import { MessageEmbed, MessageButton, MessageActionRow } from "discord.js";
+import {
+	getProposalFields,
+	getProposalEmbed,
+} from "@proposal-relayer/libs/utils/getProposalFields";
+import {
+	getVoteFields,
+	getVoteButtons,
+} from "@proposal-relayer/libs/utils/getVoteFields";
 
 export function getDiscordMessage(
 	proposalId: number,
+	proposalStatus: ProposalStatus,
 	proposalDetails: ProposalDetails,
-	proposalInfo: ProposalInfo
+	proposalInfo: ProposalInfo,
+	votes: ProposalVotes | undefined
 ): DiscordMessage {
-	const embed = new MessageEmbed()
-		.setColor("#9847FF")
-		.setTitle("New Proposal")
-		.setDescription(`**ID:** _#${proposalId}_`)
-		.addFields([
-			{
-				name: "Title",
-				value: proposalDetails.title,
-				inline: true,
-			},
-			{
-				name: "Details",
-				value: proposalDetails.description,
-				inline: true,
-			},
-			{
-				name: "Sponsor",
-				value: proposalInfo.sponsor,
-				inline: false,
-			},
-			{
-				name: "Enactment Delay",
-				value: `_${proposalInfo.enactmentDelay} blocks_`,
-				inline: false,
-			},
-		])
-		.setTimestamp();
+	const proposalFields = getProposalFields(proposalDetails, proposalInfo);
 
-	const row = new MessageActionRow().addComponents(
-		new MessageButton()
-			.setURL("https://saucet.vercel.app")
-			.setLabel("Vote!")
-			.setStyle("LINK")
-	);
-
-	return { embeds: [embed], components: [row] };
+	return {
+		components:
+			proposalStatus === "Deliberation" ? [getVoteButtons(proposalId)] : [],
+		embeds: [
+			getProposalEmbed(
+				proposalId,
+				proposalStatus,
+				proposalDetails.title,
+				proposalFields,
+				proposalStatus === "Deliberation" ? getVoteFields(votes) : undefined
+			),
+		],
+	};
 }
