@@ -1,4 +1,9 @@
-import type { u64 } from "@cennznet/types";
+import type {
+	u64,
+	ProposalStatusInfo,
+	ProposalVoteInfo,
+	StorageKey,
+} from "@cennznet/types";
 
 import chalk from "chalk";
 import { AMQPError } from "@cloudamqp/amqp-client";
@@ -10,7 +15,6 @@ import { getRabbitMQSet } from "@gov-libs/utils/getRabbitMQSet";
 import { getCENNZnetApi } from "@gov-libs/utils/getCENNZnetApi";
 import { BLOCK_POLLING_INTERVAL } from "@proposal-relayer/libs/constants";
 import { getVotesFromBits } from "@proposal-relayer/libs/utils/fetchVotes";
-import { handleFinalizedProposals } from "@proposal-relayer/libs/utils/handleFinalizedProposals";
 import { collectPendingProposalIds } from "@proposal-relayer/libs/utils/collectPendingProposalIds";
 
 const logger = getLogger("ProposalListener");
@@ -44,29 +48,60 @@ Promise.all([getCENNZnetApi()]).then(async ([cennzApi]) => {
 			await waitForBlock(cennzApi, BLOCK_POLLING_INTERVAL);
 
 			//2. Fetch votes and update DB & Discord
-			await cennzApi.query.governance.proposalVotes.entries((entries: any) => {
-				entries.forEach(async ([storageKey, { activeBits, voteBits }]) => {
-					const proposalId = storageKey.toHuman()[0];
+			await cennzApi.query.governance.proposalVotes.entries(
+				(entries: [storageKey: StorageKey, votes: ProposalVoteInfo][]) => {
+					entries.forEach(async ([storageKey, { activeBits, voteBits }]) => {
+						const proposalId = storageKey.toHuman()[0];
 
-					const proposal = await Proposal.findOne({
-						proposalId: Number(proposalId),
+						const proposal = await Proposal.findOne({
+							proposalId: Number(proposalId),
+						});
+						if (!proposal?.proposalDetails || !proposal?.proposalInfo) return;
+
+						const { passVotes, rejectVotes } = getVotesFromBits(
+							activeBits,
+							voteBits
+						);
+						const { passVotes: prevPass, rejectVotes: prevReject } = proposal;
+						if (prevPass === passVotes && prevReject === rejectVotes) return;
+
+						logger.info(
+							"Proposal #%s: New votes, sent to queue...",
+							proposalId
+						);
+						voteQueue.publish(
+							JSON.stringify({ proposal, votes: { passVotes, rejectVotes } }),
+							{ type: "votes" }
+						);
 					});
-					if (!proposal?.proposalDetails || !proposal?.proposalInfo) return;
-
-					const { passVotes, rejectVotes } = getVotesFromBits(
-						activeBits,
-						voteBits
-					);
-					const { passVotes: prevPass, rejectVotes: prevReject } = proposal;
-					if (prevPass === passVotes && prevReject === rejectVotes) return;
-
-					logger.info("ProposalVote #%s: Sent to queue...", proposalId);
-					voteQueue.publish(proposalId);
-				});
-			});
+				}
+			);
 
 			//3. Fetch finalized proposals and update DB & Discord
-			await handleFinalizedProposals(voteQueue);
+			await cennzApi.query.governance.proposalStatus.entries(
+				(entries: [storageKey: StorageKey, status: ProposalStatusInfo][]) => {
+					entries.forEach(async ([storageKey, status]) => {
+						const proposalId = storageKey.toHuman()[0];
+						const proposalStatus = status.toHuman();
+
+						if (proposalStatus === "Deliberation") return;
+
+						const proposal = await Proposal.findOne({
+							proposalId: Number(proposalId),
+						});
+						if (!proposal?.discordMessageId || proposal?.state === "Done")
+							return;
+
+						logger.info(
+							"Proposal #%s: Voting finished, sent to queue...",
+							proposalId
+						);
+						voteQueue.publish(JSON.stringify({ proposal, proposalStatus }), {
+							type: "status",
+						});
+					});
+				}
+			);
 		}
 	} catch (error) {
 		if (error instanceof AMQPError) error?.connection?.close();
