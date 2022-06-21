@@ -8,7 +8,7 @@ import { getVotesFromBits } from "@proposal-relayer/libs/utils/getVotesFromBits"
 
 const logger = getLogger("ProposalListener");
 
-export async function fetchVotes(
+export async function monitorVotes(
 	cennzApi: Api,
 	queue: AMQPQueue
 ): Promise<void> {

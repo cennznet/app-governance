@@ -7,7 +7,7 @@ import { Proposal } from "@proposal-relayer/libs/models";
 
 const logger = getLogger("ProposalListener");
 
-export async function fetchStatus(
+export async function monitorStatus(
 	cennzApi: Api,
 	queue: AMQPQueue
 ): Promise<void> {

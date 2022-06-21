@@ -7,8 +7,8 @@ import { getRabbitMQSet } from "@gov-libs/utils/getRabbitMQSet";
 import { getCENNZnetApi } from "@gov-libs/utils/getCENNZnetApi";
 import { BLOCK_POLLING_INTERVAL } from "@proposal-relayer/libs/constants";
 import { fetchProposals } from "@proposal-relayer/libs/utils/fetchProposals";
-import { fetchVotes } from "@proposal-relayer/libs/utils/fetchVotes";
-import { fetchStatus } from "@proposal-relayer/libs/utils/fetchStatus";
+import { monitorVotes } from "@proposal-relayer/libs/utils/monitorVotes";
+import { monitorStatus } from "@proposal-relayer/libs/utils/monitorStatus";
 
 const logger = getLogger("ProposalListener");
 logger.info(
@@ -28,9 +28,9 @@ Promise.all([getCENNZnetApi()]).then(async ([cennzApi]) => {
 		while (polling) {
 			await waitForBlock(cennzApi, BLOCK_POLLING_INTERVAL);
 
-			await fetchVotes(cennzApi, deliberationQueue);
+			await monitorVotes(cennzApi, deliberationQueue);
 
-			await fetchStatus(cennzApi, deliberationQueue);
+			await monitorStatus(cennzApi, deliberationQueue);
 		}
 	} catch (error) {
 		if (error instanceof AMQPError) error?.connection?.close();
