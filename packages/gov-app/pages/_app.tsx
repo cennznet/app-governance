@@ -23,7 +23,7 @@ const NextApp: FC<AppProps> = ({
 				providers={[
 					<UserAgentProvider />,
 					<WalletProvider />,
-					<CENNZExtensionProvider />,
+					<CENNZExtensionProvider appName="CENNZnet Governance" />,
 					<CENNZApiProvider endpoint={CENNZ_NETWORK.ApiUrl.InWebSocket} />,
 					<CENNZWalletProvider />,
 				]}

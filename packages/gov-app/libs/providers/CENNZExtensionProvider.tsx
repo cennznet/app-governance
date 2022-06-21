@@ -27,9 +27,12 @@ const CENNZExtensionContext = createContext<CENNZExtensionContextType>(
 	{} as CENNZExtensionContextType
 );
 
-interface CENNZExtensionProviderProps extends PropsWithChildren {}
+interface CENNZExtensionProviderProps extends PropsWithChildren {
+	appName: string;
+}
 
 export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
+	appName,
 	children,
 }) => {
 	const { browser, os } = useUserAgent();
@@ -71,10 +74,10 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 
 		return async () => {
 			const { web3Enable, web3FromSource } = module;
-			await web3Enable("CENNZnet App Hub");
+			await web3Enable(appName);
 			return await web3FromSource("cennznet-extension").catch(() => null);
 		};
-	}, [module]);
+	}, [appName, module]);
 
 	useEffect(() => {
 		if (!module || selectedWallet !== "CENNZnet") return;
@@ -83,7 +86,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 		const fetchAccounts = async () => {
 			const { web3Enable, web3Accounts, web3AccountsSubscribe } = module;
 
-			await web3Enable("CENNZnet App Hub");
+			await web3Enable(appName);
 			const accounts = (await web3Accounts()) || [];
 			if (!accounts.length)
 				return alert(
@@ -100,7 +103,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 		void fetchAccounts();
 
 		return unsubscribe;
-	}, [module, selectedWallet]);
+	}, [appName, module, selectedWallet]);
 
 	return (
 		<CENNZExtensionContext.Provider
