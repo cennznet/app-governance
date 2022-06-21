@@ -9,3 +9,8 @@ body,
 	@apply scroll-smooth;
 	@apply h-full;
 }
+
+input::-webkit-input-placeholder {
+	/* Chrome, Firefox, Opera, Safari 10.1+ */
+	@apply text-gray-400;
+}

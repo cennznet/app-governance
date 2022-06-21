@@ -9,6 +9,7 @@ import { ReactComponent as DiscordLogo } from "@gov-app/libs/assets/vectors/disc
 import { ReactComponent as TwitterLogo } from "@gov-app/libs/assets/vectors/twitter.svg";
 import { ReactComponent as CENNZLogo } from "@gov-app/libs/assets/vectors/cennz.svg";
 import { TextField } from "@gov-app/libs/components/TextField";
+import { Select } from "@gov-app/libs/components/Select";
 
 const Connect: NextPage = () => {
 	const popWindow = useWindowPopup();
@@ -49,7 +50,6 @@ const Connect: NextPage = () => {
 						placeholder="Sign-in to Twitter"
 						className="mr-4 flex-1"
 						inputClassName="!py-4"
-						disabled
 						endAdornment={
 							<Button
 								size="small"
@@ -70,10 +70,13 @@ const Connect: NextPage = () => {
 				</div>
 
 				<div className="mt-4 flex w-[520px] items-center">
+					<TextField placeholder="Connect CENNZnet Wallet" />
+				</div>
+
+				<div className="mt-4 flex w-[520px] items-center">
 					<TextField
 						placeholder="Connect CENNZnet Wallet"
 						inputClassName="!py-4"
-						disabled
 						endAdornment={
 							<Button
 								size="small"
@@ -83,6 +86,30 @@ const Connect: NextPage = () => {
 							</Button>
 						}
 					/>
+				</div>
+
+				<div className="mt-4 flex w-[520px] items-center">
+					<Select>
+						<option>0x9597a6c745a8bf15bb6320e5e6</option>
+					</Select>
+				</div>
+
+				<div className="mt-4 flex w-[520px] items-center">
+					<Select
+						placeholder="Connect CENNZnet Wallet"
+						inputClassName="!py-4"
+						required
+						endAdornment={
+							<Button
+								size="small"
+								startAdornment={<CENNZLogo className="h-4" />}
+							>
+								Connect
+							</Button>
+						}
+					>
+						<option>0x9597a6c745a8bf15bb6320e5e6</option>
+					</Select>
 				</div>
 			</div>
 		</Layout>

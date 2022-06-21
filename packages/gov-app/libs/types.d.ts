@@ -19,4 +19,5 @@ export interface IntrinsicElements {
 	button: ButtonHTMLAttributes<HTMLButtonElement>;
 	input: InputHTMLAttributes<HTMLInputElement>;
 	a: AnchorHTMLAttributes<HTMLAnchorElement>;
+	select: InputHTMLAttributes<HTMLSelectElement>;
 }
