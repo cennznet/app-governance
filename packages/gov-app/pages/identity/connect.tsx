@@ -5,6 +5,8 @@ import { useCallback } from "react";
 import { useWindowPopup } from "@gov-app/libs/hooks/useWindowPopup";
 import { useSession } from "next-auth/react";
 import { Button } from "@gov-app/libs/components/Button";
+import { ReactComponent as DiscordLogo } from "@gov-app/libs/assets/vectors/discord.svg";
+import { ReactComponent as TwitterLogo } from "@gov-app/libs/assets/vectors/twitter.svg";
 
 const Connect: NextPage = () => {
 	const popWindow = useWindowPopup();
@@ -18,19 +20,25 @@ const Connect: NextPage = () => {
 		popWindow("/popup/signin?provider=discord", "DiscordAuth");
 	}, [popWindow]);
 
-	console.log({ session, status });
-
 	return (
 		<Layout>
 			<Header />
 			<div className="flex flex-1 flex-col items-center justify-center">
 				<div className="flex">
-					<Button onClick={onTwitterConnectClick} className="mr-2">
-						Connect Twitter
+					<Button
+						onClick={onTwitterConnectClick}
+						className="mr-2"
+						startAdornment={<TwitterLogo />}
+					>
+						Sign In
 					</Button>
 
-					<Button onClick={onDiscordConnectClick} variant="white">
-						Connect Discord
+					<Button
+						onClick={onDiscordConnectClick}
+						variant="white"
+						startAdornment={<DiscordLogo />}
+					>
+						Sign In
 					</Button>
 				</div>
 			</div>
