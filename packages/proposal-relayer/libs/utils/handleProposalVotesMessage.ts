@@ -12,7 +12,7 @@ import { createProposalRecordUpdater } from "@proposal-relayer/libs/utils/create
 import { requeueMessage } from "@gov-libs/utils/requeueMessage";
 import { getDiscordMessage } from "./getDiscordMessage";
 
-const logger = getLogger("VoteProcessor");
+const logger = getLogger("DeliberationProcessor");
 
 export async function handleProposalVotesMessage(
 	discordWebhook: InteractionWebhook,

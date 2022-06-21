@@ -1,36 +1,40 @@
 import type { Api } from "@cennznet/api";
-import type { ProposalVoteInfo, u128 } from "@cennznet/types";
-import type { ProposalVotes } from "@proposal-relayer/libs/types";
+import type { AMQPQueue } from "@cloudamqp/amqp-client";
+import type { ProposalVoteInfo, StorageKey } from "@cennznet/types";
+
+import { getLogger } from "@gov-libs/utils/getLogger";
+import { Proposal } from "@proposal-relayer/libs/models";
+import { getVotesFromBits } from "@proposal-relayer/libs/utils/getVotesFromBits";
+
+const logger = getLogger("ProposalListener");
 
 export async function fetchVotes(
 	cennzApi: Api,
-	proposalId: number | string
-): Promise<ProposalVotes> {
-	const { activeBits, voteBits } =
-		(await cennzApi.query.governance.proposalVotes(
-			proposalId
-		)) as ProposalVoteInfo;
+	queue: AMQPQueue
+): Promise<void> {
+	await cennzApi.query.governance.proposalVotes.entries(
+		(entries: [storageKey: StorageKey, votes: ProposalVoteInfo][]) => {
+			entries.forEach(async ([storageKey, { activeBits, voteBits }]) => {
+				const proposalId = storageKey.toHuman()[0];
 
-	return getVotesFromBits(activeBits, voteBits);
-}
+				const proposal = await Proposal.findOne({
+					proposalId: Number(proposalId),
+				});
+				if (!proposal?.proposalDetails || !proposal?.proposalInfo) return;
 
-export function getVotesFromBits(
-	activeBits: u128[],
-	voteBits: u128[]
-): ProposalVotes {
-	const activeCount = countOnes(activeBits);
-	const passCount = countOnes(voteBits);
+				const { passVotes, rejectVotes } = getVotesFromBits(
+					activeBits,
+					voteBits
+				);
+				const { passVotes: prevPass, rejectVotes: prevReject } = proposal;
+				if (prevPass === passVotes && prevReject === rejectVotes) return;
 
-	return {
-		passVotes: passCount,
-		rejectVotes: activeCount - passCount,
-	};
-}
-
-// This function converts the bits to decimals and counts the number of ones -
-// votes are stored in this way for efficiency
-function countOnes(bits: u128[]) {
-	return bits
-		?.map((bit) => (bit.toNumber() >>> 0).toString(2).split("1").length - 1)
-		.reduce((total, acc) => total + acc, 0);
+				logger.info("Proposal #%s: New votes, sent to queue...", proposalId);
+				queue.publish(
+					JSON.stringify({ proposal, votes: { passVotes, rejectVotes } }),
+					{ type: "votes" }
+				);
+			});
+		}
+	);
 }

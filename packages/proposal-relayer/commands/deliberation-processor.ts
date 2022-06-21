@@ -7,15 +7,15 @@ import { getDiscordWebhook } from "@gov-libs/utils/getDiscordWebhook";
 import { handleProposalVotesMessage } from "@proposal-relayer/libs/utils/handleProposalVotesMessage";
 import { handleProposalStatusMessage } from "@proposal-relayer/libs/utils/handleProposalStatusMessage";
 
-const logger = getLogger("VoteProcessor");
+const logger = getLogger("DeliberationProcessor");
 logger.info(
-	`Start VoteProcessor for CENNZnet ${chalk.magenta("%s")}...`,
+	`Start DeliberationProcessor for CENNZnet ${chalk.magenta("%s")}...`,
 	CENNZ_NETWORK
 );
 
 Promise.all([getDiscordWebhook()])
 	.then(async ([discordWebhook]) => {
-		const [channel, queue] = await getRabbitMQSet("VoteQueue");
+		const [channel, queue] = await getRabbitMQSet("DeliberationQueue");
 
 		const onMessage = async (message: AMQPMessage) => {
 			const body = message.bodyString();

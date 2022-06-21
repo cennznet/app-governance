@@ -1,5 +1,5 @@
 export type LoggerService =
 	| "ProposalListener"
 	| "ProposalProcessor"
-	| "VoteProcessor"
+	| "DeliberationProcessor"
 	| "DiscordBot";

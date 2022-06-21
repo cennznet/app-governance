@@ -11,7 +11,7 @@ import { requeueMessage } from "@gov-libs/utils/requeueMessage";
 import { getDiscordMessage } from "@proposal-relayer/libs/utils/getDiscordMessage";
 import { getLogger } from "@gov-libs/utils/getLogger";
 
-const logger = getLogger("VoteProcessor");
+const logger = getLogger("DeliberationProcessor");
 
 export async function handleProposalStatusMessage(
 	discordWebhook: InteractionWebhook,
