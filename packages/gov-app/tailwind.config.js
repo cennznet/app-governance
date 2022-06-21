@@ -25,7 +25,7 @@ module.exports = {
 				sans: ["gopher", ...defaultTheme.fontFamily.sans],
 			},
 			boxShadow: {
-				hero: "4px 4px 0px 0px",
+				sharp: "4px 4px 0px 0px",
 			},
 		},
 	},

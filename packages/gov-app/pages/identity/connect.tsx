@@ -7,6 +7,8 @@ import { useSession } from "next-auth/react";
 import { Button } from "@gov-app/libs/components/Button";
 import { ReactComponent as DiscordLogo } from "@gov-app/libs/assets/vectors/discord.svg";
 import { ReactComponent as TwitterLogo } from "@gov-app/libs/assets/vectors/twitter.svg";
+import { ReactComponent as CENNZLogo } from "@gov-app/libs/assets/vectors/cennz.svg";
+import { TextField } from "@gov-app/libs/components/TextField";
 
 const Connect: NextPage = () => {
 	const popWindow = useWindowPopup();
@@ -40,6 +42,47 @@ const Connect: NextPage = () => {
 					>
 						Sign In
 					</Button>
+				</div>
+
+				<div className="mt-4 flex w-[520px] items-center">
+					<TextField
+						placeholder="Sign-in to Twitter"
+						className="mr-4 flex-1"
+						inputClassName="!py-4"
+						disabled
+						endAdornment={
+							<Button
+								size="small"
+								startAdornment={<TwitterLogo className="h-4" />}
+							>
+								Sign In
+							</Button>
+						}
+					/>
+
+					<Button
+						onClick={onTwitterConnectClick}
+						className="flex-shrink-0"
+						startAdornment={<TwitterLogo />}
+					>
+						Sign In
+					</Button>
+				</div>
+
+				<div className="mt-4 flex w-[520px] items-center">
+					<TextField
+						placeholder="Connect CENNZnet Wallet"
+						inputClassName="!py-4"
+						disabled
+						endAdornment={
+							<Button
+								size="small"
+								startAdornment={<CENNZLogo className="h-4" />}
+							>
+								Connect
+							</Button>
+						}
+					/>
 				</div>
 			</div>
 		</Layout>
