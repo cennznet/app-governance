@@ -4,6 +4,7 @@ import { Header } from "@gov-app/libs/components/Header";
 import { useCallback } from "react";
 import { useWindowPopup } from "@gov-app/libs/hooks/useWindowPopup";
 import { useSession } from "next-auth/react";
+import { Button } from "@gov-app/libs/components/Button";
 
 const Connect: NextPage = () => {
 	const popWindow = useWindowPopup();
@@ -24,17 +25,13 @@ const Connect: NextPage = () => {
 			<Header />
 			<div className="flex flex-1 flex-col items-center justify-center">
 				<div className="flex">
-					<button
-						onClick={onTwitterConnectClick}
-						type="button"
-						className="mr-2"
-					>
+					<Button onClick={onTwitterConnectClick} className="mr-2">
 						Connect Twitter
-					</button>
+					</Button>
 
-					<button onClick={onDiscordConnectClick} type="button">
+					<Button onClick={onDiscordConnectClick} variant="white">
 						Connect Discord
-					</button>
+					</Button>
 				</div>
 			</div>
 		</Layout>

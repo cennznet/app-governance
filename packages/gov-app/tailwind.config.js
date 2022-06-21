@@ -14,9 +14,17 @@ module.exports = {
 		},
 
 		extend: {
-			colors: { hero: "#9847FF", mid: "#E4D1FF", light: "#F5ECFF" },
+			colors: {
+				hero: "#9847FF",
+				mid: "#E4D1FF",
+				light: "#F5ECFF",
+				dark: "#430B8A",
+			},
 			fontFamily: {
 				sans: ["gopher", ...defaultTheme.fontFamily.sans],
+			},
+			boxShadow: {
+				hero: "4px 4px 0px 0px",
 			},
 		},
 	},
