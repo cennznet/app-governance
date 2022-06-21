@@ -16,10 +16,10 @@ export const Header: FC<IntrinsicElements["div"] & HeaderProps> = ({
 				<img src={CENNZLogo} alt="CENNZet" className=" block h-20 py-2 pr-6" />
 				<div className="border-hero self-stretch border"></div>
 				<div className="pl-6">
-					<h1 className="font-display text-hero  text-4xl font-normal uppercase">
+					<h1 className="font-display text-dark  text-4xl font-normal uppercase">
 						Governance
 					</h1>
-					<h2 className="font-body text-hero uppercase">Platform</h2>
+					<h2 className="font-body text-dark uppercase">Platform</h2>
 				</div>
 			</div>
 			{children}

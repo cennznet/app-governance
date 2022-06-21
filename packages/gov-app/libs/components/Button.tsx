@@ -34,7 +34,7 @@ export const Button: FC<IntrinsicElements["button"] & ButtonProps> = ({
 
 				{
 					small: "px-2 py-1 text-sm",
-					medium: "px-4 py-1 text-lg",
+					medium: "px-2 py-1 text-lg",
 				}[size]
 			)}
 			{...props}
