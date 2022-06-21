@@ -1,12 +1,11 @@
 import chalk from "chalk";
-import { CENNZ_NETWORK, MESSAGE_MAX_TIME } from "@gov-libs/constants";
-import { getCENNZnetApi } from "@gov-libs/utils/getCENNZnetApi";
-import { getDiscordWebhook } from "@gov-libs/utils/getDiscordWebhook";
-import { getRabbitMQSet } from "@gov-libs/utils/getRabbitMQSet";
-import { handleVoteMessage } from "@proposal-relayer/libs/utils/handleVoteMessage";
-import { AMQPError, AMQPMessage } from "@cloudamqp/amqp-client";
 import { getLogger } from "@gov-libs/utils/getLogger";
-import { DiscordHandler } from "@proposal-relayer/libs/utils/DiscordHandler";
+import { getRabbitMQSet } from "@gov-libs/utils/getRabbitMQSet";
+import { AMQPError, AMQPMessage } from "@cloudamqp/amqp-client";
+import { CENNZ_NETWORK, MESSAGE_MAX_TIME } from "@gov-libs/constants";
+import { getDiscordWebhook } from "@gov-libs/utils/getDiscordWebhook";
+import { handleProposalVotesMessage } from "@proposal-relayer/libs/utils/handleProposalVotesMessage";
+import { handleProposalStatusMessage } from "@proposal-relayer/libs/utils/handleProposalStatusMessage";
 
 const logger = getLogger("VoteProcessor");
 logger.info(
@@ -14,21 +13,36 @@ logger.info(
 	CENNZ_NETWORK
 );
 
-Promise.all([getCENNZnetApi(), getDiscordWebhook()])
-	.then(async ([cennzApi, discordWebhook]) => {
-		const discordHandlers: Record<number, DiscordHandler> = {};
-
+Promise.all([getDiscordWebhook()])
+	.then(async ([discordWebhook]) => {
 		const [channel, queue] = await getRabbitMQSet("VoteQueue");
 
 		const onMessage = async (message: AMQPMessage) => {
-			await handleVoteMessage(
-				cennzApi,
-				discordWebhook,
-				discordHandlers,
-				queue,
-				message,
-				(AbortSignal as any).timeout(MESSAGE_MAX_TIME)
-			);
+			const body = message.bodyString();
+			if (!body) return;
+
+			const bodyJson = JSON.parse(body);
+			const { proposal } = bodyJson;
+
+			if (message.properties.type === "votes")
+				await handleProposalVotesMessage(
+					discordWebhook,
+					queue,
+					message,
+					proposal,
+					bodyJson.votes,
+					(AbortSignal as any).timeout(MESSAGE_MAX_TIME)
+				);
+
+			if (message.properties.type === "status")
+				await handleProposalStatusMessage(
+					discordWebhook,
+					queue,
+					message,
+					proposal,
+					bodyJson.proposalStatus,
+					(AbortSignal as any).timeout(MESSAGE_MAX_TIME)
+				);
 		};
 
 		channel.prefetch(1);
