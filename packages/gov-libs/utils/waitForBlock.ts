@@ -2,8 +2,7 @@ import { Api } from "@cennznet/api";
 
 export async function waitForBlock(
 	api: Api,
-	// eslint-disable-next-line @typescript-eslint/no-inferrable-types
-	numberOfBlocks: number = 1
+	numberOfBlocks: number
 ): Promise<void> {
 	let firstBlock: number;
 
