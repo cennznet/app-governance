@@ -8,10 +8,12 @@ import type {
 
 import {
 	getProposalFields,
+	getProposalEmbed,
+} from "@proposal-relayer/libs/utils/getProposalFields";
+import {
 	getVoteFields,
 	getVoteButtons,
-	getProposalEmbed,
-} from "@proposal-relayer/libs/utils/getDiscordFields";
+} from "@proposal-relayer/libs/utils/getVoteFields";
 
 export function getDiscordMessage(
 	proposalId: number,
