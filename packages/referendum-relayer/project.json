@@ -1,0 +1,43 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/referendum-relayer",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/referendum-relayer",
+        "commands": [
+          "tsc -p packages/referendum-relayer/tsconfig.lib.json",
+          "tsc-alias -p packages/referendum-relayer/tsconfig.lib.json"
+        ],
+        "parallel": false
+      }
+    },
+    "listener": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "ts-node --project packages/referendum-relayer/tsconfig.json -r tsconfig-paths/register packages/referendum-relayer/commands/listener.ts"
+        ]
+      }
+    },
+    "processor": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "ts-node --project packages/referendum-relayer/tsconfig.json -r tsconfig-paths/register packages/referendum-relayer/commands/processor.ts"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/referendum-relayer/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}
