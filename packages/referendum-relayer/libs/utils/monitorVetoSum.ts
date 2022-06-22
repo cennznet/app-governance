@@ -4,6 +4,7 @@ import type { ReferendumVoteCount, StorageKey } from "@cennznet/types";
 
 import { getLogger } from "@gov-libs/utils/getLogger";
 import { Referendum } from "@referendum-relayer/libs/models";
+import { Proposal } from "@proposal-relayer/libs/models";
 
 const logger = getLogger("ReferendumListener");
 
@@ -25,13 +26,31 @@ export async function monitorVetoSum(
 				const referendum = await Referendum.findOne({ proposalId });
 				if (vetoSum === referendum?.vetoSum) return;
 
-				logger.info(
-					"Referendum #%d: Update found, sent to queue...",
-					proposalId
-				);
-				queue.publish(JSON.stringify({ proposalId, vetoSum }), {
-					type: !referendum ? "new" : "update",
-				});
+				const proposal = await Proposal.findOne({ proposalId });
+				if (!proposal || proposal?.status === "Deliberation") return;
+
+				if (!referendum) {
+					logger.info(
+						"Referendum #%d: New referendum, sent to queue...",
+						proposalId
+					);
+					queue.publish(JSON.stringify({ proposalId, proposal, vetoSum }), {
+						type: "new",
+					});
+				}
+
+				if (referendum) {
+					logger.info(
+						"Referendum #%d: Update found, sent to queue...",
+						proposalId
+					);
+					queue.publish(
+						JSON.stringify({ proposalId, proposal, referendum, vetoSum }),
+						{
+							type: "update",
+						}
+					);
+				}
 			});
 		}
 	);
