@@ -1,3 +1,5 @@
+import type { MessageEmbed, MessageActionRow } from "discord.js";
+
 export type LoggerService =
 	| "ReferendumListener"
 	| "ReferendumProcessor"
@@ -5,3 +7,8 @@ export type LoggerService =
 	| "ProposalProcessor"
 	| "DeliberationProcessor"
 	| "DiscordBot";
+
+export interface DiscordMessage {
+	components: MessageActionRow[];
+	embeds: MessageEmbed[];
+}
