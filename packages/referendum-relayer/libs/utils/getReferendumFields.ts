@@ -14,11 +14,11 @@ export function getReferendumFields(
 	return [
 		{
 			name: "Details",
-			value: proposalDetails.get("description"),
+			value: proposalDetails.description,
 		},
 		{
 			name: "Enactment Delay",
-			value: `${proposalInfo.get("enactmentDelay")} blocks`,
+			value: `${proposalInfo.enactmentDelay} blocks`,
 		},
 	];
 }

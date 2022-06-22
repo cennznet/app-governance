@@ -32,7 +32,7 @@ export function getDiscordMessage(
 			getReferendumEmbed(
 				proposalId,
 				proposalStatus,
-				proposalDetails.get("title"),
+				proposalDetails.title,
 				referendumFields,
 				proposalStatus === "ReferendumDeliberation"
 					? getVetoSumField(vetoSum)

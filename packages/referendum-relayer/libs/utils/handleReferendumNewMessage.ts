@@ -2,12 +2,11 @@ import type { InteractionWebhook } from "discord.js";
 import type { ProposalStatus } from "@proposal-relayer/libs/types";
 import type { AMQPQueue, AMQPMessage } from "@cloudamqp/amqp-client";
 import type {
-	ReferendumDetails,
+	ReferendumMessageBody,
 	ReferendumRecordUpdater,
 } from "@referendum-relayer/libs/types";
 
 import { getLogger } from "@gov-libs/utils/getLogger";
-import { Proposal } from "@proposal-relayer/libs/models";
 import { requeueMessage } from "@gov-libs/utils/requeueMessage";
 import { getDiscordMessage } from "@referendum-relayer/libs/utils/getDiscordMessage";
 import { createReferendumRecordUpdater } from "@referendum-relayer/libs/utils/createReferendumRecordUpdater";
@@ -16,7 +15,7 @@ const logger = getLogger("ReferendumProcessor");
 
 export async function handleReferendumNewMessage(
 	discordWebhook: InteractionWebhook,
-	{ proposalId, vetoSum }: ReferendumDetails,
+	{ proposalId, proposal, vetoSum }: ReferendumMessageBody,
 	queue: AMQPQueue,
 	message: AMQPMessage,
 	abortSignal: AbortSignal
@@ -46,8 +45,6 @@ export async function handleReferendumNewMessage(
 		});
 
 		if (abortSignal.aborted) return;
-		const proposal = await Proposal.findOne({ proposalId });
-
 		const { proposalDetails, proposalInfo, status } = proposal;
 
 		logger.info("Referendum #%d: [2/2] Sending to Discord...", proposalId);

@@ -1,3 +1,5 @@
+import type { ProposalInterface } from "@proposal-relayer/libs/types";
+
 import { createReferendumRecordUpdater } from "@referendum-relayer/libs/utils/createReferendumRecordUpdater";
 
 export interface ReferendumInterface {
@@ -12,7 +14,9 @@ export type ReferendumRecordUpdater = ReturnType<
 	typeof createReferendumRecordUpdater
 >;
 
-export interface ReferendumDetails {
+export interface ReferendumMessageBody {
 	proposalId: number;
+	proposal: ProposalInterface;
+	referendum?: ReferendumInterface;
 	vetoSum: number;
 }

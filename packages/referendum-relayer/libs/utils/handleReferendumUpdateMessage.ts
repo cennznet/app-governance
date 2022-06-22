@@ -2,12 +2,11 @@ import type { InteractionWebhook } from "discord.js";
 import type { ProposalStatus } from "@proposal-relayer/libs/types";
 import type { AMQPQueue, AMQPMessage } from "@cloudamqp/amqp-client";
 import type {
-	ReferendumDetails,
+	ReferendumMessageBody,
 	ReferendumRecordUpdater,
 } from "@referendum-relayer/libs/types";
 
 import { getLogger } from "@gov-libs/utils/getLogger";
-import { Proposal } from "@proposal-relayer/libs/models";
 import { requeueMessage } from "@gov-libs/utils/requeueMessage";
 import { getDiscordMessage } from "@referendum-relayer/libs/utils/getDiscordMessage";
 import { createReferendumRecordUpdater } from "@referendum-relayer/libs/utils/createReferendumRecordUpdater";
@@ -16,7 +15,7 @@ const logger = getLogger("ReferendumProcessor");
 
 export async function handleReferendumUpdateMessage(
 	discordWebhook: InteractionWebhook,
-	{ proposalId, vetoSum }: ReferendumDetails,
+	{ proposalId, proposal, referendum, vetoSum }: ReferendumMessageBody,
 	queue: AMQPQueue,
 	message: AMQPMessage,
 	abortSignal: AbortSignal
@@ -46,23 +45,21 @@ export async function handleReferendumUpdateMessage(
 		});
 
 		if (abortSignal.aborted) return;
-		const proposal = await Proposal.findOne({ proposalId });
-		if (!proposal) return;
-
-		const { proposalDetails, proposalInfo, status, discordMessageId } =
-			proposal;
-		if (!discordMessageId) return;
-
 		logger.info("Referendum #%d: [2/2] Updating on Discord...", proposalId);
+
+		const { proposalDetails, proposalInfo, status } = proposal;
 		const discordMessage = getDiscordMessage(
 			proposalId,
 			status as ProposalStatus,
 			proposalDetails,
 			proposalInfo,
-			undefined
+			status === "ReferendumDeliberation" ? vetoSum : undefined
 		);
 
-		await discordWebhook.editMessage(discordMessageId, discordMessage);
+		await discordWebhook.editMessage(
+			referendum.discordMessageId,
+			discordMessage
+		);
 
 		if (status !== "ReferendumDeliberation")
 			await updateReferendumRecord({
