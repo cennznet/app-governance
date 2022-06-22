@@ -11,3 +11,8 @@ export interface ReferendumInterface {
 export type ReferendumRecordUpdater = ReturnType<
 	typeof createReferendumRecordUpdater
 >;
+
+export interface ReferendumDetails {
+	proposalId: number;
+	vetoSum: number;
+}

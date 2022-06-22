@@ -3,8 +3,9 @@ import { getLogger } from "@gov-libs/utils/getLogger";
 import { getRabbitMQSet } from "@gov-libs/utils/getRabbitMQSet";
 import { AMQPError, AMQPMessage } from "@cloudamqp/amqp-client";
 import { CENNZ_NETWORK, MESSAGE_MAX_TIME } from "@gov-libs/constants";
-import { handleReferendumMessage } from "@referendum-relayer/libs/utils/handleReferendumMessage";
 import { getDiscordWebhook } from "@gov-libs/utils/getDiscordWebhook";
+import { handleReferendumNewMessage } from "@referendum-relayer/libs/utils/handleReferendumNewMessage";
+import { handleReferendumUpdateMessage } from "@referendum-relayer/libs/utils/handleReferendumUpdateMessage";
 
 const logger = getLogger("ReferendumProcessor");
 logger.info(
@@ -17,13 +18,26 @@ Promise.all([getDiscordWebhook()])
 		const [channel, queue] = await getRabbitMQSet("ReferendumQueue");
 
 		const onMessage = async (message: AMQPMessage) => {
-			await handleReferendumMessage(
-				discordWebhook,
-				queue,
-				message,
-				message.properties.type,
-				(AbortSignal as any).timeout(MESSAGE_MAX_TIME)
-			);
+			const body = message.bodyString();
+			if (!body) return;
+
+			if (message.properties.type === "new")
+				await handleReferendumNewMessage(
+					discordWebhook,
+					JSON.parse(body),
+					queue,
+					message,
+					(AbortSignal as any).timeout(MESSAGE_MAX_TIME)
+				);
+
+			if (message.properties.type === "update")
+				await handleReferendumUpdateMessage(
+					discordWebhook,
+					JSON.parse(body),
+					queue,
+					message,
+					(AbortSignal as any).timeout(MESSAGE_MAX_TIME)
+				);
 		};
 
 		channel.prefetch(1);

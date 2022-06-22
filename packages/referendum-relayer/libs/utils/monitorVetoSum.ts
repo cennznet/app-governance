@@ -22,15 +22,15 @@ export async function monitorVetoSum(
 				const proposalId = Number(storageKey.toHuman()[0]);
 				const vetoSum = voteCount.toNumber();
 
-				const referendum = await Referendum.findOne({ proposalId });
-				if (referendum?.vetoSum === vetoSum) return;
+				const referendum = await Referendum.findOne({ proposalId })
+				if (vetoSum === referendum?.vetoSum) return;
 
 				logger.info(
 					"Referendum #%d: Update found, sent to queue...",
 					proposalId
 				);
 				queue.publish(JSON.stringify({ proposalId, vetoSum }), {
-					type: !referendum?.vetoSum ? "new" : "update",
+					type: !referendum ? "new" : "update",
 				});
 			});
 		}
