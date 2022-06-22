@@ -4,6 +4,7 @@ import { getRabbitMQSet } from "@gov-libs/utils/getRabbitMQSet";
 import { AMQPError, AMQPMessage } from "@cloudamqp/amqp-client";
 import { CENNZ_NETWORK, MESSAGE_MAX_TIME } from "@gov-libs/constants";
 import { handleReferendumMessage } from "@referendum-relayer/libs/utils/handleReferendumMessage";
+import { getDiscordWebhook } from "@gov-libs/utils/getDiscordWebhook";
 
 const logger = getLogger("ReferendumProcessor");
 logger.info(
@@ -11,12 +12,13 @@ logger.info(
 	CENNZ_NETWORK
 );
 
-Promise.all([])
-	.then(async () => {
+Promise.all([getDiscordWebhook()])
+	.then(async ([discordWebhook]) => {
 		const [channel, queue] = await getRabbitMQSet("ReferendumQueue");
 
 		const onMessage = async (message: AMQPMessage) => {
 			await handleReferendumMessage(
+				discordWebhook,
 				queue,
 				message,
 				message.properties.type,
