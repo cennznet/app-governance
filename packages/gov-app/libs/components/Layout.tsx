@@ -11,11 +11,11 @@ export const Layout: FC<IntrinsicElements["div"] & LayoutProps> = ({
 }) => {
 	return (
 		<>
-			<div className="fixed inset-0 bg-mid"></div>
-			<div {...props} className="relative flex flex-col h-full">
+			<div className="bg-mid fixed inset-0"></div>
+			<div {...props} className="relative flex h-full flex-col">
 				{children}
 			</div>
-			<div className="fixed inset-0 border-8 border-hero"></div>
+			<div className="border-hero fixed inset-0 border-8"></div>
 		</>
 	);
 };

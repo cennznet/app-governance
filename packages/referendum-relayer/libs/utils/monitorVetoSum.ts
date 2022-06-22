@@ -22,7 +22,7 @@ export async function monitorVetoSum(
 				const proposalId = Number(storageKey.toHuman()[0]);
 				const vetoSum = voteCount.toNumber();
 
-				const referendum = await Referendum.findOne({ proposalId })
+				const referendum = await Referendum.findOne({ proposalId });
 				if (vetoSum === referendum?.vetoSum) return;
 
 				logger.info(
