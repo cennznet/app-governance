@@ -11,6 +11,5 @@ body,
 }
 
 input::-webkit-input-placeholder {
-	/* Chrome, Firefox, Opera, Safari 10.1+ */
-	@apply text-gray-400;
+	@apply text-slate-500;
 }

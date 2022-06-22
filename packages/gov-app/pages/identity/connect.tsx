@@ -13,104 +13,108 @@ import { Select } from "@gov-app/libs/components/Select";
 
 const Connect: NextPage = () => {
 	const popWindow = useWindowPopup();
-	const { data: session, status } = useSession();
+	// const { data: session, status } = useSession();
 
-	const onTwitterConnectClick = useCallback(() => {
-		popWindow("/popup/signin?provider=twitter", "TwitterAuth");
-	}, [popWindow]);
+	// const onTwitterConnectClick = useCallback(() => {
+	// 	popWindow("/popup/signin?provider=twitter", "TwitterAuth");
+	// }, [popWindow]);
 
-	const onDiscordConnectClick = useCallback(() => {
-		popWindow("/popup/signin?provider=discord", "DiscordAuth");
-	}, [popWindow]);
+	// const onDiscordConnectClick = useCallback(() => {
+	// 	popWindow("/popup/signin?provider=discord", "DiscordAuth");
+	// }, [popWindow]);
 
 	return (
 		<Layout>
 			<Header />
-			<div className="flex flex-1 flex-col items-center justify-center">
-				<div className="flex">
-					<Button
-						onClick={onTwitterConnectClick}
-						className="mr-2"
-						startAdornment={<TwitterLogo />}
-					>
-						Sign In
-					</Button>
+			<div className="w-full max-w-2xl flex-1 self-center px-8">
+				<form>
+					<h1 className="font-display mb-8 text-center text-7xl uppercase">
+						Set your identity
+					</h1>
 
-					<Button
-						onClick={onDiscordConnectClick}
-						variant="white"
-						startAdornment={<DiscordLogo />}
-					>
-						Sign In
-					</Button>
-				</div>
+					<p className="mb-8 text-lg">
+						To become a Citizen or Councillor, we need you to verify your
+						identity. This involves connecting your wallet, and two social
+						channels (Twitter and Discord). Get started below!
+					</p>
 
-				<div className="mt-4 flex w-[520px] items-center">
-					<TextField
-						placeholder="Sign-in to Twitter"
-						className="mr-4 flex-1"
-						inputClassName="!py-4"
-						endAdornment={
-							<Button
-								size="small"
-								startAdornment={<TwitterLogo className="h-4" />}
-							>
-								Sign In
-							</Button>
-						}
-					/>
+					<fieldset className="mb-12">
+						<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+							Connect your wallet
+						</h2>
+						<p className="mb-8 text-lg">
+							Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
+							labore dolor mollit commodo do anim incididunt sunt id pariatur
+							elit tempor nostrud nulla eu proident ut id qui incididunt.
+						</p>
+						<div className="flex items-center">
+							<Select
+								placeholder="Connect CENNZnet Wallet"
+								inputClassName="!py-4"
+								required
+								endAdornment={
+									<Button
+										size="small"
+										startAdornment={<CENNZLogo className="h-4" />}
+									>
+										Connect
+									</Button>
+								}
+							></Select>
+						</div>
+					</fieldset>
 
-					<Button
-						onClick={onTwitterConnectClick}
-						className="flex-shrink-0"
-						startAdornment={<TwitterLogo />}
-					>
-						Sign In
-					</Button>
-				</div>
+					<fieldset className="mb-12">
+						<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+							Connect your social channels
+						</h2>
+						<p className="mb-8 text-lg">
+							Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
+							labore dolor mollit commodo do anim incididunt sunt id pariatur
+							elit tempor nostrud nulla eu proident ut id qui incididunt.
+						</p>
 
-				<div className="mt-4 flex w-[520px] items-center">
-					<TextField placeholder="Connect CENNZnet Wallet" />
-				</div>
+						<div className="mb-6 flex items-center">
+							<TextField
+								placeholder="Sign-in to Twitter"
+								className="flex-1"
+								inputClassName="!py-4"
+								required
+								endAdornment={
+									<Button
+										size="small"
+										startAdornment={<TwitterLogo className="h-4" />}
+									>
+										Sign In
+									</Button>
+								}
+							/>
+						</div>
 
-				<div className="mt-4 flex w-[520px] items-center">
-					<TextField
-						placeholder="Connect CENNZnet Wallet"
-						inputClassName="!py-4"
-						endAdornment={
-							<Button
-								size="small"
-								startAdornment={<CENNZLogo className="h-4" />}
-							>
-								Connect
-							</Button>
-						}
-					/>
-				</div>
+						<div className="flex items-center">
+							<TextField
+								placeholder="Sign-in to Discord"
+								className="flex-1"
+								inputClassName="!py-4"
+								required
+								endAdornment={
+									<Button
+										size="small"
+										startAdornment={<DiscordLogo className="h-4" />}
+									>
+										Sign In
+									</Button>
+								}
+							/>
+						</div>
+					</fieldset>
 
-				<div className="mt-4 flex w-[520px] items-center">
-					<Select>
-						<option>0x9597a6c745a8bf15bb6320e5e6</option>
-					</Select>
-				</div>
-
-				<div className="mt-4 flex w-[520px] items-center">
-					<Select
-						placeholder="Connect CENNZnet Wallet"
-						inputClassName="!py-4"
-						required
-						endAdornment={
-							<Button
-								size="small"
-								startAdornment={<CENNZLogo className="h-4" />}
-							>
-								Connect
-							</Button>
-						}
-					>
-						<option>0x9597a6c745a8bf15bb6320e5e6</option>
-					</Select>
-				</div>
+					<fieldset className="text-center">
+						<Button type="submit" className="w-1/3 text-center">
+							Submit
+						</Button>
+					</fieldset>
+				</form>
 			</div>
 		</Layout>
 	);

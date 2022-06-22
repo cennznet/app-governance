@@ -42,7 +42,7 @@ export const Button: FC<IntrinsicElements["button"] & ButtonProps> = ({
 			<If condition={!!startAdornment}>
 				<span className="mr-2">{startAdornment}</span>
 			</If>
-			{children}
+			<span className="flex-1">{children}</span>
 		</button>
 	);
 };
