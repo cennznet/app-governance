@@ -15,19 +15,27 @@
         "parallel": false
       }
     },
-    "listener": {
+    "proposal-listener": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/listener.ts"
+          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/proposal-listener.ts"
         ]
       }
     },
-    "processor": {
+    "proposal-processor": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/processor.ts"
+          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/proposal-processor.ts"
+        ]
+      }
+    },
+    "deliberation-processor": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "ts-node --project packages/proposal-relayer/tsconfig.json -r tsconfig-paths/register packages/proposal-relayer/commands/deliberation-processor.ts"
         ]
       }
     },

@@ -24,6 +24,7 @@ export async function getDiscordWebhook(): Promise<InteractionWebhook> {
 	let webhook: InteractionWebhook | undefined;
 
 	bot.on("ready", async () => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const channel: any = bot.channels.cache.get(DISCORD_BOT.ChannelId);
 
 		webhook = DISCORD_BOT.WebhookId
