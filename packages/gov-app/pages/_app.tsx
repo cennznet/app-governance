@@ -9,7 +9,6 @@ import { CENNZApiProvider } from "@gov-app/libs/providers/CENNZApiProvider";
 import { CENNZExtensionProvider } from "@gov-app/libs/providers/CENNZExtensionProvider";
 import { CENNZWalletProvider } from "@gov-app/libs/providers/CENNZWalletProvider";
 import { UserAgentProvider } from "@gov-app/libs/providers/UserAgentProvider";
-import { WalletProvider } from "@gov-app/libs/providers/WalletProvider";
 import { FC } from "react";
 import { SessionProvider } from "next-auth/react";
 
@@ -22,7 +21,6 @@ const NextApp: FC<AppProps> = ({
 			<MainProvider
 				providers={[
 					<UserAgentProvider />,
-					<WalletProvider />,
 					<CENNZExtensionProvider appName="CENNZnet Governance" />,
 					<CENNZApiProvider endpoint={CENNZ_NETWORK.ApiUrl.InWebSocket} />,
 					<CENNZWalletProvider />,

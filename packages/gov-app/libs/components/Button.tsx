@@ -8,12 +8,14 @@ interface ButtonProps extends PropsWithChildren {
 	variant?: "hero" | "white";
 	size?: "small" | "medium" | "large";
 	startAdornment?: ReactNode;
+	active?: boolean;
 }
 
 export const Button: FC<IntrinsicElements["button"] & ButtonProps> = ({
 	variant = "hero",
 	type = "button",
 	size = "medium",
+	active,
 	startAdornment,
 	className,
 	children,
@@ -26,16 +28,18 @@ export const Button: FC<IntrinsicElements["button"] & ButtonProps> = ({
 				className,
 				"relative inline-flex items-center transition-colors duration-150",
 				{
-					hero: "bg-hero  border-hero font-display shadow-sharp shadow-dark hover:text-hero hover:bg-light top-[-3px] left-[-3px] border-[3px] uppercase text-white active:top-0 active:left-0 active:shadow-none",
+					hero: "bg-hero  border-hero font-display shadow-sharp shadow-dark hover:text-hero hover:bg-light translate-y-[-3px] translate-x-[-3px] border-[3px] uppercase text-white active:translate-y-0 active:translate-x-0 active:shadow-none",
 
 					white:
-						" border-hero  font-display shadow-sharp shadow-dark text-hero hover:bg-light top-[-3px] left-[-3px] border-[3px] bg-white uppercase active:top-0 active:left-0 active:shadow-none",
+						" border-hero  font-display shadow-sharp shadow-dark text-hero hover:bg-light top-[-3px] translate-y-[-3px] translate-x-[-3px] bg-white uppercase active:translate-y-0 active:translate-x-0 active:shadow-none",
 				}[variant],
 
 				{
 					small: "px-2 py-1 text-sm",
 					medium: "px-2 py-1 text-lg",
-				}[size]
+				}[size],
+
+				active && `bg-light text-hero translate-y-0 translate-x-0 shadow-none`
 			)}
 			{...props}
 		>

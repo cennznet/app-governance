@@ -15,7 +15,6 @@ import {
 } from "react";
 import type * as Extension from "@polkadot/extension-dapp";
 import { useUserAgent } from "@gov-app/libs/providers/UserAgentProvider";
-import { useWalletProvider } from "@gov-app/libs/providers/WalletProvider";
 
 interface CENNZExtensionContextType {
 	accounts: InjectedAccountWithMeta[];
@@ -36,7 +35,6 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 	children,
 }) => {
 	const { browser, os } = useUserAgent();
-	const { selectedWallet } = useWalletProvider();
 	const [module, setModule] = useState<typeof Extension>();
 	const [accounts, setAccounts] = useState<Array<InjectedAccountWithMeta>>();
 
@@ -47,7 +45,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 			os.name === "Android"
 		) {
 			return alert(
-				"Sorry, this browser is not supported by App Hub. To use App Hub, please switch to Chrome or Firefox browsers on a Mac or PC."
+				"Sorry, this browser is not supported by this app. To use this app, please switch to Chrome or Firefox browsers on a Mac or PC."
 			);
 		}
 
@@ -80,7 +78,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 	}, [appName, module]);
 
 	useEffect(() => {
-		if (!module || selectedWallet !== "CENNZnet") return;
+		if (!module) return;
 		let unsubscribe: () => void;
 
 		const fetchAccounts = async () => {
@@ -103,7 +101,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 		void fetchAccounts();
 
 		return unsubscribe;
-	}, [appName, module, selectedWallet]);
+	}, [appName, module]);
 
 	return (
 		<CENNZExtensionContext.Provider

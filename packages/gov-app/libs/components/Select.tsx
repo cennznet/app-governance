@@ -16,7 +16,7 @@ export const Select: FC<IntrinsicElements["select"] & SelectProps> = ({
 	endAdornment,
 	className,
 	inputClassName,
-	value,
+	defaultValue,
 	...props
 }) => {
 	return (
@@ -26,7 +26,7 @@ export const Select: FC<IntrinsicElements["select"] & SelectProps> = ({
 				"border-dark relative flex w-full items-center border-[3px] bg-white"
 			)}
 		>
-			<If condition={!value && !!placeholder}>
+			<If condition={!defaultValue && !!placeholder}>
 				<div
 					className={classNames(
 						inputClassName,
@@ -38,11 +38,11 @@ export const Select: FC<IntrinsicElements["select"] & SelectProps> = ({
 			</If>
 			<select
 				{...props}
-				value={value}
+				defaultValue={defaultValue}
 				className={classNames(
 					inputClassName,
 					"mr-2 flex-1 border border-white bg-white px-4 py-2 outline-none",
-					!!value || !placeholder ? "opacity" : "opacity-0"
+					!!defaultValue || !placeholder ? "opacity" : "opacity-0"
 				)}
 			>
 				{children}

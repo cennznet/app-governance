@@ -8,11 +8,11 @@ import { capitalize } from "lodash-es";
 
 const SignIn: NextPage = () => {
 	const {
-		query: { provider = "twitter", callback = false },
+		query: { provider = "twitter", callback = false, error },
 	} = useRouter();
 
 	useEffect(() => {
-		if (!callback) {
+		if (!callback && (!error || error === "OAuthCallback")) {
 			const id = setTimeout(() => {
 				signIn(provider as BuiltInProviderType, {
 					callbackUrl: `/popup/signin?provider=${provider}&callback=1`,
@@ -23,7 +23,7 @@ const SignIn: NextPage = () => {
 		}
 
 		window.close();
-	}, [provider, callback]);
+	}, [provider, callback, error]);
 
 	return (
 		<Layout>
