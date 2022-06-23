@@ -3,8 +3,10 @@ import { Layout } from "@gov-app/libs/components/Layout";
 import { Header } from "@gov-app/libs/components/Header";
 import {
 	ChangeEventHandler,
+	FormEventHandler,
 	MouseEventHandler,
 	useCallback,
+	useEffect,
 	useState,
 } from "react";
 import { useWindowPopup } from "@gov-app/libs/hooks/useWindowPopup";
@@ -17,6 +19,8 @@ import { Select } from "@gov-app/libs/components/Select";
 import { useCENNZExtension } from "@gov-app/libs/providers/CENNZExtensionProvider";
 import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
 import { getSession } from "next-auth/react";
+import { ReactComponent as CloseIcon } from "@gov-app/libs/assets/vectors/close-icon.svg";
+import { If } from "react-extras";
 
 const Connect: NextPage = () => {
 	const {
@@ -26,10 +30,16 @@ const Connect: NextPage = () => {
 		selectedAccount,
 	} = useCENNZConnect();
 
-	const { onSignInClick: onTwitterSignInClick, username: twitterUsername } =
-		useSocialSignIn("Twitter");
-	const { onSignInClick: onDiscordSignInClick, username: discordUsername } =
-		useSocialSignIn("Discord");
+	const {
+		onSignInClick: onTwitterSignInClick,
+		username: twitterUsername,
+		clearUsername: clearTwitterUsername,
+	} = useSocialSignIn("Twitter");
+	const {
+		onSignInClick: onDiscordSignInClick,
+		username: discordUsername,
+		clearUsername: clearDiscordUsername,
+	} = useSocialSignIn("Discord");
 
 	return (
 		<Layout>
@@ -91,40 +101,60 @@ const Connect: NextPage = () => {
 							elit tempor nostrud nulla eu proident ut id qui incididunt.
 						</p>
 
-						<div className="flex items-center">
+						<div className="grid grid-cols-2 items-center gap-4">
 							<TextField
 								placeholder="Sign-in to verify"
-								className="mr-4 flex-1"
 								inputClassName="!py-4"
 								required
-								defaultValue={twitterUsername}
+								value={twitterUsername}
+								readOnly
 								endAdornment={
-									<Button
-										size="small"
-										onClick={onTwitterSignInClick}
-										active={!!twitterUsername}
-										startAdornment={<TwitterLogo className="h-4" />}
-									>
-										{twitterUsername ? "Verified" : "Sign In"}
-									</Button>
+									<div className="flex items-center">
+										<If condition={!!twitterUsername}>
+											<div
+												className="hover:text-hero mr-2 cursor-pointer transition-colors"
+												onClick={clearTwitterUsername}
+											>
+												<CloseIcon />
+											</div>
+										</If>
+										<Button
+											size="small"
+											onClick={onTwitterSignInClick}
+											active={!!twitterUsername}
+											startAdornment={<TwitterLogo className="h-4" />}
+										>
+											{twitterUsername ? "Verified" : "Sign In"}
+										</Button>
+									</div>
 								}
 							/>
 
 							<TextField
 								placeholder="Sign-in to verify"
-								className="flex-1"
 								inputClassName="!py-4"
 								required
-								defaultValue={discordUsername}
+								value={discordUsername}
+								readOnly
 								endAdornment={
-									<Button
-										size="small"
-										onClick={onDiscordSignInClick}
-										active={!!discordUsername}
-										startAdornment={<DiscordLogo className="h-4" />}
-									>
-										{discordUsername ? "Verified" : "Sign In"}
-									</Button>
+									<div className="flex items-center">
+										<If condition={!!discordUsername}>
+											<div
+												className="hover:text-hero mr-2 cursor-pointer transition-colors"
+												onClick={clearDiscordUsername}
+											>
+												<CloseIcon />
+											</div>
+										</If>
+										<Button
+											size="small"
+											onClick={onDiscordSignInClick}
+											active={!!discordUsername}
+											startAdornment={<DiscordLogo className="h-4" />}
+										>
+											{discordUsername ? "Verified" : "Sign In"}
+										</Button>
+									</div>
 								}
 							/>
 						</div>
@@ -174,7 +204,7 @@ const useCENNZConnect = () => {
 
 const useSocialSignIn = (provider: "Twitter" | "Discord") => {
 	const popupWindow = useWindowPopup();
-	const [username, setUsername] = useState<string>(null);
+	const [username, setUsername] = useState<string>("");
 	const onSignInClick: MouseEventHandler<HTMLButtonElement> =
 		useCallback(async () => {
 			popupWindow(
@@ -202,5 +232,9 @@ const useSocialSignIn = (provider: "Twitter" | "Discord") => {
 			window.addEventListener("storage", onStorageEvent);
 		}, [popupWindow, provider]);
 
-	return { onSignInClick, username };
+	const clearUsername = useCallback(() => {
+		setUsername("");
+	}, []);
+
+	return { onSignInClick, username, clearUsername };
 };

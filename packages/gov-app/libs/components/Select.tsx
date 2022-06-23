@@ -23,7 +23,7 @@ export const Select: FC<IntrinsicElements["select"] & SelectProps> = ({
 		<div
 			className={classNames(
 				className,
-				"border-dark relative flex w-full items-center border-[3px] bg-white"
+				"border-dark relative flex w-full items-center justify-between border-[3px] bg-white"
 			)}
 		>
 			<If condition={!defaultValue && !!placeholder}>
@@ -41,7 +41,7 @@ export const Select: FC<IntrinsicElements["select"] & SelectProps> = ({
 				defaultValue={defaultValue}
 				className={classNames(
 					inputClassName,
-					"mr-2 flex-1 border border-white bg-white px-4 py-2 outline-none",
+					"mr-2 min-w-0 flex-1 border border-white bg-white px-4 py-2 outline-none",
 					!!defaultValue || !placeholder ? "opacity" : "opacity-0"
 				)}
 			>
