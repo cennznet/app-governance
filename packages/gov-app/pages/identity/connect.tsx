@@ -43,6 +43,9 @@ const Connect: NextPage = () => {
 
 	const { busy, onFormSubmit } = useFormSubmit();
 
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	const onTextInput = useCallback(() => {}, []);
+
 	return (
 		<Layout>
 			<Header />
@@ -109,7 +112,7 @@ const Connect: NextPage = () => {
 								inputClassName="!py-4"
 								required
 								value={twitterUsername}
-								readOnly
+								onInput={onTextInput}
 								endAdornment={
 									<div className="flex items-center">
 										<If condition={!!twitterUsername}>
@@ -137,7 +140,7 @@ const Connect: NextPage = () => {
 								inputClassName="!py-4"
 								required
 								value={discordUsername}
-								readOnly
+								onInput={onTextInput}
 								endAdornment={
 									<div className="flex items-center">
 										<If condition={!!discordUsername}>
