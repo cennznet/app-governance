@@ -6,7 +6,6 @@ import {
 	FormEventHandler,
 	MouseEventHandler,
 	useCallback,
-	useEffect,
 	useState,
 } from "react";
 import { useWindowPopup } from "@gov-app/libs/hooks/useWindowPopup";
@@ -14,6 +13,7 @@ import { Button } from "@gov-app/libs/components/Button";
 import { ReactComponent as DiscordLogo } from "@gov-app/libs/assets/vectors/discord.svg";
 import { ReactComponent as TwitterLogo } from "@gov-app/libs/assets/vectors/twitter.svg";
 import { ReactComponent as CENNZLogo } from "@gov-app/libs/assets/vectors/cennz.svg";
+import { ReactComponent as Spinner } from "@gov-app/libs/assets/vectors/spinner.svg";
 import { TextField } from "@gov-app/libs/components/TextField";
 import { Select } from "@gov-app/libs/components/Select";
 import { useCENNZExtension } from "@gov-app/libs/providers/CENNZExtensionProvider";
@@ -41,11 +41,13 @@ const Connect: NextPage = () => {
 		clearUsername: clearDiscordUsername,
 	} = useSocialSignIn("Discord");
 
+	const { busy, onFormSubmit } = useFormSubmit();
+
 	return (
 		<Layout>
 			<Header />
 			<div className="w-full max-w-3xl flex-1 self-center px-8">
-				<form>
+				<form onSubmit={onFormSubmit}>
 					<h1 className="font-display mb-8 text-center text-7xl uppercase">
 						Set your identity
 					</h1>
@@ -161,8 +163,15 @@ const Connect: NextPage = () => {
 					</fieldset>
 
 					<fieldset className="mt-16 text-center">
-						<Button type="submit" className="w-1/3 text-center">
-							Sign and Send
+						<Button type="submit" className="w-1/3 text-center" disabled={busy}>
+							<div className="flex items-center justify-center">
+								<If condition={busy}>
+									<span className="mr-2">
+										<Spinner />
+									</span>
+								</If>
+								<span>{busy ? "Processing..." : "Sign and Submit"}</span>
+							</div>
 						</Button>
 						<p className="mt-2 text-sm">Estimated gas fee 2 CPAY</p>
 					</fieldset>
@@ -237,4 +246,22 @@ const useSocialSignIn = (provider: "Twitter" | "Discord") => {
 	}, []);
 
 	return { onSignInClick, username, clearUsername };
+};
+
+const useFormSubmit = () => {
+	const [busy, setBusy] = useState<boolean>(false);
+	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+		(event) => {
+			event.preventDefault();
+
+			setBusy(true);
+
+			setTimeout(() => {
+				setBusy(false);
+			}, 2000);
+		},
+		[]
+	);
+
+	return { busy, onFormSubmit };
 };

@@ -26,7 +26,7 @@ export const Button: FC<IntrinsicElements["button"] & ButtonProps> = ({
 			type={type}
 			className={classNames(
 				className,
-				"relative inline-flex items-center transition-colors duration-150",
+				"relative inline-flex items-center transition-colors duration-150 disabled:translate-x-0 disabled:translate-y-0 disabled:border-slate-600 disabled:bg-slate-100 disabled:text-slate-600 disabled:shadow-none",
 				{
 					hero: "bg-hero  border-hero font-display shadow-sharp shadow-dark hover:text-hero hover:bg-light translate-y-[-3px] translate-x-[-3px] border-[3px] uppercase text-white active:translate-y-0 active:translate-x-0 active:shadow-none",
 
