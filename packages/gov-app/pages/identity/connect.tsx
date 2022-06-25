@@ -125,7 +125,7 @@ const Connect: NextPage = () => {
 										</If>
 										<Button
 											size="small"
-											onMouseUp={onTwitterSignInClick}
+											onClick={onTwitterSignInClick}
 											active={!!twitterUsername}
 											startAdornment={<TwitterLogo className="h-4" />}
 										>
@@ -153,7 +153,7 @@ const Connect: NextPage = () => {
 										</If>
 										<Button
 											size="small"
-											onMouseUp={onDiscordSignInClick}
+											onClick={onDiscordSignInClick}
 											active={!!discordUsername}
 											startAdornment={<DiscordLogo className="h-4" />}
 										>
@@ -219,10 +219,12 @@ const useSocialSignIn = (provider: "Twitter" | "Discord") => {
 	const [username, setUsername] = useState<string>("");
 	const onSignInClick: MouseEventHandler<HTMLButtonElement> =
 		useCallback(async () => {
-			popupWindow(
-				`/popup/signin?provider=${provider.toLowerCase()}`,
-				`${provider}Auth`
-			);
+			setTimeout(() => {
+				popupWindow(
+					`/popup/signin?provider=${provider.toLowerCase()}`,
+					`${provider}Auth`
+				);
+			}, 100);
 
 			const onStorageEvent = async (event: StorageEvent) => {
 				if (event.key !== "nextauth.message") return;
