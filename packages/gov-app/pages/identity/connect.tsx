@@ -49,7 +49,7 @@ const Connect: NextPage = () => {
 	return (
 		<Layout>
 			<Header />
-			<div className="w-full max-w-3xl flex-1 self-center px-8">
+			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
 				<form onSubmit={onFormSubmit}>
 					<h1 className="font-display mb-8 text-center text-7xl uppercase">
 						Set your identity
