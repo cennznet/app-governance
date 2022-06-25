@@ -125,7 +125,7 @@ const Connect: NextPage = () => {
 										</If>
 										<Button
 											size="small"
-											onClick={onTwitterSignInClick}
+											onMouseUp={onTwitterSignInClick}
 											active={!!twitterUsername}
 											startAdornment={<TwitterLogo className="h-4" />}
 										>
@@ -153,7 +153,7 @@ const Connect: NextPage = () => {
 										</If>
 										<Button
 											size="small"
-											onClick={onDiscordSignInClick}
+											onMouseUp={onDiscordSignInClick}
 											active={!!discordUsername}
 											startAdornment={<DiscordLogo className="h-4" />}
 										>
