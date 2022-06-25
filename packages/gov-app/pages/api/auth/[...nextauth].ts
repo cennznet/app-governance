@@ -12,8 +12,9 @@ export default NextAuth({
 		TwitterProvider({
 			...TWITTER_CLIENT,
 			version: "2.0",
-			userinfo: {
-				url: "https://api.twitter.com/2/users/me",
+			authorization: {
+				url: "https://twitter.com/i/oauth2/authorize",
+				params: { scope: "users.read tweet.read" },
 			},
 			profile({ data }) {
 				return {
