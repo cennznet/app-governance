@@ -8,13 +8,18 @@ const nextConfig = {
 	nx: {
 		// Set this to true if you would like to to use SVGR
 		// See: https://github.com/gregberge/svgr
-		svgr: false,
+		svgr: true,
 	},
 	async redirects() {
 		return [
 			{
 				source: "/",
-				destination: "/connect",
+				destination: "/identity/connect",
+				permanent: false,
+			},
+			{
+				source: "/identity",
+				destination: "/identity/connect",
 				permanent: false,
 			},
 			{

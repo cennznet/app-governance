@@ -26,9 +26,6 @@
     "@cennznet/api": "^2.1.1-alpha.4",
     "@nrwl/next": "14.2.4",
     "core-js": "^3.6.5",
-    "next": "12.1.5",
-    "react": "18.1.0",
-    "react-dom": "18.1.0",
     "regenerator-runtime": "0.13.7",
     "tslib": "^2.3.0"
   },
@@ -78,7 +75,9 @@
     "@polkadot/util": "8.7.1",
     "@polkadot/util-crypto": "8.7.1",
     "nx": "14.2.4",
-    "rxjs": "7.5.5"
+    "rxjs": "7.5.5",
+    "lodash": "^4.17",
+    "lodash-es": "^4.17"
   },
   "workspaces": [
     "packages/**"

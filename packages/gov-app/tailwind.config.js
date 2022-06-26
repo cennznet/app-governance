@@ -6,6 +6,7 @@ module.exports = {
 	content: [
 		join(__dirname, "./pages/**/*.{js,ts,jsx,tsx}"),
 		join(__dirname, "./libs/components/**/*.{js,ts,jsx,tsx}"),
+		join(__dirname, "./libs/assets/**/*.svg"),
 	],
 	theme: {
 		fontFamily: {
@@ -14,9 +15,18 @@ module.exports = {
 		},
 
 		extend: {
-			colors: { hero: "#9847FF", mid: "#E4D1FF", light: "#F5ECFF" },
+			colors: {
+				hero: "#9847FF",
+				mid: "#E4D1FF",
+				light: "#F5ECFF",
+				dark: "#430B8A",
+			},
 			fontFamily: {
 				sans: ["gopher", ...defaultTheme.fontFamily.sans],
+			},
+			boxShadow: {
+				"sharp": "4px 4px 0px 0px",
+				"sharp-2": "2px 2px 0px 0px",
 			},
 		},
 	},

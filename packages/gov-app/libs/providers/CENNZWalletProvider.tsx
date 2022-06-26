@@ -15,7 +15,6 @@ import {
 import store from "store";
 import { useCENNZExtension } from "@gov-app/libs/providers/CENNZExtensionProvider";
 import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";
-import { useWalletProvider } from "@gov-app/libs/providers/WalletProvider";
 
 interface CENNZWalletContextType {
 	selectedAccount: InjectedAccountWithMeta;
@@ -35,7 +34,6 @@ export const CENNZWalletProvider: FC<CENNZWalletProviderProps> = ({
 	children,
 }) => {
 	const { api } = useCENNZApi();
-	const { selectedWallet } = useWalletProvider();
 	const { promptInstallExtension, getInstalledExtension, accounts } =
 		useCENNZExtension();
 	const [wallet, setWallet] = useState<InjectedExtension>(null);
@@ -86,8 +84,7 @@ export const CENNZWalletProvider: FC<CENNZWalletProviderProps> = ({
 
 	// 2. Pick the right account once a `wallet` has been set
 	useEffect(() => {
-		if (!wallet || !accounts || !selectAccount || selectedWallet !== "CENNZnet")
-			return;
+		if (!wallet || !accounts || !selectAccount) return;
 
 		const storedAccount = store.get("CENNZNET-ACCOUNT");
 		if (!storedAccount) return selectAccount(accounts[0]);
@@ -98,7 +95,7 @@ export const CENNZWalletProvider: FC<CENNZWalletProviderProps> = ({
 		if (!matchedAccount) return selectAccount(accounts[0]);
 
 		selectAccount(matchedAccount);
-	}, [wallet, accounts, selectAccount, selectedWallet]);
+	}, [wallet, accounts, selectAccount]);
 
 	return (
 		<CENNZWalletContext.Provider

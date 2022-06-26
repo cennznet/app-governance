@@ -15,7 +15,7 @@ export const Layout: FC<IntrinsicElements["div"] & LayoutProps> = ({
 			<div {...props} className="relative flex h-full flex-col">
 				{children}
 			</div>
-			<div className="border-hero fixed inset-0 border-8"></div>
+			<div className="border-hero pointer-events-none fixed inset-0 border-8"></div>
 		</>
 	);
 };

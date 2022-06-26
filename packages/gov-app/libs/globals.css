@@ -5,5 +5,11 @@
 html,
 body,
 #__next {
+	@apply antialiased;
+	@apply scroll-smooth;
 	@apply h-full;
+}
+
+input::-webkit-input-placeholder {
+	@apply text-slate-500;
 }

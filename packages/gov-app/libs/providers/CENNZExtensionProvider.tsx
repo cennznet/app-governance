@@ -15,7 +15,6 @@ import {
 } from "react";
 import type * as Extension from "@polkadot/extension-dapp";
 import { useUserAgent } from "@gov-app/libs/providers/UserAgentProvider";
-import { useWalletProvider } from "@gov-app/libs/providers/WalletProvider";
 
 interface CENNZExtensionContextType {
 	accounts: InjectedAccountWithMeta[];
@@ -27,13 +26,15 @@ const CENNZExtensionContext = createContext<CENNZExtensionContextType>(
 	{} as CENNZExtensionContextType
 );
 
-interface CENNZExtensionProviderProps extends PropsWithChildren {}
+interface CENNZExtensionProviderProps extends PropsWithChildren {
+	appName: string;
+}
 
 export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
+	appName,
 	children,
 }) => {
 	const { browser, os } = useUserAgent();
-	const { selectedWallet } = useWalletProvider();
 	const [module, setModule] = useState<typeof Extension>();
 	const [accounts, setAccounts] = useState<Array<InjectedAccountWithMeta>>();
 
@@ -44,7 +45,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 			os.name === "Android"
 		) {
 			return alert(
-				"Sorry, this browser is not supported by App Hub. To use App Hub, please switch to Chrome or Firefox browsers on a Mac or PC."
+				"Sorry, this browser is not supported by this app. To use this app, please switch to Chrome or Firefox browsers on a Mac or PC."
 			);
 		}
 
@@ -71,19 +72,19 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 
 		return async () => {
 			const { web3Enable, web3FromSource } = module;
-			await web3Enable("CENNZnet App Hub");
+			await web3Enable(appName);
 			return await web3FromSource("cennznet-extension").catch(() => null);
 		};
-	}, [module]);
+	}, [appName, module]);
 
 	useEffect(() => {
-		if (!module || selectedWallet !== "CENNZnet") return;
+		if (!module) return;
 		let unsubscribe: () => void;
 
 		const fetchAccounts = async () => {
 			const { web3Enable, web3Accounts, web3AccountsSubscribe } = module;
 
-			await web3Enable("CENNZnet App Hub");
+			await web3Enable(appName);
 			const accounts = (await web3Accounts()) || [];
 			if (!accounts.length)
 				return alert(
@@ -100,7 +101,7 @@ export const CENNZExtensionProvider: FC<CENNZExtensionProviderProps> = ({
 		void fetchAccounts();
 
 		return unsubscribe;
-	}, [module, selectedWallet]);
+	}, [appName, module]);
 
 	return (
 		<CENNZExtensionContext.Provider
