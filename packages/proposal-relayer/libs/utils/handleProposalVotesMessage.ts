@@ -1,10 +1,10 @@
 import type {
-	DiscordMessage,
 	ProposalInterface,
 	ProposalRecordUpdater,
 	ProposalVotes,
 } from "@proposal-relayer/libs/types";
 import type { InteractionWebhook } from "discord.js";
+import type { DiscordMessage } from "@gov-libs/types";
 import type { AMQPQueue, AMQPMessage } from "@cloudamqp/amqp-client";
 
 import { getLogger } from "@gov-libs/utils/getLogger";

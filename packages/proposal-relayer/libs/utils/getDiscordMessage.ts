@@ -1,10 +1,10 @@
 import type {
-	DiscordMessage,
 	ProposalDetails,
 	ProposalInfo,
 	ProposalStatus,
 	ProposalVotes,
 } from "@proposal-relayer/libs/types";
+import type { DiscordMessage } from "@gov-libs/types";
 
 import {
 	getProposalFields,
