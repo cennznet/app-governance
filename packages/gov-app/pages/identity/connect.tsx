@@ -7,12 +7,14 @@ import {
 	useCallback,
 	useState,
 } from "react";
+import {
+	DiscordLogo,
+	TwitterLogo,
+	Spinner,
+	CloseIcon,
+} from "@gov-app/libs/assets/vectors";
 import { useWindowPopup } from "@gov-app/libs/hooks/useWindowPopup";
 import { Button } from "@gov-app/libs/components/Button";
-import { ReactComponent as DiscordLogo } from "@gov-app/libs/assets/vectors/discord.svg";
-import { ReactComponent as TwitterLogo } from "@gov-app/libs/assets/vectors/twitter.svg";
-import { ReactComponent as Spinner } from "@gov-app/libs/assets/vectors/spinner.svg";
-import { ReactComponent as CloseIcon } from "@gov-app/libs/assets/vectors/close-icon.svg";
 import { TextField } from "@gov-app/libs/components/TextField";
 import { getSession } from "next-auth/react";
 import { If } from "react-extras";
