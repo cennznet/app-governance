@@ -17,6 +17,10 @@ export function getReferendumFields(
 			value: proposalDetails.description,
 		},
 		{
+			name: "Sponsor",
+			value: `_${proposalInfo.sponsor}_`,
+		},
+		{
 			name: "Enactment Delay",
 			value: `${proposalInfo.enactmentDelay} blocks`,
 		},
