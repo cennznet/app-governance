@@ -1,72 +1,49 @@
-import type { FC } from "react";
+import type { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
 
 import { useState } from "react";
-import { AutoGrowInput } from "@gov-app/libs/components";
+import { TextField } from "@gov-app/libs/components";
+import { classNames, If } from "react-extras";
+import { ChevronDown } from "@gov-app/libs/assets/vectors";
 
-export const ProposalAdvanced: FC = () => {
-	const [cennzModule, setCennzModule] = useState<string>("");
-	const [cennzCall, setCennzCall] = useState<string>("");
+interface ProposalAdvancedProps {
+	open: boolean;
+	setOpen: Dispatch<SetStateAction<boolean>>;
+}
 
-	const { cennzValues, setCennzValue } = useCennzValues();
+export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
+	open,
+	setOpen,
+}) => {
+	const [extrinsicHash, setExtrinsicHash] = useState<string>();
 
 	return (
 		<div className="w-full">
-			<label htmlFor="cennzExtrinsic" className="text-lg">
-				Extrinsic
-			</label>
-			<fieldset
-				id="cennzExtrinsic"
-				className="border-dark mb-4 inline-flex w-full items-center border-[3px] bg-white px-4 py-2"
+			<div
+				className={classNames(
+					"mt-6 inline-flex cursor-pointer items-center text-lg",
+					open && "mb-4"
+				)}
+				onClick={() => setOpen(!open)}
 			>
-				<p className="mr-2 tracking-widest text-gray-600">api.tx.</p>
-				<AutoGrowInput
-					placeholder="module"
-					value={cennzModule}
-					onChange={setCennzModule}
+				Advanced{" "}
+				<span className={classNames("duration-200", open && "rotate-180")}>
+					<ChevronDown />
+				</span>
+			</div>
+			<br />
+			<If condition={open}>
+				<label htmlFor="cennzExtrinsic" className="text-lg">
+					Extrinsic Hash
+				</label>
+				<TextField
+					id="cennzExtrinsic"
+					inputClassName="w-full truncate"
+					value={extrinsicHash}
+					onChange={(e: ChangeEvent<HTMLInputElement>) =>
+						setExtrinsicHash(e.target.value)
+					}
 				/>
-				<p className="mx-2 tracking-widest">.</p>
-				<AutoGrowInput
-					placeholder="call"
-					value={cennzCall}
-					onChange={setCennzCall}
-				/>
-			</fieldset>
-			<label htmlFor="cennzValues" className="text-lg">
-				Values
-			</label>
-			<fieldset
-				id="cennzValues"
-				className="border-dark inline-flex w-full items-center border-[3px] bg-white px-4 py-2"
-			>
-				{["one", "two", "three"].map((num, index) => (
-					<AutoGrowInput
-						placeholder={`value ${num}`}
-						key={index}
-						value={cennzValues[index]}
-						inputClassName="mx-2"
-						onChange={(value: string) => setCennzValue(value, index)}
-					/>
-				))}
-			</fieldset>
+			</If>
 		</div>
 	);
-};
-
-const useCennzValues = () => {
-	const [cennzValues, setCennzValues] = useState({
-		0: undefined,
-		1: undefined,
-		2: undefined,
-	});
-
-	const setCennzValue = (value: string, index: number) =>
-		setCennzValues((prevValues) => ({
-			...prevValues,
-			[index]: value,
-		}));
-
-	return {
-		cennzValues,
-		setCennzValue,
-	};
 };

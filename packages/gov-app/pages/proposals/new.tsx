@@ -18,16 +18,14 @@ import {
 	TextField,
 	WalletConnect,
 } from "@gov-app/libs/components";
-import { ChevronDown, Spinner } from "@gov-app/libs/assets/vectors";
+import { Spinner } from "@gov-app/libs/assets/vectors";
 
 const NewProposal: NextPage = () => {
-	const { busy, onFormSubmit } = useFormSubmit();
-
-	const { markdown, onMarkdownChange, markdownOutput } = useMarkdown();
-
 	const [proposalTitle, setProposalTitle] = useState<string>("");
-
 	const [advancedOpen, setAdvancedOpen] = useState<boolean>();
+
+	const { busy, onFormSubmit } = useFormSubmit();
+	const { markdown, onMarkdownChange, markdownOutput } = useMarkdown();
 
 	return (
 		<Layout>
@@ -98,26 +96,7 @@ const NewProposal: NextPage = () => {
 						</div>
 					</If>
 
-					<div
-						className={classNames(
-							"mt-6 inline-flex cursor-pointer items-center text-lg",
-							advancedOpen && "mb-4"
-						)}
-						onClick={() => setAdvancedOpen(!advancedOpen)}
-					>
-						Advanced{" "}
-						<span
-							className={classNames(
-								"duration-200",
-								advancedOpen && "rotate-180"
-							)}
-						>
-							<ChevronDown />
-						</span>
-					</div>
-					<If condition={advancedOpen}>
-						<ProposalAdvanced />
-					</If>
+					<ProposalAdvanced open={advancedOpen} setOpen={setAdvancedOpen} />
 
 					<fieldset className="mt-16 text-center">
 						<Button type="submit" className="w-1/3 text-center" disabled={busy}>

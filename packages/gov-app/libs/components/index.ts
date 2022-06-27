@@ -1,4 +1,3 @@
-export { AutoGrowInput } from "@gov-app/libs/components/AutoGrowInput";
 export { Button } from "@gov-app/libs/components/Button";
 export { Header } from "@gov-app/libs/components/Header";
 export { Layout } from "@gov-app/libs/components/Layout";
