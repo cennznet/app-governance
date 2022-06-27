@@ -1,15 +1,14 @@
 import type { ChangeEvent, FC } from "react";
 
+import { useState } from "react";
 import { If } from "react-extras";
-import parse from "html-react-parser";
-import { toHTML } from "discord-markdown";
-import { useState, useMemo } from "react";
+import RemarkGfm from "remark-gfm";
+import ReactMarkdown from "react-markdown";
 import { Button, TextField } from "@gov-app/libs/components";
 
 export const ProposalDetails: FC = () => {
 	const [showPreview, setShowPreview] = useState<boolean>();
-
-	const { details, onDetailsChange, detailsMarkdown } = useProposalDetails();
+	const [proposalDetails, setProposalDetails] = useState<string>();
 
 	return (
 		<div className="w-full">
@@ -28,31 +27,21 @@ export const ProposalDetails: FC = () => {
 				<TextField
 					id="proposalDetails"
 					inputClassName="w-full"
-					value={details}
-					onChange={onDetailsChange}
+					value={proposalDetails}
+					onChange={(event: ChangeEvent<HTMLInputElement>) =>
+						setProposalDetails(event.target.value)
+					}
 					multiline
 					required
 				/>
 			</If>
 			<If condition={showPreview}>
 				<div className="border-dark flex w-full border-[3px] bg-white px-4 py-2">
-					{detailsMarkdown}
+					<ReactMarkdown remarkPlugins={[[RemarkGfm, { singleTilde: false }]]}>
+						{proposalDetails}
+					</ReactMarkdown>
 				</div>
 			</If>
 		</div>
 	);
-};
-
-const useProposalDetails = () => {
-	const [details, setDetails] = useState<string>("");
-	const detailsMarkdown = useMemo(() => parse(toHTML(details)), [details]);
-
-	const onDetailsChange = (event: ChangeEvent<HTMLInputElement>) =>
-		setDetails(event.target.value);
-
-	return {
-		details,
-		onDetailsChange,
-		detailsMarkdown,
-	};
 };
