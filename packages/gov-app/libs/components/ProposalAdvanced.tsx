@@ -43,6 +43,7 @@ export const ProposalAdvanced: FC = () => {
 						placeholder={`value ${num}`}
 						key={index}
 						value={cennzValues[index]}
+						inputClassName="mx-2"
 						onChange={(value: string) => setCennzValue(value, index)}
 					/>
 				))}
