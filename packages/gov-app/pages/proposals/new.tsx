@@ -136,10 +136,8 @@ const useFormSubmit = (
 	const [busy, setBusy] = useState<boolean>(false);
 
 	const { api } = useCENNZApi();
-	const {
-		selectedAccount,
-		wallet: { signer },
-	} = useCENNZWallet();
+	const { selectedAccount, wallet } = useCENNZWallet();
+	const signer = wallet?.signer;
 
 	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
 		async (event) => {
