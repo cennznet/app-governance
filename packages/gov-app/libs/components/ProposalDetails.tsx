@@ -1,4 +1,4 @@
-import type { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
+import type { ChangeEventHandler, FC } from "react";
 
 import { useState } from "react";
 import { If } from "react-extras";
@@ -8,12 +8,13 @@ import { Button, TextField } from "@gov-app/libs/components";
 
 interface ProposalDetailsProps {
 	proposalDetails: string;
-	setProposalDetails: Dispatch<SetStateAction<string>>;
+	onProposalDetailsChange: ChangeEventHandler<HTMLTextAreaElement> &
+		ChangeEventHandler<HTMLInputElement>;
 }
 
 export const ProposalDetails: FC<ProposalDetailsProps> = ({
 	proposalDetails,
-	setProposalDetails,
+	onProposalDetailsChange,
 }) => {
 	const [showPreview, setShowPreview] = useState<boolean>(false);
 
@@ -33,11 +34,10 @@ export const ProposalDetails: FC<ProposalDetailsProps> = ({
 			<If condition={!showPreview}>
 				<TextField
 					id="proposalDetails"
+					name="proposalDetails"
 					inputClassName="w-full"
 					value={proposalDetails}
-					onChange={(event: ChangeEvent<HTMLInputElement>) =>
-						setProposalDetails(event.target.value)
-					}
+					onChange={onProposalDetailsChange}
 					multiline
 					required
 				/>

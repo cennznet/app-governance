@@ -13,23 +13,23 @@ import {
 } from "@gov-app/libs/components";
 import { Spinner } from "@gov-app/libs/assets/vectors";
 import { IPFS_GATEWAY } from "@gov-app/libs/constants";
-import { ChangeEvent, FormEventHandler, useCallback, useState } from "react";
+import { FormEventHandler, useCallback, useState } from "react";
 import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";
 import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
 import { pinProposalToIPFS } from "@gov-app/libs/utils/pinProposalToIPFS";
+import { useControlledInput } from "@gov-app/libs/hooks/useControlledInput";
 
 const NewProposal: NextPage = () => {
-	const [proposalTitle, setProposalTitle] = useState<string>("");
-	const [proposalDetails, setProposalDetails] = useState<string>("");
-	const [proposalExtrinsic, setProposalExtrinsic] = useState<string>("");
-	const [proposalDelay, setProposalDelay] = useState<number>(0);
+	const { value: proposalTitle, onChange: onProposalTitleChange } =
+		useControlledInput<string>("");
+	const { value: proposalDetails, onChange: onProposalDetailsChange } =
+		useControlledInput<string>("");
+	const { value: proposalExtrinsic, onChange: onProposalExtrinsicChange } =
+		useControlledInput<string>("");
+	const { value: proposalDelay, onChange: onProposalDelayChange } =
+		useControlledInput<number>(0);
 
-	const { busy, onFormSubmit } = useFormSubmit(
-		proposalTitle,
-		proposalDetails,
-		proposalExtrinsic,
-		proposalDelay
-	);
+	const { busy, onFormSubmit } = useFormSubmit();
 
 	return (
 		<Layout>
@@ -71,16 +71,15 @@ const NewProposal: NextPage = () => {
 								id="proposalTitle"
 								inputClassName="w-full"
 								value={proposalTitle}
-								onChange={(e: ChangeEvent<HTMLInputElement>) =>
-									setProposalTitle(e.target.value)
-								}
+								name="proposalTitle"
+								onChange={onProposalTitleChange}
 								required
 							/>
 						</div>
 
 						<ProposalDetails
 							proposalDetails={proposalDetails}
-							setProposalDetails={setProposalDetails}
+							onProposalDetailsChange={onProposalDetailsChange}
 						/>
 
 						<div>
@@ -89,13 +88,12 @@ const NewProposal: NextPage = () => {
 							</label>
 							<TextField
 								id="proposalDelay"
+								name="proposalDelay"
 								type="number"
 								placeholder={"0"}
 								inputClassName="w-full"
 								value={proposalDelay}
-								onChange={(e: ChangeEvent<HTMLInputElement>) =>
-									setProposalDelay(Number(e.target.value))
-								}
+								onChange={onProposalDelayChange}
 								required
 							/>
 						</div>
@@ -103,7 +101,7 @@ const NewProposal: NextPage = () => {
 
 					<ProposalAdvanced
 						proposalExtrinsic={proposalExtrinsic}
-						setProposalExtrinsic={setProposalExtrinsic}
+						onProposalExtrinsicChange={onProposalExtrinsicChange}
 					/>
 
 					<fieldset className="mt-16 text-center">
@@ -127,12 +125,7 @@ const NewProposal: NextPage = () => {
 
 export default NewProposal;
 
-const useFormSubmit = (
-	proposalTitle: string,
-	proposalDetails: string,
-	proposalExtrinsic: string,
-	proposalDelay: number
-) => {
+const useFormSubmit = () => {
 	const [busy, setBusy] = useState<boolean>(false);
 
 	const { api } = useCENNZApi();
@@ -143,28 +136,22 @@ const useFormSubmit = (
 		async (event) => {
 			event.preventDefault();
 
-			if (
-				!api ||
-				!proposalTitle ||
-				!proposalDetails ||
-				!proposalDelay ||
-				!selectedAccount ||
-				!signer
-			)
-				return;
-
+			if (!api || !selectedAccount || !signer) return;
 			setBusy(true);
+
 			try {
+				const proposalData = new FormData(event.target as HTMLFormElement);
+
 				const { IpfsHash } = await pinProposalToIPFS({
-					proposalTitle,
-					proposalDetails,
+					proposalTitle: proposalData.get("proposalTitle").toString(),
+					proposalDetails: proposalData.get("proposalDetails").toString(),
 				});
 
 				await api.tx.governance
 					.submitProposal(
-						proposalExtrinsic,
+						proposalData.get("proposalExtrinsic"),
 						IPFS_GATEWAY.concat(IpfsHash),
-						proposalDelay
+						proposalData.get("proposalDelay")
 					)
 					.signAndSend(
 						selectedAccount.address,
@@ -180,15 +167,7 @@ const useFormSubmit = (
 
 			setBusy(false);
 		},
-		[
-			api,
-			proposalTitle,
-			proposalDetails,
-			proposalExtrinsic,
-			proposalDelay,
-			selectedAccount,
-			signer,
-		]
+		[api, selectedAccount, signer]
 	);
 
 	return { busy, onFormSubmit };

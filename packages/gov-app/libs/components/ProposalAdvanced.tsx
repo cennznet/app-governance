@@ -1,4 +1,4 @@
-import type { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
+import type { ChangeEventHandler, FC } from "react";
 
 import { useState } from "react";
 import { classNames, If } from "react-extras";
@@ -8,12 +8,12 @@ import { ChevronDown } from "@gov-app/libs/assets/vectors";
 
 interface ProposalAdvancedProps {
 	proposalExtrinsic: string;
-	setProposalExtrinsic: Dispatch<SetStateAction<string>>;
+	onProposalExtrinsicChange: ChangeEventHandler<HTMLInputElement>;
 }
 
 export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 	proposalExtrinsic,
-	setProposalExtrinsic,
+	onProposalExtrinsicChange,
 }) => {
 	const [open, setOpen] = useState<boolean>(false);
 
@@ -33,17 +33,16 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 			</div>
 			<br />
 			<If condition={open}>
-				<label htmlFor="cennzExtrinsic" className="text-lg">
+				<label htmlFor="proposalExtrinsic" className="text-lg">
 					Extrinsic Hash
 				</label>
 				<TextField
-					id="cennzExtrinsic"
+					id="proposalExtrinsic"
+					name="proposalExtrinsic"
 					inputClassName="w-full truncate"
 					placeholder={NULL_ADDRESS}
 					value={proposalExtrinsic}
-					onChange={(e: ChangeEvent<HTMLInputElement>) =>
-						setProposalExtrinsic(e.target.value)
-					}
+					onChange={onProposalExtrinsicChange}
 				/>
 			</If>
 		</div>
