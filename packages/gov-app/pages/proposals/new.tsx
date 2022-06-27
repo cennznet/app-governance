@@ -7,13 +7,18 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import { Layout } from "@gov-app/libs/components/Layout";
-import { Header } from "@gov-app/libs/components/Header";
 import { toHTML } from "discord-markdown";
 import parse from "html-react-parser";
-import { If } from "react-extras";
-import { Button, TextField, WalletConnect } from "@gov-app/libs/components";
-import { Spinner } from "@gov-app/libs/assets/vectors";
+import { classNames, If } from "react-extras";
+import {
+	Button,
+	Header,
+	Layout,
+	ProposalAdvanced,
+	TextField,
+	WalletConnect,
+} from "@gov-app/libs/components";
+import { ChevronDown, Spinner } from "@gov-app/libs/assets/vectors";
 
 const NewProposal: NextPage = () => {
 	const { busy, onFormSubmit } = useFormSubmit();
@@ -21,6 +26,8 @@ const NewProposal: NextPage = () => {
 	const { markdown, onMarkdownChange, markdownOutput } = useMarkdown();
 
 	const [proposalTitle, setProposalTitle] = useState<string>("");
+
+	const [advancedOpen, setAdvancedOpen] = useState<boolean>();
 
 	return (
 		<Layout>
@@ -89,6 +96,27 @@ const NewProposal: NextPage = () => {
 						>
 							{markdownOutput}
 						</div>
+					</If>
+
+					<div
+						className={classNames(
+							"inline-flex cursor-pointer items-center text-lg",
+							advancedOpen && "mb-4"
+						)}
+						onClick={() => setAdvancedOpen(!advancedOpen)}
+					>
+						Advanced{" "}
+						<span
+							className={classNames(
+								"duration-200",
+								advancedOpen && "rotate-180"
+							)}
+						>
+							<ChevronDown />
+						</span>
+					</div>
+					<If condition={advancedOpen}>
+						<ProposalAdvanced />
 					</If>
 
 					<fieldset className="mt-16 text-center">
