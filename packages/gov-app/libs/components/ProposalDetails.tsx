@@ -15,7 +15,7 @@ export const ProposalDetails: FC<ProposalDetailsProps> = ({
 	proposalDetails,
 	setProposalDetails,
 }) => {
-	const [showPreview, setShowPreview] = useState<boolean>();
+	const [showPreview, setShowPreview] = useState<boolean>(false);
 
 	return (
 		<div className="w-full">

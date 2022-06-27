@@ -15,7 +15,7 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 	proposalExtrinsic,
 	setProposalExtrinsic,
 }) => {
-	const [open, setOpen] = useState<boolean>();
+	const [open, setOpen] = useState<boolean>(false);
 
 	return (
 		<div className="w-full">
