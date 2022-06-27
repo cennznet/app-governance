@@ -14,12 +14,14 @@ import { Spinner } from "@gov-app/libs/assets/vectors";
 import { ChangeEvent, FormEventHandler, useCallback, useState } from "react";
 import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";
 import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
+import { pinProposalToIPFS } from "@gov-app/libs/utils/pinProposalToIPFS";
+import { IPFS_GATEWAY } from "@gov-app/libs/constants";
 
 const NewProposal: NextPage = () => {
 	const [proposalTitle, setProposalTitle] = useState<string>("");
 	const [proposalDetails, setProposalDetails] = useState<string>("");
-	const [proposalExtrinsic, setProposalExtrinsic] = useState<string>();
-	const [proposalDelay, setProposalDelay] = useState<number>();
+	const [proposalExtrinsic, setProposalExtrinsic] = useState<string>("");
+	const [proposalDelay, setProposalDelay] = useState<number>(0);
 
 	const { busy, onFormSubmit } = useFormSubmit(
 		proposalTitle,
@@ -149,15 +151,14 @@ const useFormSubmit = (
 				return;
 			setBusy(true);
 
-			console.log({ proposalTitle, proposalDetails, proposalExtrinsic });
+			const { IpfsHash } = await pinProposalToIPFS({
+				proposalTitle,
+				proposalDetails,
+			});
 
-			//1. Pin `proposalDetails` to IPFS
-			const justificationUri = "";
-
-			//2. Submit Proposal to CENNZnet
 			const tx = api.tx.governance.submitProposal(
 				proposalExtrinsic,
-				justificationUri,
+				IPFS_GATEWAY.concat(IpfsHash),
 				proposalDelay
 			);
 

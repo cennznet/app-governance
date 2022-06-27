@@ -43,3 +43,8 @@ export const TWITTER_CLIENT: Pick<
 };
 
 export const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
+
+export const PINATA_JWT: string = process.env.PINATA_JWT;
+
+export const IPFS_GATEWAY: string =
+	process.env.NEXT_PUBLIC_IPFS_GATEWAY || "https://gateway.pinata.cloud/ipfs/";
