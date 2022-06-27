@@ -233,10 +233,9 @@ const useSocialSignIn = (provider: "Twitter" | "Discord") => {
 					return;
 
 				const session = await getSession();
-				const [sessionProvider, username] = session?.user?.name?.split("#") ?? [
-					null,
-					null,
-				];
+				const [sessionProvider, username] = session?.user?.name?.split(
+					"://"
+				) ?? [null, null];
 				if (provider.toLowerCase() !== sessionProvider) return;
 
 				window.removeEventListener("storage", onStorageEvent);
