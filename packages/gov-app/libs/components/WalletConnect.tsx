@@ -1,13 +1,12 @@
 import type { NextPage } from "next";
 import type { ChangeEventHandler, MouseEventHandler } from "react";
 
-import { Select } from "@gov-app/libs/components/Select";
-import { Button } from "@gov-app/libs/components/Button";
+import { Button, Select } from "@gov-app/libs/components";
 import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
 import { useCENNZExtension } from "@gov-app/libs/providers/CENNZExtensionProvider";
 import { CENNZLogo } from "@gov-app/libs/assets/vectors";
 
-const WalletConnect: NextPage = () => {
+export const WalletConnect: NextPage = () => {
 	const {
 		onCENNZConnectClick,
 		onCENNZAccountSelect,
@@ -52,8 +51,6 @@ const WalletConnect: NextPage = () => {
 		</fieldset>
 	);
 };
-
-export default WalletConnect;
 
 const useCENNZConnect = () => {
 	const { accounts } = useCENNZExtension();

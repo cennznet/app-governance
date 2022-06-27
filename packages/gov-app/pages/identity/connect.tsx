@@ -1,6 +1,4 @@
 import type { NextPage } from "next";
-import { Layout } from "@gov-app/libs/components/Layout";
-import { Header } from "@gov-app/libs/components/Header";
 import {
 	FormEventHandler,
 	MouseEventHandler,
@@ -14,11 +12,15 @@ import {
 	CloseIcon,
 } from "@gov-app/libs/assets/vectors";
 import { useWindowPopup } from "@gov-app/libs/hooks/useWindowPopup";
-import { Button } from "@gov-app/libs/components/Button";
-import { TextField } from "@gov-app/libs/components/TextField";
 import { getSession } from "next-auth/react";
 import { If } from "react-extras";
-import WalletConnect from "@gov-app/libs/components/WalletConnect";
+import {
+	Button,
+	TextField,
+	WalletConnect,
+	Layout,
+	Header,
+} from "@gov-app/libs/components";
 
 const Connect: NextPage = () => {
 	const {
