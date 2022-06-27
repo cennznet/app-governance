@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import type { SubmittableResult } from "@cennznet/api";
 
 import { If } from "react-extras";
 import {
@@ -11,11 +12,11 @@ import {
 	WalletConnect,
 } from "@gov-app/libs/components";
 import { Spinner } from "@gov-app/libs/assets/vectors";
+import { IPFS_GATEWAY } from "@gov-app/libs/constants";
 import { ChangeEvent, FormEventHandler, useCallback, useState } from "react";
 import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";
 import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
 import { pinProposalToIPFS } from "@gov-app/libs/utils/pinProposalToIPFS";
-import { IPFS_GATEWAY } from "@gov-app/libs/constants";
 
 const NewProposal: NextPage = () => {
 	const [proposalTitle, setProposalTitle] = useState<string>("");
@@ -135,7 +136,10 @@ const useFormSubmit = (
 	const [busy, setBusy] = useState<boolean>(false);
 
 	const { api } = useCENNZApi();
-	const { selectedAccount } = useCENNZWallet();
+	const {
+		selectedAccount,
+		wallet: { signer },
+	} = useCENNZWallet();
 
 	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
 		async (event) => {
@@ -146,25 +150,37 @@ const useFormSubmit = (
 				!proposalTitle ||
 				!proposalDetails ||
 				!proposalDelay ||
-				!selectedAccount
+				!selectedAccount ||
+				!signer
 			)
 				return;
+
 			setBusy(true);
+			try {
+				const { IpfsHash } = await pinProposalToIPFS({
+					proposalTitle,
+					proposalDetails,
+				});
 
-			const { IpfsHash } = await pinProposalToIPFS({
-				proposalTitle,
-				proposalDetails,
-			});
+				await api.tx.governance
+					.submitProposal(
+						proposalExtrinsic,
+						IPFS_GATEWAY.concat(IpfsHash),
+						proposalDelay
+					)
+					.signAndSend(
+						selectedAccount.address,
+						{ signer },
+						(result: SubmittableResult) => {
+							const { txHash } = result;
+							console.info("Transaction", txHash.toString());
+						}
+					);
+			} catch (error) {
+				console.log("error", error.message);
+			}
 
-			const tx = api.tx.governance.submitProposal(
-				proposalExtrinsic,
-				IPFS_GATEWAY.concat(IpfsHash),
-				proposalDelay
-			);
-
-			setTimeout(() => {
-				setBusy(false);
-			}, 2000);
+			setBusy(false);
 		},
 		[
 			api,
@@ -173,6 +189,7 @@ const useFormSubmit = (
 			proposalExtrinsic,
 			proposalDelay,
 			selectedAccount,
+			signer,
 		]
 	);
 
