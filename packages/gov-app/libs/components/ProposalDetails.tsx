@@ -1,7 +1,7 @@
 import type { ChangeEvent, FC } from "react";
 
 import { useState } from "react";
-import { If } from "react-extras";
+import { classNames, If } from "react-extras";
 import RemarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import { Button, TextField } from "@gov-app/libs/components";
@@ -12,11 +12,25 @@ export const ProposalDetails: FC = () => {
 
 	return (
 		<div className="w-full">
-			<div className="float-right mr-[1px] inline-flex" role="group">
-				<Button size="small" onClick={() => setShowPreview(false)}>
+			<div
+				className={classNames(
+					"float-right inline-flex space-x-1",
+					!showPreview && "mr-[1px]"
+				)}
+				role="group"
+			>
+				<Button
+					size="small"
+					onClick={() => setShowPreview(false)}
+					active={!showPreview}
+				>
 					Write
 				</Button>
-				<Button size="small" onClick={() => setShowPreview(true)}>
+				<Button
+					size="small"
+					onClick={() => setShowPreview(true)}
+					active={showPreview}
+				>
 					Preview
 				</Button>
 			</div>
