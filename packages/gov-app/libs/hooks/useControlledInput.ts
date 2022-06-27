@@ -5,7 +5,9 @@ interface ControlledInputHook<T> {
 	onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }
 
-export function useControlledInput<T>(defaultValue: T): ControlledInputHook<T> {
+export const useControlledInput = <T>(
+	defaultValue: T
+): ControlledInputHook<T> => {
 	const [value, setValue] = useState<T>(defaultValue);
 
 	const onChange = (
@@ -16,4 +18,4 @@ export function useControlledInput<T>(defaultValue: T): ControlledInputHook<T> {
 		value,
 		onChange,
 	};
-}
+};
