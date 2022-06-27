@@ -1,20 +1,21 @@
 import type { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
 
 import { useState } from "react";
-import { TextField } from "@gov-app/libs/components";
 import { classNames, If } from "react-extras";
+import { TextField } from "@gov-app/libs/components";
+import { NULL_ADDRESS } from "@gov-app/libs/constants";
 import { ChevronDown } from "@gov-app/libs/assets/vectors";
 
 interface ProposalAdvancedProps {
-	open: boolean;
-	setOpen: Dispatch<SetStateAction<boolean>>;
+	proposalExtrinsic: string;
+	setProposalExtrinsic: Dispatch<SetStateAction<string>>;
 }
 
 export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
-	open,
-	setOpen,
+	proposalExtrinsic,
+	setProposalExtrinsic,
 }) => {
-	const [extrinsicHash, setExtrinsicHash] = useState<string>();
+	const [open, setOpen] = useState<boolean>();
 
 	return (
 		<div className="w-full">
@@ -38,9 +39,10 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 				<TextField
 					id="cennzExtrinsic"
 					inputClassName="w-full truncate"
-					value={extrinsicHash}
+					placeholder={NULL_ADDRESS}
+					value={proposalExtrinsic}
 					onChange={(e: ChangeEvent<HTMLInputElement>) =>
-						setExtrinsicHash(e.target.value)
+						setProposalExtrinsic(e.target.value)
 					}
 				/>
 			</If>

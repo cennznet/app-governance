@@ -41,3 +41,5 @@ export const TWITTER_CLIENT: Pick<
 	clientId: process.env.TWITTER_CLIENT_ID,
 	clientSecret: process.env.TWITTER_CLIENT_SECRET,
 };
+
+export const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";

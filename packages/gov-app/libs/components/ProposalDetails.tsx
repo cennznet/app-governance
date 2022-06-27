@@ -1,4 +1,4 @@
-import type { ChangeEvent, FC } from "react";
+import type { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
 
 import { useState } from "react";
 import { If } from "react-extras";
@@ -6,9 +6,16 @@ import RemarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import { Button, TextField } from "@gov-app/libs/components";
 
-export const ProposalDetails: FC = () => {
+interface ProposalDetailsProps {
+	proposalDetails: string;
+	setProposalDetails: Dispatch<SetStateAction<string>>;
+}
+
+export const ProposalDetails: FC<ProposalDetailsProps> = ({
+	proposalDetails,
+	setProposalDetails,
+}) => {
 	const [showPreview, setShowPreview] = useState<boolean>();
-	const [proposalDetails, setProposalDetails] = useState<string>();
 
 	return (
 		<div className="w-full">
@@ -21,7 +28,7 @@ export const ProposalDetails: FC = () => {
 				</Button>
 			</div>
 			<label htmlFor="proposalDetails" className="text-lg">
-				Proposal Details
+				Justification
 			</label>
 			<If condition={!showPreview}>
 				<TextField

@@ -12,12 +12,21 @@ import {
 } from "@gov-app/libs/components";
 import { Spinner } from "@gov-app/libs/assets/vectors";
 import { ChangeEvent, FormEventHandler, useCallback, useState } from "react";
+import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";
+import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
 
 const NewProposal: NextPage = () => {
 	const [proposalTitle, setProposalTitle] = useState<string>("");
-	const [advancedOpen, setAdvancedOpen] = useState<boolean>();
+	const [proposalDetails, setProposalDetails] = useState<string>("");
+	const [proposalExtrinsic, setProposalExtrinsic] = useState<string>();
+	const [proposalDelay, setProposalDelay] = useState<number>();
 
-	const { busy, onFormSubmit } = useFormSubmit();
+	const { busy, onFormSubmit } = useFormSubmit(
+		proposalTitle,
+		proposalDetails,
+		proposalExtrinsic,
+		proposalDelay
+	);
 
 	return (
 		<Layout>
@@ -38,7 +47,7 @@ const NewProposal: NextPage = () => {
 						Enter proposal details
 					</h2>
 					<p className="mb-8">
-						The proposal details section supports markdown! Refer to{" "}
+						The <em>justification</em> section supports markdown! Refer to{" "}
 						<a
 							href="https://assets.discohook.app/discord_md_cheatsheet.pdf"
 							target="_blank"
@@ -50,23 +59,49 @@ const NewProposal: NextPage = () => {
 						to take advantage.
 					</p>
 
-					<label htmlFor="proposalTitle" className="text-lg">
-						Proposal Title
-					</label>
-					<TextField
-						id="proposalTitle"
-						className="mb-6"
-						inputClassName="w-full"
-						value={proposalTitle}
-						onChange={(e: ChangeEvent<HTMLInputElement>) =>
-							setProposalTitle(e.target.value)
-						}
-						required
+					<fieldset className="space-y-6">
+						<div>
+							<label htmlFor="proposalTitle" className="text-lg">
+								Title
+							</label>
+							<TextField
+								id="proposalTitle"
+								inputClassName="w-full"
+								value={proposalTitle}
+								onChange={(e: ChangeEvent<HTMLInputElement>) =>
+									setProposalTitle(e.target.value)
+								}
+								required
+							/>
+						</div>
+
+						<ProposalDetails
+							proposalDetails={proposalDetails}
+							setProposalDetails={setProposalDetails}
+						/>
+
+						<div>
+							<label htmlFor="proposalDelay" className="text-lg">
+								Enactment Delay <span className="text-base">(# blocks)</span>
+							</label>
+							<TextField
+								id="proposalDelay"
+								type="number"
+								placeholder={"0"}
+								inputClassName="w-full"
+								value={proposalDelay}
+								onChange={(e: ChangeEvent<HTMLInputElement>) =>
+									setProposalDelay(Number(e.target.value))
+								}
+								required
+							/>
+						</div>
+					</fieldset>
+
+					<ProposalAdvanced
+						proposalExtrinsic={proposalExtrinsic}
+						setProposalExtrinsic={setProposalExtrinsic}
 					/>
-
-					<ProposalDetails />
-
-					<ProposalAdvanced open={advancedOpen} setOpen={setAdvancedOpen} />
 
 					<fieldset className="mt-16 text-center">
 						<Button type="submit" className="w-1/3 text-center" disabled={busy}>
@@ -89,19 +124,55 @@ const NewProposal: NextPage = () => {
 
 export default NewProposal;
 
-const useFormSubmit = () => {
+const useFormSubmit = (
+	proposalTitle: string,
+	proposalDetails: string,
+	proposalExtrinsic: string,
+	proposalDelay: number
+) => {
 	const [busy, setBusy] = useState<boolean>(false);
+
+	const { api } = useCENNZApi();
+	const { selectedAccount } = useCENNZWallet();
+
 	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-		(event) => {
+		async (event) => {
 			event.preventDefault();
 
+			if (
+				!api ||
+				!proposalTitle ||
+				!proposalDetails ||
+				!proposalDelay ||
+				!selectedAccount
+			)
+				return;
 			setBusy(true);
+
+			console.log({ proposalTitle, proposalDetails, proposalExtrinsic });
+
+			//1. Pin `proposalDetails` to IPFS
+			const justificationUri = "";
+
+			//2. Submit Proposal to CENNZnet
+			const tx = api.tx.governance.submitProposal(
+				proposalExtrinsic,
+				justificationUri,
+				proposalDelay
+			);
 
 			setTimeout(() => {
 				setBusy(false);
 			}, 2000);
 		},
-		[]
+		[
+			api,
+			proposalTitle,
+			proposalDetails,
+			proposalExtrinsic,
+			proposalDelay,
+			selectedAccount,
+		]
 	);
 
 	return { busy, onFormSubmit };
