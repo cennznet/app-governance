@@ -38,7 +38,7 @@ export const ProposalDetails: FC = () => {
 			<If condition={showPreview}>
 				<div className="border-dark flex w-full border-[3px] bg-white px-4 py-2">
 					<ReactMarkdown remarkPlugins={[[RemarkGfm, { singleTilde: false }]]}>
-						{proposalDetails}
+						{proposalDetails ?? "Nothing to preview"}
 					</ReactMarkdown>
 				</div>
 			</If>
