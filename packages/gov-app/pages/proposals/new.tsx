@@ -1,31 +1,23 @@
 import type { NextPage } from "next";
 
-import {
-	ChangeEvent,
-	FormEventHandler,
-	useCallback,
-	useMemo,
-	useState,
-} from "react";
-import { toHTML } from "discord-markdown";
-import parse from "html-react-parser";
-import { classNames, If } from "react-extras";
+import { If } from "react-extras";
 import {
 	Button,
 	Header,
 	Layout,
 	ProposalAdvanced,
+	ProposalDetails,
 	TextField,
 	WalletConnect,
 } from "@gov-app/libs/components";
 import { Spinner } from "@gov-app/libs/assets/vectors";
+import { ChangeEvent, FormEventHandler, useCallback, useState } from "react";
 
 const NewProposal: NextPage = () => {
 	const [proposalTitle, setProposalTitle] = useState<string>("");
 	const [advancedOpen, setAdvancedOpen] = useState<boolean>();
 
 	const { busy, onFormSubmit } = useFormSubmit();
-	const { markdown, onMarkdownChange, markdownOutput } = useMarkdown();
 
 	return (
 		<Layout>
@@ -72,29 +64,7 @@ const NewProposal: NextPage = () => {
 						required
 					/>
 
-					<label htmlFor="proposalDetails" className="text-lg">
-						Proposal Details
-					</label>
-					<TextField
-						id="proposalDetails"
-						inputClassName="w-full"
-						value={markdown}
-						onChange={onMarkdownChange}
-						className={classNames(!!markdown && "mb-4")}
-						multiline
-						required
-					/>
-					<If condition={!!markdown}>
-						<label htmlFor="markdownOutput" className="text-lg">
-							Markdown Output
-						</label>
-						<div
-							id="markdownOutput"
-							className="border-dark w-full border-[3px] bg-white px-4 py-2"
-						>
-							{markdownOutput}
-						</div>
-					</If>
+					<ProposalDetails />
 
 					<ProposalAdvanced open={advancedOpen} setOpen={setAdvancedOpen} />
 
@@ -118,20 +88,6 @@ const NewProposal: NextPage = () => {
 };
 
 export default NewProposal;
-
-const useMarkdown = () => {
-	const [markdown, setMarkdown] = useState<string>("");
-	const markdownOutput = useMemo(() => parse(toHTML(markdown)), [markdown]);
-
-	const onMarkdownChange = (event: ChangeEvent<HTMLInputElement>) =>
-		setMarkdown(event.target.value);
-
-	return {
-		markdown,
-		onMarkdownChange,
-		markdownOutput,
-	};
-};
 
 const useFormSubmit = () => {
 	const [busy, setBusy] = useState<boolean>(false);
