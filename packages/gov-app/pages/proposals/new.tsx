@@ -79,10 +79,10 @@ const NewProposal: NextPage = () => {
 					</label>
 					<TextField
 						id="proposalDetails"
-						className="mb-6"
 						inputClassName="w-full"
 						value={markdown}
 						onChange={onMarkdownChange}
+						className={classNames(!!markdown && "mb-4")}
 						multiline
 						required
 					/>
@@ -100,7 +100,7 @@ const NewProposal: NextPage = () => {
 
 					<div
 						className={classNames(
-							"inline-flex cursor-pointer items-center text-lg",
+							"mt-6 inline-flex cursor-pointer items-center text-lg",
 							advancedOpen && "mb-4"
 						)}
 						onClick={() => setAdvancedOpen(!advancedOpen)}
