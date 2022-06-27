@@ -53,7 +53,9 @@ const NewProposal: NextPage = () => {
 						to take advantage.
 					</p>
 
-					<label htmlFor="proposalTitle">Proposal Title</label>
+					<label htmlFor="proposalTitle" className="text-lg">
+						Proposal Title
+					</label>
 					<TextField
 						id="proposalTitle"
 						className="mb-6"
@@ -65,7 +67,9 @@ const NewProposal: NextPage = () => {
 						required
 					/>
 
-					<label htmlFor="proposalDetails">Proposal Details</label>
+					<label htmlFor="proposalDetails" className="text-lg">
+						Proposal Details
+					</label>
 					<TextField
 						id="proposalDetails"
 						className="mb-6"
@@ -76,7 +80,9 @@ const NewProposal: NextPage = () => {
 						required
 					/>
 					<If condition={!!markdown}>
-						<label htmlFor="markdownOutput">Markdown Output</label>
+						<label htmlFor="markdownOutput" className="text-lg">
+							Markdown Output
+						</label>
 						<div
 							id="markdownOutput"
 							className="border-dark w-full border-[3px] bg-white px-4 py-2"
