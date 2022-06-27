@@ -1,12 +1,11 @@
-import type { NextPage } from "next";
-import type { ChangeEventHandler, MouseEventHandler } from "react";
+import type { ChangeEventHandler, FC, MouseEventHandler } from "react";
 
 import { Button, Select } from "@gov-app/libs/components";
 import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
 import { useCENNZExtension } from "@gov-app/libs/providers/CENNZExtensionProvider";
 import { CENNZLogo } from "@gov-app/libs/assets/vectors";
 
-export const WalletConnect: NextPage = () => {
+export const WalletConnect: FC = () => {
 	const {
 		onCENNZConnectClick,
 		onCENNZAccountSelect,
