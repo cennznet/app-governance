@@ -1,12 +1,18 @@
 import type { NextPage } from "next";
 
-import { FormEventHandler, useCallback, useState } from "react";
+import { FormEventHandler, useCallback, useMemo, useState } from "react";
 import { Layout } from "@gov-app/libs/components/Layout";
 import { Header } from "@gov-app/libs/components/Header";
 import WalletConnect from "@gov-app/libs/components/WalletConnect";
+import { toHTML } from "discord-markdown";
+import parse from "html-react-parser";
+import { If } from "react-extras";
 
 const NewProposal: NextPage = () => {
 	const { busy, onFormSubmit } = useFormSubmit();
+
+	const [markdown, setMarkdown] = useState<string>("");
+	const markdownOutput = useMemo(() => parse(toHTML(markdown)), [markdown]);
 
 	return (
 		<Layout>
@@ -22,6 +28,12 @@ const NewProposal: NextPage = () => {
 				</p>
 
 				<WalletConnect />
+				<input
+					type="text"
+					value={markdown}
+					onChange={(e) => setMarkdown(e.target.value)}
+				/>
+				<If condition={!!markdownOutput}>{markdownOutput}</If>
 			</div>
 		</Layout>
 	);
