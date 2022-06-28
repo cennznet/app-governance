@@ -3,15 +3,19 @@ import type { ProposalInterface } from "@proposal-relayer/libs/types";
 import type { ProposalVote } from "@gov-app/libs/types";
 
 import { Choose, If } from "react-extras";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
 	Button,
 	Header,
 	Layout,
 	ProposalDetailsDisplay,
+	WalletConnect,
 } from "@gov-app/libs/components";
 import { fetchProposal } from "@gov-app/libs/utils/fetchProposal";
 import { Spinner } from "@gov-app/libs/assets/vectors";
+import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";
+import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
+import { SubmittableResult } from "@cennznet/api";
 
 export const getServerSideProps = (context: NextPageContext) => {
 	return {
@@ -27,24 +31,7 @@ interface ProposalProps {
 
 const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 	const proposal = useProposal(proposalId);
-
-	const [busy, setBusy] = useState({
-		pass: false,
-		reject: false,
-	});
-
-	const onVoteClick = (vote: ProposalVote) => {
-		setBusy({ ...busy, [vote]: true });
-
-		setTimeout(
-			() =>
-				setBusy({
-					pass: false,
-					reject: false,
-				}),
-			1000
-		);
-	};
+	const { busy, onVoteClick } = useVote(proposalId);
 
 	return (
 		<Layout>
@@ -53,10 +40,22 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 				<h1 className="font-display mb-6 text-center text-6xl uppercase">
 					Proposal #{proposalId}
 				</h1>
+
+				<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+					Connect your wallet
+				</h2>
+				<p className="mb-8">
+					Lorem laborum dolor minim mollit eu reprehenderit culpa dolore labore
+					dolor mollit commodo do anim incididunt sunt id pariatur elit tempor
+					nostrud nulla eu proident ut id qui incididunt.
+				</p>
+				<WalletConnect />
+
 				<Choose>
 					<Choose.When condition={!proposal}>
 						<Spinner className="m-auto h-8 w-8 animate-spin" />
 					</Choose.When>
+
 					<Choose.When condition={!!proposal}>
 						<ProposalDetailsDisplay
 							proposalDetails={proposal?.proposalDetails}
@@ -105,4 +104,41 @@ const useProposal = (proposalId: string): ProposalInterface => {
 	}, [proposalId]);
 
 	return proposal;
+};
+
+const useVote = (proposalId: string) => {
+	const { api } = useCENNZApi();
+	const { selectedAccount, wallet } = useCENNZWallet();
+	const signer = wallet?.signer;
+
+	const [busy, setBusy] = useState({
+		pass: false,
+		reject: false,
+	});
+
+	const onVoteClick = useCallback(
+		async (vote: ProposalVote) => {
+			if (!api || !selectedAccount?.address || !signer) return;
+			setBusy({ ...busy, [vote]: true });
+
+			await api.tx.governance
+				.voteOnProposal(proposalId, vote === "pass")
+				.signAndSend(
+					selectedAccount.address,
+					{ signer },
+					(result: SubmittableResult) => {
+						const { txHash } = result;
+						console.info("Transaction", txHash.toString());
+					}
+				);
+
+			setBusy({
+				pass: false,
+				reject: false,
+			});
+		},
+		[api, selectedAccount?.address, signer, busy, proposalId]
+	);
+
+	return { busy, onVoteClick };
 };
