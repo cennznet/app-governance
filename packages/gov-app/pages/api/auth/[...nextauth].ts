@@ -19,7 +19,7 @@ export default NextAuth({
 			profile({ data }) {
 				return {
 					id: data.id,
-					name: `twitter#${data.username}`,
+					name: `twitter://${data.username}`,
 				};
 			},
 		}),
@@ -28,7 +28,7 @@ export default NextAuth({
 			profile(data) {
 				return {
 					id: data.id,
-					name: `discord#${data.username}`,
+					name: `discord://${data.username}#${data.discriminator}`,
 				};
 			},
 		}),

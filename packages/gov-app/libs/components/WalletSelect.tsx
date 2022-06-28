@@ -5,7 +5,7 @@ import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
 import { useCENNZExtension } from "@gov-app/libs/providers/CENNZExtensionProvider";
 import { CENNZLogo } from "@gov-app/libs/assets/vectors";
 
-export const WalletConnect: FC = () => {
+export const WalletSelect: typeof Select = (props) => {
 	const {
 		onCENNZConnectClick,
 		onCENNZAccountSelect,
@@ -14,32 +14,30 @@ export const WalletConnect: FC = () => {
 	} = useCENNZConnect();
 
 	return (
-		<fieldset className="mb-12 min-w-0">
-			<Select
-				placeholder="Connect CENNZnet Wallet"
-				inputClassName="!py-4"
-				required
-				defaultValue={selectedAccount}
-				onChange={onCENNZAccountSelect}
-				endAdornment={
-					<Button
-						active={!!selectedAccount}
-						size="small"
-						onMouseDown={onCENNZConnectClick}
-						startAdornment={<CENNZLogo className="h-4" />}
-					>
-						{!!selectedAccount && "Connected"}
-						{!selectedAccount && "Connect"}
-					</Button>
-				}
-			>
-				{allAccounts?.map((account, index) => (
-					<option value={account} key={index}>
-						{account}
-					</option>
-				))}
-			</Select>
-		</fieldset>
+		<Select
+			placeholder="Connect CENNZnet Wallet"
+			inputClassName="!py-4"
+			defaultValue={selectedAccount}
+			onChange={onCENNZAccountSelect}
+			endAdornment={
+				<Button
+					active={!!selectedAccount}
+					size="small"
+					onMouseDown={onCENNZConnectClick}
+					startAdornment={<CENNZLogo className="h-4" />}
+				>
+					{!!selectedAccount && "Connected"}
+					{!selectedAccount && "Connect"}
+				</Button>
+			}
+			{...props}
+		>
+			{allAccounts?.map((account, index) => (
+				<option value={account} key={index}>
+					{account}
+				</option>
+			))}
+		</Select>
 	);
 };
 
