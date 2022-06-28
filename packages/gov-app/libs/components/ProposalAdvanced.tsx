@@ -37,11 +37,12 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 				</label>
 				<TextField
 					id="cennzExtrinsic"
-					inputClassName="w-full truncate"
+					inputClassName="w-full"
 					value={extrinsicHash}
 					onChange={(e: ChangeEvent<HTMLInputElement>) =>
 						setExtrinsicHash(e.target.value)
 					}
+					multiline
 				/>
 			</If>
 		</div>
