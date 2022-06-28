@@ -5,4 +5,4 @@ export { ProposalAdvanced } from "@gov-app/libs/components/ProposalAdvanced";
 export { ProposalDetails } from "@gov-app/libs/components/ProposalDetails";
 export { Select } from "@gov-app/libs/components/Select";
 export { TextField } from "@gov-app/libs/components/TextField";
-export { WalletConnect } from "@gov-app/libs/components/WalletConnect";
+export { WalletSelect } from "@gov-app/libs/components/WalletSelect";

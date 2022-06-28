@@ -17,7 +17,7 @@ import { If } from "react-extras";
 import {
 	Button,
 	TextField,
-	WalletConnect,
+	WalletSelect,
 	Layout,
 	Header,
 } from "@gov-app/libs/components";
@@ -64,18 +64,19 @@ const Connect: NextPage = () => {
 						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
 						tempor nostrud nulla eu proident ut id qui incididunt.
 					</p>
-					<WalletConnect />
+					<fieldset className="mb-12 min-w-0">
+						<WalletSelect required name="address" />
+					</fieldset>
 
+					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+						Connect your social channels
+					</h2>
+					<p className="mb-8">
+						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
+						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
+						tempor nostrud nulla eu proident ut id qui incididunt.
+					</p>
 					<fieldset className="mb-12">
-						<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
-							Connect your social channels
-						</h2>
-						<p className="mb-8">
-							Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
-							labore dolor mollit commodo do anim incididunt sunt id pariatur
-							elit tempor nostrud nulla eu proident ut id qui incididunt.
-						</p>
-
 						<div className="grid grid-cols-2 items-center gap-4">
 							<TextField
 								placeholder="Sign-in to verify"
