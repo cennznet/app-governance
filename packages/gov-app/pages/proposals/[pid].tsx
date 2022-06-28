@@ -1,11 +1,12 @@
 import type { NextPage } from "next";
 import type { ProposalInterface } from "@proposal-relayer/libs/types";
 
-import { If } from "react-extras";
+import { Choose } from "react-extras";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Header, Layout } from "@gov-app/libs/components";
 import { fetchProposal } from "@gov-app/libs/utils/fetchProposal";
+import { Spinner } from "@gov-app/libs/assets/vectors";
 
 const Proposal: NextPage = () => {
 	const router = useRouter();
@@ -17,29 +18,37 @@ const Proposal: NextPage = () => {
 		<Layout>
 			<Header />
 			<div className="w-full max-w-3xl flex-1 self-center px-8 pb-12">
-				<h1 className="font-display text-center text-6xl uppercase">
+				<h1 className="font-display mb-6 text-center text-6xl uppercase">
 					Proposal #{pid}
 				</h1>
-				<If condition={!!proposal}>
-					<div className="mb-6 space-y-4">
-						<span className="border-hero border-b-2 text-2xl">
-							{proposal?.proposalDetails?.title}
-						</span>
-						<p className="text-base">
-							{proposal?.proposalDetails?.description}
-						</p>
-					</div>
-					<div className="space-y-4">
-						<div>
-							<span className="italic">Sponsor</span>
-							<p>{proposal?.proposalInfo?.sponsor}</p>
+				<Choose>
+					<Choose.When condition={!proposal}>
+						<Spinner className="m-auto h-8 w-8 animate-spin" />
+					</Choose.When>
+					<Choose.When condition={!!proposal}>
+						<div className="space-y-6">
+							<span className="border-hero border-b-2 text-4xl">
+								{proposal?.proposalDetails?.title}
+							</span>
+							<div className="flex w-full space-x-20">
+								<div>
+									<span className="italic">Enactment delay</span>
+									<p>{proposal?.proposalInfo?.enactmentDelay} blocks</p>
+								</div>
+								<div>
+									<span className="italic">Sponsor</span>
+									<p>{proposal?.proposalInfo?.sponsor}</p>
+								</div>
+							</div>
 						</div>
+						<div className="border-hero my-6 w-full border-b-2" />
 						<div>
-							<span className="italic">Enactment delay</span>
-							<p>{proposal?.proposalInfo?.enactmentDelay} blocks</p>
+							<p className="text-xl">
+								{proposal?.proposalDetails?.description}
+							</p>
 						</div>
-					</div>
-				</If>
+					</Choose.When>
+				</Choose>
 			</div>
 		</Layout>
 	);

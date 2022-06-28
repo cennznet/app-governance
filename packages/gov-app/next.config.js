@@ -30,8 +30,8 @@ const nextConfig = {
 		];
 	},
 	experimental: {
-		externalDir: true
-	}
+		externalDir: true,
+	},
 };
 
 module.exports = withNx(nextConfig);
