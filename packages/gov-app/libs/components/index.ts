@@ -6,4 +6,4 @@ export { ProposalDetailsDisplay } from "@gov-app/libs/components/ProposalDetails
 export { ProposalDetailsField } from "@gov-app/libs/components/ProposalDetailsField";
 export { Select } from "@gov-app/libs/components/Select";
 export { TextField } from "@gov-app/libs/components/TextField";
-export { WalletConnect } from "@gov-app/libs/components/WalletConnect";
+export { WalletSelect } from "@gov-app/libs/components/WalletSelect";

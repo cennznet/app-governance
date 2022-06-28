@@ -42,6 +42,7 @@ export const TWITTER_CLIENT: Pick<
 	clientSecret: process.env.TWITTER_CLIENT_SECRET,
 };
 
+export const NEXTAUTH_SECRET: string = process.env.NEXTAUTH_SECRET ?? "";
 export const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 export const PINATA_JWT: string = process.env.PINATA_JWT || "";

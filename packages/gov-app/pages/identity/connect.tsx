@@ -17,10 +17,12 @@ import { If } from "react-extras";
 import {
 	Button,
 	TextField,
-	WalletConnect,
+	WalletSelect,
 	Layout,
 	Header,
 } from "@gov-app/libs/components";
+import { submitIdentityConnectForm } from "@gov-app/libs/utils/submitIdentityConnectForm";
+import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";
 
 const Connect: NextPage = () => {
 	const {
@@ -62,23 +64,25 @@ const Connect: NextPage = () => {
 						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
 						tempor nostrud nulla eu proident ut id qui incididunt.
 					</p>
-					<WalletConnect />
+					<fieldset className="mb-12 min-w-0">
+						<WalletSelect required name="address" />
+					</fieldset>
 
+					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+						Connect your social channels
+					</h2>
+					<p className="mb-8">
+						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
+						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
+						tempor nostrud nulla eu proident ut id qui incididunt.
+					</p>
 					<fieldset className="mb-12">
-						<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
-							Connect your social channels
-						</h2>
-						<p className="mb-8">
-							Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
-							labore dolor mollit commodo do anim incididunt sunt id pariatur
-							elit tempor nostrud nulla eu proident ut id qui incididunt.
-						</p>
-
 						<div className="grid grid-cols-2 items-center gap-4">
 							<TextField
 								placeholder="Sign-in to verify"
 								inputClassName="!py-4"
 								required
+								name="twitterUsername"
 								value={twitterUsername}
 								onInput={onTextInput}
 								endAdornment={
@@ -107,6 +111,7 @@ const Connect: NextPage = () => {
 								placeholder="Sign-in to verify"
 								inputClassName="!py-4"
 								required
+								name="discordUsername"
 								value={discordUsername}
 								onInput={onTextInput}
 								endAdornment={
@@ -173,10 +178,9 @@ const useSocialSignIn = (provider: "Twitter" | "Discord") => {
 					return;
 
 				const session = await getSession();
-				const [sessionProvider, username] = session?.user?.name?.split("#") ?? [
-					null,
-					null,
-				];
+				const [sessionProvider, username] = session?.user?.name?.split(
+					"://"
+				) ?? [null, null];
 				if (provider.toLowerCase() !== sessionProvider) return;
 
 				window.removeEventListener("storage", onStorageEvent);
@@ -194,18 +198,28 @@ const useSocialSignIn = (provider: "Twitter" | "Discord") => {
 };
 
 const useFormSubmit = () => {
+	const { api } = useCENNZApi();
 	const [busy, setBusy] = useState<boolean>(false);
 	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-		(event) => {
+		async (event) => {
 			event.preventDefault();
-
 			setBusy(true);
 
-			setTimeout(() => {
-				setBusy(false);
-			}, 2000);
+			const data = new FormData(event.target as HTMLFormElement);
+
+			try {
+				await submitIdentityConnectForm(api, {
+					address: data.get("address") as string,
+					twitterUsername: data.get("twitterUsername") as string,
+					discordUsername: data.get("discordUsername") as string,
+				}).finally(() => {
+					setBusy(false);
+				});
+			} catch (error) {
+				console.info(error);
+			}
 		},
-		[]
+		[api]
 	);
 
 	return { busy, onFormSubmit };

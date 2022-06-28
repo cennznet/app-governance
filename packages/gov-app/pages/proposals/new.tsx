@@ -9,7 +9,7 @@ import {
 	ProposalAdvanced,
 	ProposalDetailsField,
 	TextField,
-	WalletConnect,
+	WalletSelect,
 } from "@gov-app/libs/components";
 import { Spinner } from "@gov-app/libs/assets/vectors";
 import { IPFS_GATEWAY } from "@gov-app/libs/constants";
@@ -55,7 +55,9 @@ const NewProposal: NextPage = () => {
 						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
 						tempor nostrud nulla eu proident ut id qui incididunt.
 					</p>
-					<WalletConnect />
+					<fieldset className="mb-12 min-w-0">
+						<WalletSelect required />
+					</fieldset>
 
 					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 						Enter proposal details
