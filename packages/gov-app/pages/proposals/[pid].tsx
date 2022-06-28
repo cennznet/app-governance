@@ -65,7 +65,7 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 					/>
 
 					<div
-						className="mt-12 inline-flex w-full justify-center space-x-12"
+						className="mt-16 inline-flex w-full justify-center space-x-12"
 						role="group"
 					>
 						<If condition={proposal?.status === "Deliberation"}>
