@@ -28,12 +28,6 @@ const NextApp: FC<AppProps> = ({
 			>
 				<Head>
 					<title>CENNZnet | Governance Platform</title>
-					<meta name="description" content="CENNZnet Governance" />
-					<link
-						rel="stylesheet"
-						type="text/css"
-						href="https://use.typekit.net/sxj0edc.css"
-					/>
 				</Head>
 				<Component {...pageProps} />
 			</MainProvider>

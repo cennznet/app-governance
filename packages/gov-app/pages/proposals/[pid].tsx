@@ -1,11 +1,9 @@
 import type { NextPage } from "next";
-import type { ProposalInterface } from "@proposal-relayer/libs/types";
 
-import { useRouter } from "next/router";
-import { Layout } from "@gov-app/libs/components/Layout";
-import { Header } from "@gov-app/libs/components/Header";
-import { useEffect, useState } from "react";
 import { If } from "react-extras";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { Header, Layout } from "@gov-app/libs/components";
 import { fetchProposal } from "@gov-app/libs/utils/fetchProposal";
 
 const Proposal: NextPage = () => {

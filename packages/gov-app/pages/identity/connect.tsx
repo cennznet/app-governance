@@ -1,35 +1,28 @@
 import type { NextPage } from "next";
-import { Layout } from "@gov-app/libs/components/Layout";
-import { Header } from "@gov-app/libs/components/Header";
 import {
-	ChangeEventHandler,
 	FormEventHandler,
 	MouseEventHandler,
 	useCallback,
 	useState,
 } from "react";
+import {
+	DiscordLogo,
+	TwitterLogo,
+	Spinner,
+	CloseIcon,
+} from "@gov-app/libs/assets/vectors";
 import { useWindowPopup } from "@gov-app/libs/hooks/useWindowPopup";
-import { Button } from "@gov-app/libs/components/Button";
-import { ReactComponent as DiscordLogo } from "@gov-app/libs/assets/vectors/discord.svg";
-import { ReactComponent as TwitterLogo } from "@gov-app/libs/assets/vectors/twitter.svg";
-import { ReactComponent as CENNZLogo } from "@gov-app/libs/assets/vectors/cennz.svg";
-import { ReactComponent as Spinner } from "@gov-app/libs/assets/vectors/spinner.svg";
-import { TextField } from "@gov-app/libs/components/TextField";
-import { Select } from "@gov-app/libs/components/Select";
-import { useCENNZExtension } from "@gov-app/libs/providers/CENNZExtensionProvider";
-import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
 import { getSession } from "next-auth/react";
-import { ReactComponent as CloseIcon } from "@gov-app/libs/assets/vectors/close-icon.svg";
 import { If } from "react-extras";
+import {
+	Button,
+	TextField,
+	WalletConnect,
+	Layout,
+	Header,
+} from "@gov-app/libs/components";
 
 const Connect: NextPage = () => {
-	const {
-		onCENNZConnectClick,
-		onCENNZAccountSelect,
-		allAccounts,
-		selectedAccount,
-	} = useCENNZConnect();
-
 	const {
 		onSignInClick: onTwitterSignInClick,
 		username: twitterUsername,
@@ -61,40 +54,15 @@ const Connect: NextPage = () => {
 						channels (Twitter and Discord). Get started below!
 					</p>
 
-					<fieldset className="mb-12 min-w-0">
-						<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
-							Connect your wallet
-						</h2>
-						<p className="mb-8">
-							Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
-							labore dolor mollit commodo do anim incididunt sunt id pariatur
-							elit tempor nostrud nulla eu proident ut id qui incididunt.
-						</p>
-						<Select
-							placeholder="Connect CENNZnet Wallet"
-							inputClassName="!py-4"
-							required
-							defaultValue={selectedAccount}
-							onChange={onCENNZAccountSelect}
-							endAdornment={
-								<Button
-									active={!!selectedAccount}
-									size="small"
-									onMouseDown={onCENNZConnectClick}
-									startAdornment={<CENNZLogo className="h-4" />}
-								>
-									{!!selectedAccount && "Connected"}
-									{!selectedAccount && "Connect"}
-								</Button>
-							}
-						>
-							{allAccounts?.map((account, index) => (
-								<option value={account} key={index}>
-									{account}
-								</option>
-							))}
-						</Select>
-					</fieldset>
+					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+						Connect your wallet
+					</h2>
+					<p className="mb-8">
+						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
+						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
+						tempor nostrud nulla eu proident ut id qui incididunt.
+					</p>
+					<WalletConnect />
 
 					<fieldset className="mb-12">
 						<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
@@ -185,34 +153,6 @@ const Connect: NextPage = () => {
 };
 
 export default Connect;
-
-const useCENNZConnect = () => {
-	const { accounts } = useCENNZExtension();
-	const { connectWallet, selectedAccount, selectAccount } = useCENNZWallet();
-
-	const allAccounts = accounts
-		?.map((account) => account?.address)
-		.filter(Boolean);
-
-	const onCENNZConnectClick: MouseEventHandler<HTMLButtonElement> = () =>
-		connectWallet();
-
-	const onCENNZAccountSelect: ChangeEventHandler<HTMLSelectElement> = (
-		event
-	) => {
-		const address = event.target.value;
-		const item = accounts.find((account) => account.address === address);
-
-		if (item) selectAccount(item);
-	};
-
-	return {
-		onCENNZConnectClick,
-		onCENNZAccountSelect,
-		allAccounts,
-		selectedAccount: selectedAccount?.address,
-	};
-};
 
 const useSocialSignIn = (provider: "Twitter" | "Discord") => {
 	const popupWindow = useWindowPopup();

@@ -41,3 +41,9 @@ export const TWITTER_CLIENT: Pick<
 	clientId: process.env.TWITTER_CLIENT_ID,
 	clientSecret: process.env.TWITTER_CLIENT_SECRET,
 };
+
+export const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
+
+export const PINATA_JWT: string = process.env.PINATA_JWT || "";
+
+export const IPFS_GATEWAY: string = process.env.NEXT_PUBLIC_IPFS_GATEWAY || "";
