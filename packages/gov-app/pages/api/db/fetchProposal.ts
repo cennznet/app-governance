@@ -2,13 +2,16 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import mongoose from "mongoose";
 import { MONGODB_SERVER } from "@gov-libs/constants";
-import { Proposal } from "@proposal-relayer/libs/models";
 
-export async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+	req: NextApiRequest,
+	res: NextApiResponse
+) {
 	try {
 		await mongoose.connect(MONGODB_SERVER);
+		const Proposal = mongoose.model("Proposal");
 
-		const proposalId = Number(req.body.proposalId);
+		const { proposalId } = req.query;
 		const proposal = await Proposal.findOne({ proposalId });
 
 		if (!proposal) return res.status(404);
