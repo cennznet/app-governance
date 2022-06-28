@@ -8,7 +8,9 @@ import { ChevronDown } from "@gov-app/libs/assets/vectors";
 
 interface ProposalAdvancedProps {
 	proposalExtrinsic: string;
-	onProposalExtrinsicChange: ChangeEventHandler<HTMLInputElement>;
+	onProposalExtrinsicChange: ChangeEventHandler<
+		HTMLTextAreaElement & HTMLInputElement
+	>;
 }
 
 export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({

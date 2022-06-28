@@ -8,8 +8,9 @@ import { Button, TextField } from "@gov-app/libs/components";
 
 interface ProposalDetailsProps {
 	proposalDetails: string;
-	onProposalDetailsChange: ChangeEventHandler<HTMLTextAreaElement> &
-		ChangeEventHandler<HTMLInputElement>;
+	onProposalDetailsChange: ChangeEventHandler<
+		HTMLTextAreaElement & HTMLInputElement
+	>;
 }
 
 export const ProposalDetails: FC<ProposalDetailsProps> = ({
