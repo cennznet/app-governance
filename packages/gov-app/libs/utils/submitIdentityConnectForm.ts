@@ -13,7 +13,7 @@ interface ConnectFormData {
 export async function submitIdentityConnectForm(
 	api: Api,
 	{ address, twitterUsername, discordUsername }: ConnectFormData
-): Promise<ResponseBody> {
+): Promise<void> {
 	// const extrinsic =
 	// const response = await fetch("/api/identity/connect", {
 	// 	method: "POST",
