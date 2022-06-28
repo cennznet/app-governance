@@ -41,10 +41,11 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 				<TextField
 					id="proposalExtrinsic"
 					name="proposalExtrinsic"
-					inputClassName="w-full truncate"
+					inputClassName="w-full"
 					placeholder={NULL_ADDRESS}
 					value={proposalExtrinsic}
 					onChange={onProposalExtrinsicChange}
+					multiline
 				/>
 			</If>
 		</div>
