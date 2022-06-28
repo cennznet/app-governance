@@ -7,7 +7,7 @@ import {
 	Header,
 	Layout,
 	ProposalAdvanced,
-	ProposalDetails,
+	ProposalDetailsField,
 	TextField,
 	WalletConnect,
 } from "@gov-app/libs/components";
@@ -88,7 +88,7 @@ const NewProposal: NextPage = () => {
 							/>
 						</div>
 
-						<ProposalDetails
+						<ProposalDetailsField
 							proposalDetails={proposalDetails}
 							onProposalDetailsChange={onProposalDetailsChange}
 						/>
