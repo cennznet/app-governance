@@ -17,8 +17,6 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "paths": {
-      "@discord": ["packages/discord"],
-      "@discord/*": ["packages/discord/*"],
       "@gov-app": ["packages/gov-app"],
       "@gov-app/*": ["packages/gov-app/*"],
       "@gov-libs": ["packages/gov-libs"],
