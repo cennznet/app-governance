@@ -43,3 +43,8 @@ export const TWITTER_CLIENT: Pick<
 };
 
 export const NEXTAUTH_SECRET: string = process.env.NEXTAUTH_SECRET ?? "";
+export const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
+
+export const PINATA_JWT: string = process.env.PINATA_JWT || "";
+
+export const IPFS_GATEWAY: string = process.env.NEXT_PUBLIC_IPFS_GATEWAY || "";

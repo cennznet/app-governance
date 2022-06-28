@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { Layout } from "@gov-app/libs/components/Layout";
+import { Layout } from "@gov-app/libs/components";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { signIn } from "next-auth/react";

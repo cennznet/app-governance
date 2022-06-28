@@ -20,4 +20,5 @@ export interface IntrinsicElements {
 	input: InputHTMLAttributes<HTMLInputElement>;
 	a: AnchorHTMLAttributes<HTMLAnchorElement>;
 	select: InputHTMLAttributes<HTMLSelectElement>;
+	textarea: InputHTMLAttributes<HtmlTextAreaElement>;
 }
