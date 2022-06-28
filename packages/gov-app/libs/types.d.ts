@@ -23,4 +23,4 @@ export interface IntrinsicElements {
 	textarea: InputHTMLAttributes<HtmlTextAreaElement>;
 }
 
-export type ProposalVote = "pass" | "reject";
+export type ProposalVote = "pass" | "reject" | "veto";

@@ -2,7 +2,7 @@ import type { NextPage, NextPageContext } from "next";
 import type { ProposalInterface } from "@proposal-relayer/libs/types";
 import type { ProposalVote } from "@gov-app/libs/types";
 
-import { Choose, If } from "react-extras";
+import { If } from "react-extras";
 import { useCallback, useEffect, useState } from "react";
 import {
 	Button,
@@ -41,37 +41,40 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 					Proposal #{proposalId}
 				</h1>
 
-				<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
-					Connect your wallet
-				</h2>
-				<p className="mb-8">
-					Lorem laborum dolor minim mollit eu reprehenderit culpa dolore labore
-					dolor mollit commodo do anim incididunt sunt id pariatur elit tempor
-					nostrud nulla eu proident ut id qui incididunt.
-				</p>
-				<WalletConnect />
+				<If condition={proposal?.status?.includes("Deliberation")}>
+					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+						Connect your wallet
+					</h2>
+					<p className="mb-8">
+						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
+						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
+						tempor nostrud nulla eu proident ut id qui incididunt.
+					</p>
+					<WalletConnect />
+				</If>
 
-				<Choose>
-					<Choose.When condition={!proposal}>
-						<Spinner className="m-auto h-8 w-8 animate-spin" />
-					</Choose.When>
+				<If condition={!proposal}>
+					<Spinner className="m-auto h-8 w-8 animate-spin" />
+				</If>
 
-					<Choose.When condition={!!proposal}>
-						<ProposalDetailsDisplay
-							proposalDetails={proposal?.proposalDetails}
-							proposalInfo={proposal?.proposalInfo}
-						/>
+				<If condition={!!proposal}>
+					<ProposalDetailsDisplay
+						proposalDetails={proposal?.proposalDetails}
+						proposalInfo={proposal?.proposalInfo}
+						proposalStatus={proposal?.status}
+					/>
 
-						<div
-							className="mt-12 inline-flex w-full justify-center space-x-12"
-							role="group"
-						>
+					<div
+						className="mt-12 inline-flex w-full justify-center space-x-12"
+						role="group"
+					>
+						<If condition={proposal?.status === "Deliberation"}>
 							{["pass", "reject"].map((vote: ProposalVote, index) => (
 								<Button
 									size="medium"
 									disabled={busy[vote]}
 									className="w-1/4 text-center"
-									onClick={() => onVoteClick(vote)}
+									onClick={() => onVoteClick("proposal", vote)}
 									key={index}
 								>
 									<div className="flex items-center justify-center">
@@ -84,9 +87,27 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 									</div>
 								</Button>
 							))}
-						</div>
-					</Choose.When>
-				</Choose>
+						</If>
+
+						<If condition={proposal?.status === "ReferendumDeliberation"}>
+							<Button
+								size="medium"
+								disabled={busy.veto}
+								className="w-1/4 text-center"
+								onClick={() => onVoteClick("referendum", "veto")}
+							>
+								<div className="flex items-center justify-center">
+									<If condition={busy.veto}>
+										<span className="mr-2">
+											<Spinner />
+										</span>
+									</If>
+									<span>{busy.veto ? "Processing..." : "Veto"}</span>
+								</div>
+							</Button>
+						</If>
+					</div>
+				</If>
 			</div>
 		</Layout>
 	);
@@ -114,27 +135,42 @@ const useVote = (proposalId: string) => {
 	const [busy, setBusy] = useState({
 		pass: false,
 		reject: false,
+		veto: false,
 	});
 
 	const onVoteClick = useCallback(
-		async (vote: ProposalVote) => {
+		async (stage: "proposal" | "referendum", vote: ProposalVote) => {
 			if (!api || !selectedAccount?.address || !signer) return;
 			setBusy({ ...busy, [vote]: true });
 
-			await api.tx.governance
-				.voteOnProposal(proposalId, vote === "pass")
-				.signAndSend(
-					selectedAccount.address,
-					{ signer },
-					(result: SubmittableResult) => {
-						const { txHash } = result;
-						console.info("Transaction", txHash.toString());
-					}
-				);
+			if (stage === "proposal")
+				await api.tx.governance
+					.voteOnProposal(proposalId, vote === "pass")
+					.signAndSend(
+						selectedAccount.address,
+						{ signer },
+						(result: SubmittableResult) => {
+							const { txHash } = result;
+							console.info("Transaction", txHash.toString());
+						}
+					);
+
+			if (stage === "referendum")
+				await api.tx.governance
+					.voteAgainstReferendum(proposalId)
+					.signAndSend(
+						selectedAccount.address,
+						{ signer },
+						(result: SubmittableResult) => {
+							const { txHash } = result;
+							console.info("Transaction", txHash.toString());
+						}
+					);
 
 			setBusy({
 				pass: false,
 				reject: false,
+				veto: false,
 			});
 		},
 		[api, selectedAccount?.address, signer, busy, proposalId]

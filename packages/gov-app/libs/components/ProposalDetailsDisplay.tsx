@@ -7,11 +7,13 @@ import type {
 interface ProposalDetailsDisplayProps {
 	proposalDetails: ProposalDetails;
 	proposalInfo: ProposalInfo;
+	proposalStatus: string;
 }
 
 export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 	proposalDetails,
 	proposalInfo,
+	proposalStatus,
 }) => {
 	return (
 		<div>
@@ -25,9 +27,13 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 						<p>{proposalInfo?.enactmentDelay || 0} blocks</p>
 					</div>
 					<div>
-						<span className="italic">Sponsor</span>
-						<p>{proposalInfo?.sponsor}</p>
+						<span className="italic">Status</span>
+						<p>{proposalStatus}</p>
 					</div>
+				</div>
+				<div>
+					<span className="italic">Sponsor</span>
+					<p>{proposalInfo?.sponsor}</p>
 				</div>
 			</div>
 			<div className="border-hero my-6 w-full border-b-2" />
