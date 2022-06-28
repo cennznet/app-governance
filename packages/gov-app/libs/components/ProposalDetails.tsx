@@ -1,7 +1,7 @@
 import type { ChangeEventHandler, FC } from "react";
 
 import { useState } from "react";
-import { classNames, If } from "react-extras";
+import { If } from "react-extras";
 import RemarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import { Button, TextField } from "@gov-app/libs/components";
@@ -21,25 +21,11 @@ export const ProposalDetails: FC<ProposalDetailsProps> = ({
 
 	return (
 		<div className="w-full">
-			<div
-				className={classNames(
-					"float-right inline-flex space-x-1",
-					!showPreview && "mr-[1px]"
-				)}
-				role="group"
-			>
-				<Button
-					size="small"
-					onClick={() => setShowPreview(false)}
-					active={!showPreview}
-				>
+			<div className="float-right mr-[1px] inline-flex" role="group">
+				<Button size="small" onClick={() => setShowPreview(false)}>
 					Write
 				</Button>
-				<Button
-					size="small"
-					onClick={() => setShowPreview(true)}
-					active={showPreview}
-				>
+				<Button size="small" onClick={() => setShowPreview(true)}>
 					Preview
 				</Button>
 			</div>
@@ -60,7 +46,7 @@ export const ProposalDetails: FC<ProposalDetailsProps> = ({
 			<If condition={showPreview}>
 				<div className="border-dark flex w-full border-[3px] bg-white px-4 py-2">
 					<ReactMarkdown remarkPlugins={[[RemarkGfm, { singleTilde: false }]]}>
-						{proposalDetails || "Nothing to preview"}
+						{proposalDetails}
 					</ReactMarkdown>
 				</div>
 			</If>
