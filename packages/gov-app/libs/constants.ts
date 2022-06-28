@@ -41,3 +41,5 @@ export const TWITTER_CLIENT: Pick<
 	clientId: process.env.TWITTER_CLIENT_ID,
 	clientSecret: process.env.TWITTER_CLIENT_SECRET,
 };
+
+export const NEXTAUTH_SECRET: string = process.env.NEXTAUTH_SECRET ?? "";

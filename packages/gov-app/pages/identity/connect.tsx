@@ -21,6 +21,8 @@ import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
 import { getSession } from "next-auth/react";
 import { ReactComponent as CloseIcon } from "@gov-app/libs/assets/vectors/close-icon.svg";
 import { If } from "react-extras";
+import { submitIdentityConnectForm } from "@gov-app/libs/utils/submitIdentityConnectForm";
+import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";
 
 const Connect: NextPage = () => {
 	const {
@@ -73,9 +75,10 @@ const Connect: NextPage = () => {
 						<Select
 							placeholder="Connect CENNZnet Wallet"
 							inputClassName="!py-4"
-							required
 							defaultValue={selectedAccount}
 							onChange={onCENNZAccountSelect}
+							required
+							name="address"
 							endAdornment={
 								<Button
 									active={!!selectedAccount}
@@ -111,6 +114,7 @@ const Connect: NextPage = () => {
 								placeholder="Sign-in to verify"
 								inputClassName="!py-4"
 								required
+								name="twitterUsername"
 								value={twitterUsername}
 								onInput={onTextInput}
 								endAdornment={
@@ -139,6 +143,7 @@ const Connect: NextPage = () => {
 								placeholder="Sign-in to verify"
 								inputClassName="!py-4"
 								required
+								name="discordUsername"
 								value={discordUsername}
 								onInput={onTextInput}
 								endAdornment={
@@ -253,18 +258,28 @@ const useSocialSignIn = (provider: "Twitter" | "Discord") => {
 };
 
 const useFormSubmit = () => {
+	const { api } = useCENNZApi();
 	const [busy, setBusy] = useState<boolean>(false);
 	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-		(event) => {
+		async (event) => {
 			event.preventDefault();
-
 			setBusy(true);
 
-			setTimeout(() => {
-				setBusy(false);
-			}, 2000);
+			const data = new FormData(event.target as HTMLFormElement);
+
+			try {
+				await submitIdentityConnectForm(api, {
+					address: data.get("address") as string,
+					twitterUsername: data.get("twitterUsername") as string,
+					discordUsername: data.get("discordUsername") as string,
+				}).finally(() => {
+					setBusy(false);
+				});
+			} catch (error) {
+				console.info(error);
+			}
 		},
-		[]
+		[api]
 	);
 
 	return { busy, onFormSubmit };
