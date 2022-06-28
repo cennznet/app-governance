@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import type { SubmittableResult } from "@cennznet/api";
 
 import { If } from "react-extras";
 import {
@@ -11,11 +12,22 @@ import {
 	WalletConnect,
 } from "@gov-app/libs/components";
 import { Spinner } from "@gov-app/libs/assets/vectors";
-import { ChangeEvent, FormEventHandler, useCallback, useState } from "react";
+import { IPFS_GATEWAY } from "@gov-app/libs/constants";
+import { FormEventHandler, useCallback, useState } from "react";
+import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";
+import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
+import { pinProposalToIPFS } from "@gov-app/libs/utils/pinProposalToIPFS";
+import { useControlledInput } from "@gov-app/libs/hooks/useControlledInput";
 
 const NewProposal: NextPage = () => {
-	const [proposalTitle, setProposalTitle] = useState<string>("");
-	const [advancedOpen, setAdvancedOpen] = useState<boolean>();
+	const { value: proposalTitle, onChange: onProposalTitleChange } =
+		useControlledInput<string, HTMLInputElement>("");
+	const { value: proposalDetails, onChange: onProposalDetailsChange } =
+		useControlledInput<string, HTMLTextAreaElement>("");
+	const { value: proposalExtrinsic, onChange: onProposalExtrinsicChange } =
+		useControlledInput<string, HTMLTextAreaElement>("");
+	const { value: proposalDelay, onChange: onProposalDelayChange } =
+		useControlledInput<number, HTMLInputElement>(0);
 
 	const { busy, onFormSubmit } = useFormSubmit();
 
@@ -28,28 +40,17 @@ const NewProposal: NextPage = () => {
 						Submit a Proposal
 					</h1>
 
-					<p className="mb-8 text-lg">
-						To submit a proposal you must be a CENNZnet Councillor. Lorem
-						laborum dolor minim mollit eu reprehenderit culpa dolore labore
-						dolor mollit commodo do anim incididunt sunt id pariatur elit tempor
-						nostrud nulla eu proident ut id qui incididunt.
+					<p className="mb-8 text-center text-lg">
+						To submit a proposal you must be a CENNZnet Councillor.
 					</p>
 
-					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
-						Connect your wallet
-					</h2>
-					<p className="mb-8">
-						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
-						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
-						tempor nostrud nulla eu proident ut id qui incididunt.
-					</p>
 					<WalletConnect />
 
 					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 						Enter proposal details
 					</h2>
 					<p className="mb-8">
-						The proposal details section supports markdown! Refer to{" "}
+						The <em>justification</em> section supports markdown! Refer to{" "}
 						<a
 							href="https://assets.discohook.app/discord_md_cheatsheet.pdf"
 							target="_blank"
@@ -61,23 +62,47 @@ const NewProposal: NextPage = () => {
 						to take advantage.
 					</p>
 
-					<label htmlFor="proposalTitle" className="text-lg">
-						Proposal Title
-					</label>
-					<TextField
-						id="proposalTitle"
-						className="mb-6"
-						inputClassName="w-full"
-						value={proposalTitle}
-						onChange={(e: ChangeEvent<HTMLInputElement>) =>
-							setProposalTitle(e.target.value)
-						}
-						required
+					<fieldset className="space-y-6">
+						<div>
+							<label htmlFor="proposalTitle" className="text-lg">
+								Title
+							</label>
+							<TextField
+								id="proposalTitle"
+								inputClassName="w-full"
+								value={proposalTitle}
+								name="proposalTitle"
+								onChange={onProposalTitleChange}
+								required
+							/>
+						</div>
+
+						<ProposalDetails
+							proposalDetails={proposalDetails}
+							onProposalDetailsChange={onProposalDetailsChange}
+						/>
+
+						<div>
+							<label htmlFor="proposalDelay" className="text-lg">
+								Enactment Delay <span className="text-base">(# blocks)</span>
+							</label>
+							<TextField
+								id="proposalDelay"
+								name="proposalDelay"
+								type="number"
+								placeholder={"0"}
+								inputClassName="w-full"
+								value={proposalDelay}
+								onChange={onProposalDelayChange}
+								required
+							/>
+						</div>
+					</fieldset>
+
+					<ProposalAdvanced
+						proposalExtrinsic={proposalExtrinsic}
+						onProposalExtrinsicChange={onProposalExtrinsicChange}
 					/>
-
-					<ProposalDetails />
-
-					<ProposalAdvanced open={advancedOpen} setOpen={setAdvancedOpen} />
 
 					<fieldset className="mt-16 text-center">
 						<Button type="submit" className="w-1/3 text-center" disabled={busy}>
@@ -102,17 +127,47 @@ export default NewProposal;
 
 const useFormSubmit = () => {
 	const [busy, setBusy] = useState<boolean>(false);
+
+	const { api } = useCENNZApi();
+	const { selectedAccount, wallet } = useCENNZWallet();
+	const signer = wallet?.signer;
+
 	const onFormSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-		(event) => {
+		async (event) => {
 			event.preventDefault();
 
+			if (!api || !selectedAccount || !signer) return;
 			setBusy(true);
 
-			setTimeout(() => {
-				setBusy(false);
-			}, 2000);
+			try {
+				const proposalData = new FormData(event.target as HTMLFormElement);
+
+				const { IpfsHash } = await pinProposalToIPFS({
+					proposalTitle: proposalData.get("proposalTitle").toString(),
+					proposalDetails: proposalData.get("proposalDetails").toString(),
+				});
+
+				await api.tx.governance
+					.submitProposal(
+						proposalData.get("proposalExtrinsic"),
+						IPFS_GATEWAY.concat(IpfsHash),
+						proposalData.get("proposalDelay")
+					)
+					.signAndSend(
+						selectedAccount.address,
+						{ signer },
+						(result: SubmittableResult) => {
+							const { txHash } = result;
+							console.info("Transaction", txHash.toString());
+						}
+					);
+			} catch (error) {
+				console.log("error", error.message);
+			}
+
+			setBusy(false);
 		},
-		[]
+		[api, selectedAccount, signer]
 	);
 
 	return { busy, onFormSubmit };

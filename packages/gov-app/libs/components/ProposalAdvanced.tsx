@@ -1,20 +1,23 @@
-import type { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
+import type { ChangeEventHandler, FC } from "react";
 
 import { useState } from "react";
-import { TextField } from "@gov-app/libs/components";
 import { classNames, If } from "react-extras";
+import { TextField } from "@gov-app/libs/components";
+import { NULL_ADDRESS } from "@gov-app/libs/constants";
 import { ChevronDown } from "@gov-app/libs/assets/vectors";
 
 interface ProposalAdvancedProps {
-	open: boolean;
-	setOpen: Dispatch<SetStateAction<boolean>>;
+	proposalExtrinsic: string;
+	onProposalExtrinsicChange: ChangeEventHandler<
+		HTMLTextAreaElement & HTMLInputElement
+	>;
 }
 
 export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
-	open,
-	setOpen,
+	proposalExtrinsic,
+	onProposalExtrinsicChange,
 }) => {
-	const [extrinsicHash, setExtrinsicHash] = useState<string>();
+	const [open, setOpen] = useState<boolean>(false);
 
 	return (
 		<div className="w-full">
@@ -32,17 +35,16 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 			</div>
 			<br />
 			<If condition={open}>
-				<label htmlFor="cennzExtrinsic" className="text-lg">
+				<label htmlFor="proposalExtrinsic" className="text-lg">
 					Extrinsic Hash
 				</label>
 				<TextField
-					id="cennzExtrinsic"
-					inputClassName="w-full"
-					value={extrinsicHash}
-					onChange={(e: ChangeEvent<HTMLInputElement>) =>
-						setExtrinsicHash(e.target.value)
-					}
-					multiline
+					id="proposalExtrinsic"
+					name="proposalExtrinsic"
+					inputClassName="w-full truncate"
+					placeholder={NULL_ADDRESS}
+					value={proposalExtrinsic}
+					onChange={onProposalExtrinsicChange}
 				/>
 			</If>
 		</div>

@@ -15,6 +15,14 @@ export const WalletConnect: FC = () => {
 
 	return (
 		<fieldset className="mb-12 min-w-0">
+			<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+				Connect your wallet
+			</h2>
+			<p className="mb-8">
+				Lorem laborum dolor minim mollit eu reprehenderit culpa dolore labore
+				dolor mollit commodo do anim incididunt sunt id pariatur elit tempor
+				nostrud nulla eu proident ut id qui incididunt.
+			</p>
 			<Select
 				placeholder="Connect CENNZnet Wallet"
 				inputClassName="!py-4"
