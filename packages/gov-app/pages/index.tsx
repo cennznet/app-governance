@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
-import { Layout } from "@gov-app/libs/components/Layout";
-import { Header } from "@gov-app/libs/components/Header";
+import { Header, Layout } from "@gov-app/libs/components";
 
 const Home: NextPage = () => {
 	return (
