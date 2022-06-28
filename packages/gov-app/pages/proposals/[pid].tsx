@@ -9,7 +9,7 @@ import {
 	Header,
 	Layout,
 	ProposalDetailsDisplay,
-	WalletConnect,
+	WalletSelect,
 } from "@gov-app/libs/components";
 import { fetchProposal } from "@gov-app/libs/utils/fetchProposal";
 import { Spinner } from "@gov-app/libs/assets/vectors";
@@ -41,7 +41,7 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 					Proposal #{proposalId}
 				</h1>
 
-				<If condition={proposal?.status?.includes("Deliberation")}>
+				<If condition={!proposal || proposal?.status?.includes("Deliberation")}>
 					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
 						Connect your wallet
 					</h2>
@@ -50,7 +50,9 @@ const Proposal: NextPage<ProposalProps> = ({ proposalId }) => {
 						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
 						tempor nostrud nulla eu proident ut id qui incididunt.
 					</p>
-					<WalletConnect />
+					<div className="mb-12 min-w-0">
+						<WalletSelect required />
+					</div>
 				</If>
 
 				<If condition={!proposal}>
