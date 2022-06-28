@@ -1,18 +1,20 @@
 import { ChangeEvent, ChangeEventHandler, useState } from "react";
 
-interface ControlledInputHook<T> {
+interface ControlledInputHook<T, E> {
 	value: T;
-	onChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+	onChange: ChangeEventHandler<E>;
 }
 
-export const useControlledInput = <T>(
+export const useControlledInput = <
+	T,
+	E extends HTMLInputElement | HTMLTextAreaElement
+>(
 	defaultValue: T
-): ControlledInputHook<T> => {
+): ControlledInputHook<T, E> => {
 	const [value, setValue] = useState<T>(defaultValue);
 
-	const onChange = (
-		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => setValue(event.target.value as unknown as T);
+	const onChange = (event: ChangeEvent<E>) =>
+		setValue(event.target.value as unknown as T);
 
 	return {
 		value,

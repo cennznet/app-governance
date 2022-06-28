@@ -21,13 +21,13 @@ import { useControlledInput } from "@gov-app/libs/hooks/useControlledInput";
 
 const NewProposal: NextPage = () => {
 	const { value: proposalTitle, onChange: onProposalTitleChange } =
-		useControlledInput<string>("");
+		useControlledInput<string, HTMLInputElement>("");
 	const { value: proposalDetails, onChange: onProposalDetailsChange } =
-		useControlledInput<string>("");
+		useControlledInput<string, HTMLTextAreaElement>("");
 	const { value: proposalExtrinsic, onChange: onProposalExtrinsicChange } =
-		useControlledInput<string>("");
+		useControlledInput<string, HTMLTextAreaElement>("");
 	const { value: proposalDelay, onChange: onProposalDelayChange } =
-		useControlledInput<number>(0);
+		useControlledInput<number, HTMLInputElement>(0);
 
 	const { busy, onFormSubmit } = useFormSubmit();
 
