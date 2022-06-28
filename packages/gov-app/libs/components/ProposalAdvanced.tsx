@@ -43,6 +43,7 @@ export const ProposalAdvanced: FC<ProposalAdvancedProps> = ({
 					placeholder={NULL_ADDRESS}
 					value={proposalExtrinsic}
 					onChange={onProposalExtrinsicChange}
+					multiline
 				/>
 			</If>
 		</div>

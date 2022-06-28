@@ -40,10 +40,21 @@ const NewProposal: NextPage = () => {
 						Submit a Proposal
 					</h1>
 
-					<p className="mb-8 text-center text-lg">
-						To submit a proposal you must be a CENNZnet Councillor.
+					<p className="mb-8 text-lg">
+						To submit a proposal you must be a CENNZnet Councillor. Lorem
+						laborum dolor minim mollit eu reprehenderit culpa dolore labore
+						dolor mollit commodo do anim incididunt sunt id pariatur elit tempor
+						nostrud nulla eu proident ut id qui incididunt.
 					</p>
 
+					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
+						Connect your wallet
+					</h2>
+					<p className="mb-8">
+						Lorem laborum dolor minim mollit eu reprehenderit culpa dolore
+						labore dolor mollit commodo do anim incididunt sunt id pariatur elit
+						tempor nostrud nulla eu proident ut id qui incididunt.
+					</p>
 					<WalletConnect />
 
 					<h2 className="font-display border-hero mb-4 border-b-2 text-4xl uppercase">
