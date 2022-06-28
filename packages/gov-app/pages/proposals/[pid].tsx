@@ -1,6 +1,7 @@
 import type { NextPage, NextPageContext } from "next";
-import type { ProposalInterface } from "@proposal-relayer/libs/types";
+import type { SubmittableResult } from "@cennznet/api";
 import type { ProposalVote } from "@gov-app/libs/types";
+import type { ProposalInterface } from "@proposal-relayer/libs/types";
 
 import { If } from "react-extras";
 import { useCallback, useEffect, useState } from "react";
@@ -15,7 +16,6 @@ import { fetchProposal } from "@gov-app/libs/utils/fetchProposal";
 import { Spinner } from "@gov-app/libs/assets/vectors";
 import { useCENNZApi } from "@gov-app/libs/providers/CENNZApiProvider";
 import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
-import { SubmittableResult } from "@cennznet/api";
 
 export const getServerSideProps = (context: NextPageContext) => {
 	return {
