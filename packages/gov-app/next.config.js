@@ -29,6 +29,9 @@ const nextConfig = {
 			},
 		];
 	},
+	experimental: {
+		externalDir: true
+	}
 };
 
 module.exports = withNx(nextConfig);

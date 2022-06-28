@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import type { ProposalInterface } from "@proposal-relayer/libs/types";
 
 import { If } from "react-extras";
 import { useRouter } from "next/router";
