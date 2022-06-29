@@ -19,7 +19,7 @@ export function getDiscordMessage(
 	proposalStatus: ProposalStatus,
 	proposalDetails: ProposalDetails,
 	proposalInfo: ProposalInfo,
-	vetoSum: number | undefined
+	vetoSum: string | number | undefined
 ): DiscordMessage {
 	const referendumFields = getReferendumFields(proposalDetails, proposalInfo);
 

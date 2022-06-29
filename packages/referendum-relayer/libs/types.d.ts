@@ -19,4 +19,5 @@ export interface ReferendumMessageBody {
 	proposal: ProposalInterface;
 	referendum?: ReferendumInterface;
 	vetoSum: number;
+	vetoPercentage?: string;
 }

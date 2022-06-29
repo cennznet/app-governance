@@ -14,7 +14,7 @@ function getVetoLink(proposalId: number): string {
 	return `${REFERENDUM_URL}/${proposalId}?stage=referendum`;
 }
 
-export function getVetoSumField(vetoSum: number): EmbedFieldData[] {
+export function getVetoSumField(vetoSum: string | number): EmbedFieldData[] {
 	return [
 		{
 			name: "Veto Sum",

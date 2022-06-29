@@ -5,6 +5,7 @@ import type { ReferendumVoteCount, StorageKey } from "@cennznet/types";
 import { getLogger } from "@gov-libs/utils/getLogger";
 import { Referendum } from "@referendum-relayer/libs/models";
 import { Proposal } from "@proposal-relayer/libs/models";
+import { fetchVetoPercentage } from "./fetchVetoPercentage";
 
 const logger = getLogger("ReferendumListener");
 
@@ -44,8 +45,16 @@ export async function monitorVetoSum(
 						"Referendum #%d: Update found, sent to queue...",
 						proposalId
 					);
+
+					const vetoPercentage = await fetchVetoPercentage(cennzApi, vetoSum);
 					queue.publish(
-						JSON.stringify({ proposalId, proposal, referendum, vetoSum }),
+						JSON.stringify({
+							proposalId,
+							proposal,
+							referendum,
+							vetoSum,
+							vetoPercentage,
+						}),
 						{
 							type: "update",
 						}
