@@ -4,6 +4,9 @@ import type {
 	ProposalInfo,
 } from "@proposal-relayer/libs/types";
 
+import RemarkGfm from "remark-gfm";
+import ReactMarkdown from "react-markdown";
+
 interface ProposalDetailsDisplayProps {
 	proposalDetails: ProposalDetails;
 	proposalInfo: ProposalInfo;
@@ -37,8 +40,10 @@ export const ProposalDetailsDisplay: FC<ProposalDetailsDisplayProps> = ({
 				</div>
 			</div>
 			<div className="border-hero my-6 w-full border-b-2" />
-			<div>
-				<p className="text-xl">{proposalDetails?.description}</p>
+			<div className="text-xl">
+				<ReactMarkdown remarkPlugins={[[RemarkGfm, { singleTilde: false }]]}>
+					{proposalDetails?.description}
+				</ReactMarkdown>
 			</div>
 		</div>
 	);
