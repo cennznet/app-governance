@@ -5,7 +5,7 @@ import type { ReferendumVoteCount, StorageKey } from "@cennznet/types";
 import { getLogger } from "@gov-libs/utils/getLogger";
 import { Referendum } from "@referendum-relayer/libs/models";
 import { Proposal } from "@proposal-relayer/libs/models";
-import { fetchVetoPercentage } from "./fetchVetoPercentage";
+import { fetchVetoThreshold, fetchVetoPercentage } from "./fetchVetoPercentage";
 
 const logger = getLogger("ReferendumListener");
 
@@ -30,14 +30,19 @@ export async function monitorVetoSum(
 				const proposal = await Proposal.findOne({ proposalId });
 				if (!proposal || proposal?.status === "Deliberation") return;
 
+				const vetoThreshold = await fetchVetoThreshold(cennzApi);
+
 				if (!referendum) {
 					logger.info(
 						"Referendum #%d: New referendum, sent to queue...",
 						proposalId
 					);
-					queue.publish(JSON.stringify({ proposalId, proposal, vetoSum }), {
-						type: "new",
-					});
+					queue.publish(
+						JSON.stringify({ proposalId, proposal, vetoSum, vetoThreshold }),
+						{
+							type: "new",
+						}
+					);
 				}
 
 				if (referendum) {
@@ -52,7 +57,7 @@ export async function monitorVetoSum(
 							proposalId,
 							proposal,
 							referendum,
-							vetoSum,
+							vetoThreshold,
 							vetoPercentage,
 						}),
 						{

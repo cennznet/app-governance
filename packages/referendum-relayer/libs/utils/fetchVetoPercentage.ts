@@ -1,6 +1,14 @@
 import type { Api } from "@cennznet/api";
 import type { u128, Permill, EraIndex } from "@cennznet/types";
 
+export async function fetchVetoThreshold(cennzApi: Api): Promise<number> {
+	const referendumThreshold = (
+		(await cennzApi.query.governance.referendumThreshold()) as Permill
+	).toNumber();
+
+	return referendumThreshold / 10000;
+}
+
 export async function fetchVetoPercentage(
 	cennzApi: Api,
 	vetoSum: number
@@ -13,12 +21,5 @@ export async function fetchVetoPercentage(
 		(await cennzApi.query.staking.erasTotalStake(stakingEra)) as u128
 	).toNumber();
 
-	const referendumThreshold = (
-		(await cennzApi.query.governance.referendumThreshold()) as Permill
-	).toNumber();
-
-	const vetoPercentage = (vetoSum / totalStaked).toFixed();
-	const thresholdPercentage = referendumThreshold / 10000;
-
-	return `${vetoPercentage} / ${thresholdPercentage} %`;
+	return (vetoSum / totalStaked).toFixed();
 }

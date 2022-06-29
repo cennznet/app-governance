@@ -21,6 +21,7 @@ export async function handleReferendumUpdateMessage(
 		referendum,
 		vetoSum,
 		vetoPercentage,
+		vetoThreshold,
 	}: ReferendumMessageBody,
 	queue: AMQPQueue,
 	message: AMQPMessage,
@@ -59,7 +60,7 @@ export async function handleReferendumUpdateMessage(
 			status as ProposalStatus,
 			proposalDetails,
 			proposalInfo,
-			status === "ReferendumDeliberation" ? vetoPercentage : undefined
+			{ vetoPercentage, vetoThreshold }
 		);
 
 		await discordWebhook.editMessage(

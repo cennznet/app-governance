@@ -19,5 +19,11 @@ export interface ReferendumMessageBody {
 	proposal: ProposalInterface;
 	referendum?: ReferendumInterface;
 	vetoSum: number;
+	vetoThreshold?: number;
 	vetoPercentage?: string;
+}
+
+export interface VetoSumFields {
+	vetoThreshold: number;
+	vetoPercentage: string;
 }

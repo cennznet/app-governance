@@ -1,3 +1,5 @@
+import type { VetoSumFields } from "@referendum-relayer/libs/types";
+
 import { MessageActionRow, MessageButton, EmbedFieldData } from "discord.js";
 import { REFERENDUM_URL } from "@referendum-relayer/libs/constants";
 
@@ -14,11 +16,14 @@ function getVetoLink(proposalId: number): string {
 	return `${REFERENDUM_URL}/${proposalId}?stage=referendum`;
 }
 
-export function getVetoSumField(vetoSum: string | number): EmbedFieldData[] {
+export function getVetoSumField({
+	vetoThreshold,
+	vetoPercentage,
+}: VetoSumFields): EmbedFieldData[] {
 	return [
 		{
 			name: "Veto Sum",
-			value: `_**${vetoSum}**_`,
+			value: `_**${vetoPercentage} / ${vetoThreshold} %**_`,
 			inline: false,
 		},
 	];
