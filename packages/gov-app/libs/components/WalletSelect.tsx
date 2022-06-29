@@ -1,4 +1,4 @@
-import type { ChangeEventHandler, FC, MouseEventHandler } from "react";
+import type { ChangeEventHandler, MouseEventHandler } from "react";
 
 import { Button, Select } from "@gov-app/libs/components";
 import { useCENNZWallet } from "@gov-app/libs/providers/CENNZWalletProvider";
