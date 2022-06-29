@@ -4,6 +4,7 @@ import type {
 	ProposalStatus,
 } from "@proposal-relayer/libs/types";
 import type { DiscordMessage } from "@gov-libs/types";
+import type { VetoSumFields } from "@referendum-relayer/libs/types";
 
 import {
 	getReferendumFields,
@@ -19,7 +20,7 @@ export function getDiscordMessage(
 	proposalStatus: ProposalStatus,
 	proposalDetails: ProposalDetails,
 	proposalInfo: ProposalInfo,
-	vetoSum: number | undefined
+	vetoSumFields: VetoSumFields
 ): DiscordMessage {
 	const referendumFields = getReferendumFields(proposalDetails, proposalInfo);
 
@@ -35,7 +36,7 @@ export function getDiscordMessage(
 				proposalDetails.title,
 				referendumFields,
 				proposalStatus === "ReferendumDeliberation"
-					? getVetoSumField(vetoSum)
+					? getVetoSumField(vetoSumFields)
 					: undefined
 			),
 		],

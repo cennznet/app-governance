@@ -15,7 +15,7 @@ const logger = getLogger("ReferendumProcessor");
 
 export async function handleReferendumNewMessage(
 	discordWebhook: InteractionWebhook,
-	{ proposalId, proposal, vetoSum }: ReferendumMessageBody,
+	{ proposalId, proposal, vetoSum, vetoThreshold }: ReferendumMessageBody,
 	queue: AMQPQueue,
 	message: AMQPMessage,
 	abortSignal: AbortSignal
@@ -53,7 +53,7 @@ export async function handleReferendumNewMessage(
 			status as ProposalStatus,
 			proposalDetails,
 			proposalInfo,
-			vetoSum
+			{ vetoPercentage: "0", vetoThreshold }
 		);
 
 		const { id: discordMessageId } = await discordWebhook.send(discordMessage);

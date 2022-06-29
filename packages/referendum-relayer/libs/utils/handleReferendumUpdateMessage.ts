@@ -15,7 +15,14 @@ const logger = getLogger("ReferendumProcessor");
 
 export async function handleReferendumUpdateMessage(
 	discordWebhook: InteractionWebhook,
-	{ proposalId, proposal, referendum, vetoSum }: ReferendumMessageBody,
+	{
+		proposalId,
+		proposal,
+		referendum,
+		vetoSum,
+		vetoPercentage,
+		vetoThreshold,
+	}: ReferendumMessageBody,
 	queue: AMQPQueue,
 	message: AMQPMessage,
 	abortSignal: AbortSignal
@@ -53,7 +60,7 @@ export async function handleReferendumUpdateMessage(
 			status as ProposalStatus,
 			proposalDetails,
 			proposalInfo,
-			status === "ReferendumDeliberation" ? vetoSum : undefined
+			{ vetoPercentage, vetoThreshold }
 		);
 
 		await discordWebhook.editMessage(
